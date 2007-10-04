@@ -16,6 +16,41 @@
 
 #include "defs.h"
 #include "stream_repository.h"
+#include "../common/dir/directory_factory.h"
+
+/**
+ * Loads all MDC streams found in path.
+ * @param path path of mdc files
+ */
+StreamRepository::StreamRepository(std::string path)
+{
+	m_is_valid = false;
+	
+	AbstractDirectory* dir = DirectoryFactory::createDirectory();
+	
+	std::vector<std::string> files = dir->get_file_names(path);
+	
+	for(Uint32 i = 0; i<files.size(); i++)
+	{
+		std::string::size_type found = files[i].find(".mdc");
+		if(found != std::string::npos)
+		{
+			MDStream* curr_stream = new MDStream();
+			std::string complete_path = path+files[i];
+			curr_stream->load_from_disk(complete_path);
+			if(curr_stream->is_empty()==false)
+			{
+				m_streams.push_back(curr_stream);
+			}
+			else
+			{
+				delete curr_stream;
+			}
+		}
+	}
+	        
+	m_is_valid = true;
+}
 
 
 
@@ -38,3 +73,14 @@ std::vector<MDStream*> StreamRepository::find_by_name(std::string regexp)
 	return results;
 	
 }
+
+
+
+StreamRepository::~StreamRepository()
+{
+	for(Uint32 i = 0; i<m_streams.size(); i++)
+	{
+		delete m_streams[i];
+	}
+}
+

@@ -16,6 +16,8 @@
 
 
 #include "descriptor.h"
+#include "../common/data_chunk.h"
+#include "../messages/mdc_message.h"
 
 
 
@@ -101,5 +103,36 @@ std::string Descriptor::get_codec_name() const
 
 AbstractCodecParameters* Descriptor::get_codec_parameter() const
 {
-	return codec_parameter;
+	return m_codec_parameters;
+}
+
+
+Descriptor::~Descriptor()
+{
+	delete m_codec_parameters;
+	delete[] m_payload;
+}
+
+
+DataChunk& Descriptor::serialize() const
+{
+	DataChunk* result = new DataChunk();
+	MDCMessage msg;
+	msg.set_type_string("DESC");
+	(*result)+=msg.serialize();
+	result->append(this->m_hash.c_str());
+	result->append(this->m_file_name.c_str());
+	result->append(m_flow_id);
+	result->append(this->m_sequence_number);
+	result->append(this->m_codec_name.c_str());
+	(*result)+=m_codec_parameters->serialize();
+	result->append(this->m_payload_size);
+	result->append(this->m_payload_size, this->m_payload);
+	
+	return (*result);
+}
+
+void Descriptor::deserialize(const DataChunk& data)
+{
+	
 }

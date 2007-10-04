@@ -34,9 +34,20 @@ private:
 	std::vector<std::vector<bool> > m_valid_descriptor;
 	
 	void set_descriptor(Uint8 flow, Uint32 sequence, Descriptor* descriptor);
-		
+	
+	std::string m_name;
+	
+	std::string m_hash;
+	
+	bool m_is_empty;
+	
+	bool m_is_inited;
+	
+	void init(Uint8 n_flows, Uint32 sequence_size);
 	
 public:
+	
+	MDStream();
 	
 	MDStream(Uint8 n_flows, Uint32 sequence_size);
 	
@@ -75,7 +86,7 @@ public:
 	
 	std::string get_hash() const;
 	
-	
+	bool is_empty(){return m_is_empty;}
 	
 };
 

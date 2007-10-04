@@ -35,12 +35,14 @@ private:
 	std::string m_file_name;
 	std::string m_hash;
 	std::string m_codec_name;
-	AbstractCodecParameters* codec_parameter;
+	AbstractCodecParameters* m_codec_parameters;
 	Uint32 m_payload_size;
 	Uint8* m_payload;
 public:
 	Descriptor() {};
 
+	~Descriptor();
+	
 	Uint8 get_flow_id() const;
 	
 	void set_flow_id(Uint8 id);

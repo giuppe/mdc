@@ -27,7 +27,7 @@ ServerAction::ServerAction()
 {
 	m_listening_socket = NetManager::instance()->create_UDP_listen_socket("localhost", 5555);
 	LOG_INFO("Server listening on port 5555");
-	m_stream_repository = new StreamRepository("~/repo_mdc");
+	m_stream_repository = new StreamRepository("/home/kumber/repo_mdc");
 }
 
 

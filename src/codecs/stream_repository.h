@@ -23,19 +23,24 @@
 #ifndef STREAM_REPOSITORY_H_
 #define STREAM_REPOSITORY_H_
 
-class StreamRepository
+class StreamRepository 
 {
 	
 private:
 
 	std::vector<MDStream*> m_streams;
+	
+	bool m_is_valid;
 
 public:
 	
 	StreamRepository(std::string path);
+
+	~StreamRepository();
 	
 	std::vector<MDStream*> find_by_name(std::string regexp);
-	
+
+
 };
 
 #endif /*STREAM_REPOSITORY_H_*/
