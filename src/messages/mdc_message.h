@@ -21,6 +21,7 @@
 
 class MDCMessage : public Serializable
 {
+	friend class Descriptor;
 protected:
 	Uint8* m_header_title;
 	Uint8 m_version;
