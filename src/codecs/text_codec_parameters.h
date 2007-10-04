@@ -17,18 +17,19 @@
 #include "defs.h"
 #include "../common/data_chunk.h"
 #include "../common/serializable.h"
+#include "string.h"
 #ifndef TEXT_CODEC_PARAMETERS_H_
 #define TEXT_CODEC_PARAMETERS_H_
 
 class TextCodecParameters : public Serializable {
-protected:
-	Uint32 m_file_size;
-	Uint8 m_sequence_number;
-	string m_file_name;
 public:
-	DataChunk& serialize() = 0;
-	virtual void deserialize(const DataChunk&)= 0;
-	virtual ~MpegCodecParameters(){};
+	DataChunk& serialize() {
+		DataChunk* dc = new DataChunk;
+		return dc;
+	}
+	
+	void deserialize(const DataChunk&) {};
+	~TextCodecParameters(){};
 };
 
 #endif /*TEXT_CODEC_PARAMETERS_H_*/

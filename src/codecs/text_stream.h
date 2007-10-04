@@ -1,7 +1,7 @@
 /***************************************************************************
-                          codec_parameters.h  -  Codec Parameters abstract class
+                          AbstractStream.h  -  Stream abstract class
                              -------------------
-    begin                : Oct 4 2007
+    begin                : Jul 13, 2007
     copyright            : Livio Pipitone
     email                : livent@tiscalinet.it
  ***************************************************************************/
@@ -14,24 +14,29 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include "defs.h"
-#include "../common/data_chunk.h"
-#include "../common/serializable.h"
-#include "string.h"
-#ifndef MPEG_CODEC_PARAMETERS_H_
-#define MPEG_CODEC_PARAMETERS_H_
+#ifndef TEXT_STREAM_H_
+#define TEXT_STREAM_H_
 
-class MpegCodecParameters : public Serializable {
-protected:
-	Uint16 m_height_size;
-	Uint16 m_width_size;
-	Uint8 m_fps;
-	Uint16 m_bitrate;
-	char m_frame_type;
+class TextStream
+{
 public:
-	DataChunk& serialize() = 0;
-	virtual void deserialize(const DataChunk&)= 0;
-	virtual ~MpegCodecParameters(){};
+	~TextStream(){};
+	
+	/*
+	 * Loads a stream from disk.
+	 * @path: filesystem path of file to load;
+	 * @returns: true if operation is successful
+	 */
+	
+	virtual bool load_from_disk(const std::string& path) = 0;
+	
+	
+	/*
+	 * Saves a stream to disk.
+	 * @path: filesystem path of file to save;
+	 * @returns: true if operation is successful
+	 */
+	virtual bool save_to_disk(const std::string& path) = 0;
 };
 
-#endif /*MPEG_CODEC_PARAMETERS_H_*/
+#endif /*TEXT_STREAM_H_*/
