@@ -16,14 +16,15 @@
 #include "text_stream.h"
 #include "md_stream.h"
 #include "abstract_stream.h"
+#include "abstract_md_codec.h"
 
 #ifndef TEXT_MD_CODEC_H_
 #define TEXT_MD_CODEC_H_
 
-class TextMDCodec {
+class TextMDCodec : public AbstractMDCodec{
 public:
-	void code(const TextStream* stream, MDStream* md_stream);
-	virtual void decode(const MDStream* md_stream, AbstractStream* stream) = 0;
+	void code(const AbstractStream* stream, MDStream* md_stream);
+	void decode(const MDStream* md_stream, AbstractStream* stream);
 	~TextMDCodec(){};
 };
 

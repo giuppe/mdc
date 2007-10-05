@@ -21,8 +21,10 @@
 #include "md_stream.h"
 #include "descriptor.h"
 
-void TextMDCodec::code(const TextStream* stream, MDStream* md_stream) {
-	stream->get_character();
+void TextMDCodec::code(const AbstractStream* stream, MDStream* md_stream) 
+{
+	//FIXME this function doesn't do what it should...
+	(dynamic_cast<const TextStream*>(stream))->get_character(0);
 	Descriptor* descriptor= new Descriptor;
 	descriptor->set_codec_name("text");
 	descriptor->set_file_name("");

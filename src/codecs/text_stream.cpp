@@ -32,6 +32,8 @@ bool TextStream::load_from_disk(const std::string& path) {
 	else return false;
 }
 
-char& TextStream::get_character() {
-	return character;
+char& TextStream::get_character(Uint32 position) const
+{
+	//FIXME: should check array boundaries
+	return character[position];
 }

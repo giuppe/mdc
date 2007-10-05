@@ -18,11 +18,13 @@
 #include "stdio.h"
 #include "descriptor.h"
 #include "string.h"
+#include "abstract_stream.h"
 
 #ifndef TEXT_STREAM_H_
 #define TEXT_STREAM_H_
 
-class TextStream {
+class TextStream :public AbstractStream
+{
 private:
 	char* character;
 public:
@@ -32,14 +34,18 @@ public:
 	 * @returns: true if operation is successful
 	 */
 	bool load_from_disk(const std::string& path);
-	char& get_character ();
+	
+	
+	char& get_character (Uint32 position) const;
 	
 	/*
 	 * Saves a stream to disk.
 	 * @path: filesystem path of file to save;
 	 * @returns: true if operation is successful
 	 */
-	virtual bool save_to_disk(const std::string& path) = 0;
+	bool save_to_disk(const std::string& path);
+	
+	
 	~TextStream(){};
 };
 

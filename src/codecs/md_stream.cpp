@@ -125,6 +125,6 @@ MDStream::~MDStream()
 
 bool MDStream::load_from_disk(const std::string& path)
 {
-	assert("this function must be filled.");
+	assert(!"this function is a stub and must be filled.");
 	return false;
 }

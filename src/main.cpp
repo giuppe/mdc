@@ -15,6 +15,9 @@
 #include <SDL/SDL.h>
 #include "common/scheduler.h"
 #include "codecs/codec_registry.h"
+#include "codecs/text_stream.h"
+#include "codecs/text_md_codec.h"
+#include "codecs/md_stream.h"
 #include "server_action.h"
 #include "client_test_action.h"
 
@@ -38,8 +41,9 @@ int main(int argc, char** argv)
 	SDL_Delay(1000);
 
 	CodecRegistry* codecReg = CodecRegistry::instance();
-	
-	codecReg->register_codec("text", new TextMDCodec());
+	AbstractMDCodec* textcodec = new TextMDCodec();
+	const std::string text("text");
+	codecReg->register_codec(text, textcodec);
 	
 	AbstractConfiguration* config = new CommandlineConfiguration(argc, argv);
 	
@@ -102,13 +106,13 @@ void stream_converter(AbstractConfiguration* config)
 	
 	CodecRegistry* codecReg = CodecRegistry::instance();
 	AbstractMDCodec* codec;
-	codecReg->get_codec("text", codec);
-	TextStream text;
-	text.load_from_disk(input_filename);
+	codecReg->get_codec(std::string("text"), codec);
+	AbstractStream* text = new TextStream();
+	text->load_from_disk(input_filename);
 	MDStream mdstream;
 	
-	codec->code(&text, &mdstream);
+	codec->code(text, &mdstream);
 	
-	mdstream.save_to_disk(output_filename);
+	//mdstream.save_to_disk(output_filename);
 	
 }
