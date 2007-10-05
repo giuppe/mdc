@@ -22,6 +22,12 @@
 #ifndef ABSTRACT_CODEC_PARAMETERS_H_
 #define ABSTRACT_CODEC_PARAMETERS_H_
 
+/**
+ * This abstract class represents generic codec parameters.
+ * Codec parameters are informations about coding, such as 
+ * color bit depth in an image, sampling/quantization parameters etc.
+ * You must derive this class for each codec you create.  
+*/
 class AbstractCodecParameters : public Serializable
 {
 protected:
