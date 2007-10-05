@@ -1,7 +1,7 @@
 /***************************************************************************
-                          TextStream.h  -  Text Stream class
+                          text_stream.cpp  -  Insert text stream
                              -------------------
-    begin                : Jul 13, 2007
+    begin                : Oct 5, 2007
     copyright            : Livio Pipitone
     email                : livent@tiscalinet.it
  ***************************************************************************/
@@ -14,33 +14,24 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include "stdlib.h"
-#include "stdio.h"
-#include "descriptor.h"
+#include "text_stream.h"
 #include "string.h"
+#include "defs.h"
 
-#ifndef TEXT_STREAM_H_
-#define TEXT_STREAM_H_
+bool TextStream::load_from_disk(const std::string& path) {
+	FILE *m_f;
+	char* c;
+	if (fopen(path.c_str(), "r") != NULL) {
+		m_f = fopen(path.c_str(), "r");
+		while (fscanf(m_f, "%c", c) > 0) {
+			character = c;
+		}
+		fclose(m_f);
+		return true;
+	}
+	else return false;
+}
 
-class TextStream {
-private:
-	char* character;
-public:
-	/*
-	 * Loads a stream from disk.
-	 * @path: filesystem path of file to load;
-	 * @returns: true if operation is successful
-	 */
-	bool load_from_disk(const std::string& path);
-	char& get_character ();
-	
-	/*
-	 * Saves a stream to disk.
-	 * @path: filesystem path of file to save;
-	 * @returns: true if operation is successful
-	 */
-	virtual bool save_to_disk(const std::string& path) = 0;
-	~TextStream(){};
-};
-
-#endif /*TEXT_STREAM_H_*/
+char& TextStream::get_character() {
+	return character;
+}

@@ -1,7 +1,7 @@
 /***************************************************************************
-                          TextStream.h  -  Text Stream class
+                          TextMDCodec.h  -  MD codec for text class
                              -------------------
-    begin                : Jul 13, 2007
+    begin                : Oct 5, 2007
     copyright            : Livio Pipitone
     email                : livent@tiscalinet.it
  ***************************************************************************/
@@ -13,34 +13,18 @@
  *   as published by the Free Software Foundation.                                  
  *                                                                                                                 
  ***************************************************************************/
+#include "text_stream.h"
+#include "md_stream.h"
+#include "abstract_stream.h"
 
-#include "stdlib.h"
-#include "stdio.h"
-#include "descriptor.h"
-#include "string.h"
+#ifndef TEXT_MD_CODEC_H_
+#define TEXT_MD_CODEC_H_
 
-#ifndef TEXT_STREAM_H_
-#define TEXT_STREAM_H_
-
-class TextStream {
-private:
-	char* character;
+class TextMDCodec {
 public:
-	/*
-	 * Loads a stream from disk.
-	 * @path: filesystem path of file to load;
-	 * @returns: true if operation is successful
-	 */
-	bool load_from_disk(const std::string& path);
-	char& get_character ();
-	
-	/*
-	 * Saves a stream to disk.
-	 * @path: filesystem path of file to save;
-	 * @returns: true if operation is successful
-	 */
-	virtual bool save_to_disk(const std::string& path) = 0;
-	~TextStream(){};
+	void code(const TextStream* stream, MDStream* md_stream);
+	virtual void decode(const MDStream* md_stream, AbstractStream* stream) = 0;
+	~TextMDCodec(){};
 };
 
-#endif /*TEXT_STREAM_H_*/
+#endif /*TEXT_MD_CODEC_H_*/
