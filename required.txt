@@ -1,0 +1,19 @@
+debian/ubuntu required packages for successfully build eonio's mdc:
+
+build-essential
+libsdl-net1.2-dev
+ (
+  libsdl-net1.2
+  libsdl1.2-dev
+  libgl1-mesa-dev
+  libglu1-mesa-dev 
+  libglu1-xorg-dev 
+  libx11-dev 
+  libxau-dev
+  libxdmcp-dev 
+  mesa-common-dev 
+  x11proto-core-dev
+  x11proto-input-dev 
+  x11proto-kb-dev 
+  xtrans-dev
+ )
