@@ -22,7 +22,11 @@
 #define TEXT_MD_CODEC_H_
 
 class TextMDCodec : public AbstractMDCodec{
+private:
+	Uint8 descriptor_number;
 public:
+	void set_descriptor_number (Uint8& descriptors);
+	Uint8 get_descriptor_number ();
 	void code(const AbstractStream* stream, MDStream* md_stream);
 	void decode(const MDStream* md_stream, AbstractStream* stream);
 	~TextMDCodec(){};

@@ -17,7 +17,7 @@
 #include "defs.h"
 #include "../common/data_chunk.h"
 #include "../common/serializable.h"
-#include "string.h"
+
 #ifndef TEXT_CODEC_PARAMETERS_H_
 #define TEXT_CODEC_PARAMETERS_H_
 

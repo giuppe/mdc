@@ -2,7 +2,7 @@
                           descriptor.h  -  MDC Descriptor class
                              -------------------
     begin                : Jul 13 2007
-    copyright          : (C) 2007 by Giuseppe D'Aqui', Livio Pipitone
+    copyright          : (C) 2007 by Giuseppe D'Aqui'
     email                : kumber@tiscalinet.it
  ***************************************************************************/
 
@@ -66,9 +66,9 @@ public:
 	AbstractCodecParameters* get_codec_parameter () const;
 	
 	/**
-		 * This function serializes the Descriptor state and produces a DataChunk for net sending.
-		 * It is the opposite of deserialize() function.
-		 */
+	 * This function serializes the Descriptor state and produces a DataChunk for net sending.
+	 * It is the opposite of deserialize() function.
+	 */
 	DataChunk& serialize() const;
 	
 	/**
