@@ -40,30 +40,24 @@ private:
 	Uint8* m_payload;
 public:
 	Descriptor() {};
-
 	~Descriptor();
-	
 	Uint8 get_flow_id() const;
-	
 	void set_flow_id(Uint8 id);
-	
 	Uint32 get_sequence_number() const;
-
 	void set_sequence_number(Uint32 seq_num);
-	
 	std::string get_file_name() const;
-
 	void set_file_name(const std::string& file_name);
-	
 	std::string get_hash() const;
-	
 	void set_hash(const std::string& hash);
-
 	void set_codec_name(const std::string& codec_name);
-
 	std::string get_codec_name() const;
-	
 	AbstractCodecParameters* get_codec_parameter () const;
+	void set_payload_size(Uint32);
+	Uint32 get_payload_size();
+	void set_payload(DataChunk payload);
+	DataChunk* get_payload();
+	void set_hash(std::string* hash);
+	std::string get_hash();
 	
 	/**
 	 * This function serializes the Descriptor state and produces a DataChunk for net sending.

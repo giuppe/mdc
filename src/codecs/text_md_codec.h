@@ -23,10 +23,10 @@
 
 class TextMDCodec : public AbstractMDCodec{
 private:
-	Uint8 descriptor_number;
+	Uint8 m_descriptor_number;
 public:
-	void set_descriptor_number (Uint8& descriptors);
 	Uint8 get_descriptor_number ();
+	void set_descriptor_number (Uint8 descriptors);
 	void code(const AbstractStream* stream, MDStream* md_stream);
 	void decode(const MDStream* md_stream, AbstractStream* stream);
 	~TextMDCodec(){};

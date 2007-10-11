@@ -38,12 +38,16 @@ public:
 	 */
 	virtual bool save_to_disk(const std::string& path) = 0;
 	
-	virtual char get_character (Uint32 position) const = 0;
+	virtual char get_characters(Uint32 init_position, Uint32 final_position) const = 0;
 	virtual Uint32 get_characters_dim () const = 0;
 	virtual void set_stream_name(std::string& name) = 0;
 	virtual std::string& get_stream_name() const = 0;
 	virtual void set_payload_size(Uint32 size) const = 0;
 	virtual	Uint32 get_payload_size() = 0;
+	virtual void set_current_position(Uint32 new_position) = 0;
+	virtual Uint32 get_current_position() = 0;
+	virtual std::string& get_stream_hash() = 0;
+	virtual void set_stream_hash() = 0;
 };
 
 #endif /*ABSTRACTSTREAM_H_*/

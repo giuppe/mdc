@@ -20,31 +20,41 @@
 #include "text_stream.h"
 #include "md_stream.h"
 #include "descriptor.h"
-#include "hashtable.h"
+#include "../common/data_chunk.h"
 
-void TextMDCodec::set_descriptor_number (Uint8& descriptors) {
-	descriptor_number = descriptors;
+void TextMDCodec::set_descriptor_number (Uint8 descriptors) {
+	m_descriptor_number = descriptors;
 }
 
 Uint8 TextMDCodec::get_descriptor_number () {
-	return descriptor_number;
+	return m_descriptor_number;
 }
 
 void TextMDCodec::code(const AbstractStream* stream, MDStream* md_stream) 
 {
-	for (Uint8 i=0; i<descriptor_number; i++) {
-		Descriptor* descriptor= new Descriptor;
-		descriptor->set_file_name(stream->get_stream_name()+".mdc");
-		descriptor->set_flow_id(i);
-		descriptor->set_codec_name("text");
-		descriptor->set_payload_size(1024);
-		descriptor->set_hash();//insert an hash sha1 / sha2, code based on contents
-		Uint32 dim = (dynamic_cast<const TextStream*>(stream))->get_characters_dim();
-		for (Uint32 i=0; i <= dim; i++) {
-			(dynamic_cast<const TextStream*>(stream))->get_character(i);
-			descriptor->set_sequence_number();//insert Uint32
-			descriptor->set_payload();//must be created?
-			md_stream->set_descriptor(descriptor);
+	m_descriptor_number = 2;
+	vector<Uint32> m_seq;
+	for (Uint8 i=1; i<=descriptor_number; i++) {
+		Descriptor* descriptor(i)= new Descriptor;
+		descriptor(i)->set_file_name(stream->get_stream_name()+".mdc");
+		descriptor(i)->set_flow_id(i);
+		descriptor(i)->set_codec_name("text");
+		Uint32 m_descriptor_dim = Uint32(stream->get_payload_size() / m_descriptor_number);
+		if (i-m_descriptor_number == 0)
+			m_descriptor_dim = Uint32(stream->get_payload_size() - (descriptor_dim * i));
+		descriptor(i)->set_payload_size(m_descriptor_dim);
+		Uint32 m_last_position = 0;
+		while (m_last_position<=m_descriptor_dim) {
+			stream = (dynamic_cast<const TextStream*>(stream))->get_characters(m_last_position, m_last_position+descriptor_dim);
+			m_last_position++;
 		}
+		descriptor(i)->set_sequence_number(m_seq[i]);
+		m_seq[i]++;
+		DataChunk payload = descriptor(i)->get_payload();
+		descriptor(i)->set_payload(payload);
+		descriptor(i)->set_hash(stream->get_stream_hash());
+		md_stream->set_descriptor(descriptor(i));
 	}
 }
+
+void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {}
