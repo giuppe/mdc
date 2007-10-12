@@ -14,12 +14,12 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include "stdlib.h"
-#include "stdio.h"
+#include <cstdlib>
+#include <cstdio>
 #include "descriptor.h"
 #include "abstract_stream.h"
-#include "vector.h"
-#include "string.h"
+#include <vector>
+#include <string>
 #include "../sha/mhash.h"
 
 #ifndef TEXT_STREAM_H_
@@ -28,7 +28,7 @@
 class TextStream : public AbstractStream
 {
 private:
-	vector<char> m_characters;
+	std::vector<char> m_characters;
 	std::string m_stream_name;
 	Uint32 m_size;
 	Uint32 m_current_position;

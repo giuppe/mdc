@@ -15,10 +15,10 @@
  ***************************************************************************/
 
 #include "text_stream.h"
-#include "string.h"
+#include <string.h>
 #include "defs.h"
-#include "vector.h"
-#include "mhash_sha1.h"
+#include <vector>
+#include "../sha/mhash_sha1.h"
 
 bool TextStream::load_from_disk(const std::string& path) {
 	FILE *m_f;

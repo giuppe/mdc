@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "text_md_codec.h"
-#include "string.h"
+#include <string>
 #include "defs.h"
 #include "text_stream.h"
 #include "md_stream.h"
@@ -33,7 +33,7 @@ Uint8 TextMDCodec::get_descriptor_number () {
 void TextMDCodec::code(const AbstractStream* stream, MDStream* md_stream) 
 {
 	m_descriptor_number = 2;
-	vector<Uint32> m_seq;
+	std::vector<Uint32> m_seq;
 	for (Uint8 i=1; i<=descriptor_number; i++) {
 		Descriptor* descriptor(i)= new Descriptor;
 		descriptor(i)->set_file_name(stream->get_stream_name()+".mdc");
