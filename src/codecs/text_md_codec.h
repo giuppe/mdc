@@ -1,5 +1,5 @@
 /***************************************************************************
-                          TextMDCodec.h  -  MD codec for text class
+                          TextMDCodec.h  -  MD codec class for text
                              -------------------
     begin                : Oct 5, 2007
     copyright            : Livio Pipitone
@@ -23,11 +23,34 @@
 
 class TextMDCodec : public AbstractMDCodec{
 private:
-	Uint8 m_descriptor_number;
+	Uint8 m_flows_number;
 public:
-	Uint8 get_descriptor_number ();
-	void set_descriptor_number (Uint8 descriptors);
+	
+	/*
+	 * Get flows number.
+	 * @returns: flows number
+	 */
+	Uint8 get_flows_number ();
+	
+	/*
+	 * Set flows number.
+	 * @flows: flows number
+	 * @dinal_position: read to this final position
+	 */
+	void set_flows_number (Uint8 flows);
+	
+	/*
+	 * Code the stream.
+	 * @stream: abstract stream to be coded
+	 * @md_stream: flow group
+	 */
 	void code(const AbstractStream* stream, MDStream* md_stream);
+	
+	/*
+	 * Decode the received stream.
+	 * @md_stream: flow group
+	 * @stream: abstract stream to be decoded
+	 */
 	void decode(const MDStream* md_stream, AbstractStream* stream);
 	~TextMDCodec(){};
 };

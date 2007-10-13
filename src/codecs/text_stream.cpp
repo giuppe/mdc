@@ -26,7 +26,7 @@ bool TextStream::load_from_disk(const std::string& path) {
 	if (fopen(path.c_str(), "r") != NULL) {
 		m_f = fopen(path.c_str(), "r");
 		while (fscanf(m_f, "%c", &c) > 0) {
-			m_characters.push_back(c);
+			m_data.push_back(c);
 		}
 		fclose(m_f);
 		return true;
@@ -34,15 +34,15 @@ bool TextStream::load_from_disk(const std::string& path) {
 	else return false;
 }
 
-char TextStream::get_characters(Uint32 init_position, Uint32 final_position) const
+char TextStream::get_data(Uint32 init_position, Uint32 final_position) const
 {
-	if ((!m_characters.empty()) && (position <= m_characters.size()))
-		return m_characters.at(position);
+	if ((!m_data.empty()) && (position <= m_data.size()))
+		return m_data.at(position);
 	else return NULL;
 }
 
-Uint32 TextStream::get_characters_dim() const {
-	return m_characters.size();
+Uint32 TextStream::get_data_dim() const {
+	return m_data.size();
 }
 
 void TextStream::set_stream_name(std::string& name) {
@@ -63,7 +63,7 @@ Uint32 TextStream::get_payload_size() {
 }
 
 void TextStream::set_current_position(Uint32 new_position) {
-	if (m_current_position+new_position < m_characters.size()-1)
+	if (m_current_position+new_position < m_data.size()-1)
 		m_current_position = new_position;
 }
 
@@ -71,12 +71,12 @@ Uint32 TextStream::get_current_position() {
 	return m_current_position;
 }
 
-void TextStream::set_stream_hash() {
+void TextStream::update_stream_hash() {
 	m_td = mhash_init(MHASH_SHA1);
-	if (td == MHASH_FAILED) return ("");
+	if (td == MHASH_FAILED) return;
 	else {
-		for (Uint32 i=0; i<m_characters.size(); i++)
-			mhash(m_td, &m_characters[i], 1);
+		for (Uint32 i=0; i<m_data.size(); i++)
+			mhash(m_td, &m_data[i], 1);
 		m_hash = mhash_end(m_td);
 	}
 }

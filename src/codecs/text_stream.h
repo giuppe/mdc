@@ -28,7 +28,7 @@
 class TextStream : public AbstractStream
 {
 private:
-	std::vector<char> m_characters;
+	std::vector<char> m_data;
 	std::string m_stream_name;
 	Uint32 m_size;
 	Uint32 m_current_position;
@@ -41,8 +41,8 @@ public:
 	 * @returns: true if operation is successful
 	 */
 	bool load_from_disk(const std::string& path);
-	char get_characters(Uint32 init_position, Uint32 final_position) const;
-	Uint32 get_characters_dim () const;
+	char get_data(Uint32 init_position, Uint32 final_position) const;
+	Uint32 get_data_dim () const;
 	void set_stream_name(std::string& name);
 	std::string& get_stream_name() const;
 	void set_payload_size(Uint32 size) const;
@@ -50,7 +50,7 @@ public:
 	void set_current_position(Uint32 new_position);
 	Uint32 get_current_position();
 	std::string& get_stream_hash();
-	void set_stream_hash();
+	void update_stream_hash();
 	
 	/*
 	 * Saves a stream to disk.

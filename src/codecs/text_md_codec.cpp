@@ -21,20 +21,22 @@
 #include "md_stream.h"
 #include "descriptor.h"
 #include "../common/data_chunk.h"
+#include <vector>
 
-void TextMDCodec::set_descriptor_number (Uint8 descriptors) {
-	m_descriptor_number = descriptors;
+void TextMDCodec::set_flows_number (Uint8 descriptors) {
+	m_flows_number = descriptors;
 }
 
-Uint8 TextMDCodec::get_descriptor_number () {
-	return m_descriptor_number;
+Uint8 TextMDCodec::get_flows_number () {
+	return m_flows_number;
 }
 
 void TextMDCodec::code(const AbstractStream* stream, MDStream* md_stream) 
 {
-	m_descriptor_number = 2;
+	//settare i flussi e derivare i descrittori
 	std::vector<Uint32> m_seq;
-	for (Uint8 i=1; i<=descriptor_number; i++) {
+	std::vector<Descriptor> descriptors;
+	for (Uint8 i=1; i<=m_flows_number; i++) {
 		Descriptor* descriptor(i)= new Descriptor;
 		descriptor(i)->set_file_name(stream->get_stream_name()+".mdc");
 		descriptor(i)->set_flow_id(i);

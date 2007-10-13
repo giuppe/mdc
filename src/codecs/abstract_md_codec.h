@@ -24,8 +24,8 @@
 class AbstractMDCodec
 {
 public:
-	virtual void set_descriptor_number (Uint8 descriptors) = 0;
-	virtual Uint8 get_descriptor_number () = 0;
+	virtual void set_flows_number (Uint8 flows) = 0;
+	virtual Uint8 get_flows_number () = 0;
 	virtual void code(const AbstractStream* stream, MDStream* md_stream) = 0;
 	virtual void decode(const MDStream* md_stream, AbstractStream* stream) = 0;
 	virtual ~AbstractMDCodec(){};
