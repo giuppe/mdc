@@ -1,5 +1,5 @@
 /***************************************************************************
-                          MDStream.h  -  Multiple Descriptor Stream class
+                          md_stream.h  -  Multiple Descriptor Stream class
                              -------------------
     begin                : Jul 13, 2007
     copyright          : (C) 2007 by Giuseppe D'Aqui'
@@ -61,11 +61,13 @@ public:
 	 */
 	bool get_descriptor(Uint8 flow, Uint32 sequence, Descriptor* &descriptor) const;
 	
-	
+	/*
+	 * Sets the descriptor.
+	 * @descriptor: descriptor to be set
+	 */
 	void set_descriptor(Descriptor* descriptor);
 	
-	
-	 /*
+	/*
 	 * Loads a stream from disk.
 	 * @path: filesystem path of file to load;
 	 * @returns: true if operation is successful
@@ -79,13 +81,22 @@ public:
 	 */
 	bool save_to_disk(const std::string& path);
 	
-	
-	
+	/*
+	 * Gets a stream name.
+	 * @returns: stream name
+	 */
 	std::string get_name() const;
 	
-	
+	/*
+	 * Gets a stream name.
+	 * @returns: stream hash
+	 */	
 	std::string get_hash() const;
 	
+	/*
+	 * Verifies if a stream is empty.
+	 * @returns: true if stream is empty
+	 */
 	bool is_empty(){return m_is_empty;}
 	
 };

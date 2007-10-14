@@ -41,23 +41,96 @@ private:
 public:
 	Descriptor() {};
 	~Descriptor();
+	
+	/*
+	 * Get flow identifier.
+	 * @returns: flow identifier of a stream
+	 */
 	Uint8 get_flow_id() const;
+	
+	/*
+	 * Set flow identifier.
+	 * @id: flow identifier
+	 */
 	void set_flow_id(Uint8 id);
+	
+	/*
+	 * Get sequence number.
+	 * @returns: sequence number
+	 */
 	Uint32 get_sequence_number() const;
+	
+	/*
+	 * Set sequence number.
+	 * @seq_num: sequence number
+	 */
 	void set_sequence_number(Uint32 seq_num);
+	
+	/*
+	 * Get file name.
+	 * @returns: file name
+	 */
 	std::string get_file_name() const;
+	
+	/*
+	 * Set file name.
+	 * @file_name: file name
+	 */
 	void set_file_name(const std::string& file_name);
+	
+	/*
+	 * Get hash.
+	 * @returns: hash code
+	 */
 	std::string get_hash() const;
+	
+	/*
+	 * Set hash.
+	 * @hash: hash code
+	 */
 	void set_hash(const std::string& hash);
+	
+	/*
+	 * Set codec name.
+	 * @codec_name: codec name
+	 */
 	void set_codec_name(const std::string& codec_name);
+	
+	/*
+	 * Get codec name.
+	 * @returns: codec name
+	 */
 	std::string get_codec_name() const;
-	AbstractCodecParameters* get_codec_parameter () const;
-	void set_payload_size(Uint32);
+	
+	/*
+	 * Get codec parameter.
+	 * @returns: codec parameters
+	 */
+	AbstractCodecParameters* get_codec_parameter() const;
+	
+	/*
+	 * Set payload size.
+	 * @psize: payload size
+	 */
+	void set_payload_size(Uint32 psize);
+	
+	/*
+	 * Get payload size.
+	 * @returns: payload size
+	 */
 	Uint32 get_payload_size();
-	void set_payload(DataChunk payload);
+	
+	/*
+	 * Set payload.
+	 * @payload: real payload
+	 */
+	void set_payload(DataChunk& payload);
+	
+	/*
+	 * Get payload.
+	 * @returns: data chunk containing payload
+	 */
 	DataChunk* get_payload();
-	void set_hash(std::string* hash);
-	std::string get_hash();
 	
 	/**
 	 * This function serializes the Descriptor state and produces a DataChunk for net sending.

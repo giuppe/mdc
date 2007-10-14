@@ -1,5 +1,5 @@
 /***************************************************************************
-                          descriptor.cpp  -  MDC Descriptor class
+                      descriptor.cpp  -  MDC Descriptor
                              -------------------
     begin                : Jul 13, 2007
     copyright          : (C) 2007 by Giuseppe D'Aqui'
@@ -96,15 +96,15 @@ DataChunk& Descriptor::serialize() const
 
 void Descriptor::deserialize(const DataChunk& data) {}
 
-void Descriptor::set_payload_size(Uint32 m_psize) {
-	m_payload_size = m_psize;
+void Descriptor::set_payload_size(Uint32 psize) {
+	m_payload_size = psize;
 }
 
 Uint32 Descriptor::get_payload_size() {
 	return m_payload_size;
 }
 
-void Descriptor::set_payload(DataChunk payload) {
+void Descriptor::set_payload(DataChunk& payload) {
 	m_payload = payload.get_data();
 }
 

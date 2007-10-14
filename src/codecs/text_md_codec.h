@@ -1,5 +1,5 @@
 /***************************************************************************
-                          TextMDCodec.h  -  MD codec class for text
+                    text_md_codec.h  -  MD codec class for text
                              -------------------
     begin                : Oct 5, 2007
     copyright            : Livio Pipitone
@@ -13,6 +13,7 @@
  *   as published by the Free Software Foundation.                                  
  *                                                                                                                 
  ***************************************************************************/
+
 #include "text_stream.h"
 #include "md_stream.h"
 #include "abstract_stream.h"
@@ -24,27 +25,34 @@
 class TextMDCodec : public AbstractMDCodec{
 private:
 	Uint8 m_flows_number;
+	Uint8 m_descriptors_number;
+	Uint16 m_descr_dim_total;
 public:
 	
 	/*
 	 * Get flows number.
 	 * @returns: flows number
 	 */
-	Uint8 get_flows_number ();
+	Uint8 get_flows_number();
 	
 	/*
 	 * Set flows number.
 	 * @flows: flows number
-	 * @dinal_position: read to this final position
 	 */
-	void set_flows_number (Uint8 flows);
+	void set_flows_number(Uint8 flows);
 	
 	/*
-	 * Code the stream.
+	 * Set descriptor dimension.
+	 * @total_dimension: dimension of payload and header
+	 */	
+	void set_descriptor_dimension(Uint16 total_dimension);
+	
+	/*
+	 * Code the stream to be sent.
 	 * @stream: abstract stream to be coded
 	 * @md_stream: flow group
 	 */
-	void code(const AbstractStream* stream, MDStream* md_stream);
+	void code(AbstractStream* stream, MDStream* md_stream);
 	
 	/*
 	 * Decode the received stream.

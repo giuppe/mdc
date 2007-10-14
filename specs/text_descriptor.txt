@@ -1,11 +1,10 @@
 3 bytes  	"MDC"
 1 byte		version
 4 bytes		"DESC"
-??		stream hash (null terminated)
-??		stream file name (null terminated)
+??			stream hash (null terminated)
+?? 			stream file name (null terminated)
 1 byte		flow_id
 4 bytes		sequence_number
-??		codec name (null terminated)
-4 bytes		payload size
-??		payload
-
+??			codec name (null terminated)
+2 bytes		payload size
+??			payload

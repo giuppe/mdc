@@ -1,5 +1,5 @@
 /***************************************************************************
-                          AbstractStream.h  -  Stream abstract class
+                          abstract_stream.h  -  Stream abstract class
                              -------------------
     begin                : Jul 13, 2007
     copyright          : (C) 2007 by Giuseppe D'Aqui'
@@ -15,6 +15,8 @@
  ***************************************************************************/
 
 #include <string>
+#include <vector>
+#include "../common/data_chunk.h"
 
 #ifndef ABSTRACTSTREAM_H_
 #define ABSTRACTSTREAM_H_
@@ -39,18 +41,17 @@ public:
 	virtual bool save_to_disk(const std::string& path) = 0;
 
 	/*
-	 * Get data stream from disk.
-	 * @init_position: read from this initial position
-	 * @dinal_position: read to this final position
-	 * @returns: data between positions
+	 * Get data from memory.
+	 * @dimension: quantity of data to be selected
+	 * @returns: data chunk containing data from current position to new current position
 	 */
-	virtual char get_data(Uint32 init_position, Uint32 final_position) const = 0;
+	virtual DataChunk& get_data(Uint16 dimension) const = 0;
 	
 	/*
 	 * Get data dimension from file.
 	 * @returns: dimension
 	 */
-	virtual Uint32 get_data_dim () const = 0;
+	virtual Uint32 get_data_dim() const = 0;
 	
 	/*
 	 * Set stream name.
@@ -64,42 +65,36 @@ public:
 	 * @final_position: read to this final position
 	 * @returns: name
 	 */
-	virtual std::string& get_stream_name() const = 0;
+	virtual std::string get_stream_name() const = 0;
 	
 	/*
 	 * Set payload size.
 	 * @size: size to be set
 	 */
-	virtual void set_payload_size(Uint32 size) const = 0;
+	virtual void set_payload_size(Uint32 size) = 0;
 	
 	/*
-	 * Get payload size.
-	 * @returns: size
-	 */
-	virtual	Uint32 get_payload_size() = 0;
-	
-	/*
-	 * Set position in file.
+	 * Set last position in file.
 	 * @new_position: position to be considered as new current position
 	 */
-	virtual void set_current_position(Uint32 new_position) = 0;
+	virtual void set_last_current_position(Uint32 new_position) = 0;
 	
 	/*
-	 * Get current position in file.
-	 * @returns: current position
+	 * Get last current position in file.
+	 * @returns: last current position
 	 */
-	virtual Uint32 get_current_position() = 0;
+	virtual Uint32 get_last_current_position() const = 0;
 	
 	/*
-	 * Get hash based on a stream.
+	 * Get stream hash.
 	 * @returns: hash string
 	 */
-	virtual std::string& get_stream_hash() = 0;
+	virtual std::string get_stream_hash() const = 0;
 	
 	/*
-	 * Update hash based on current data.
+	 * Update hash based on file content.
 	 */
-	virtual void update_stream_hash() = 0; //update
+	virtual void update_stream_hash() = 0;
 };
 
 #endif /*ABSTRACTSTREAM_H_*/

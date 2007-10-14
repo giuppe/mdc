@@ -1,5 +1,5 @@
 /***************************************************************************
-                          TextStream.h  -  Text Stream class
+                       text_stream.h  -  Text Stream class
                              -------------------
     begin                : Jul 13, 2007
     copyright            : Livio Pipitone
@@ -21,6 +21,7 @@
 #include <vector>
 #include <string>
 #include "../sha/mhash.h"
+#include "../common/data_chunk.h"
 
 #ifndef TEXT_STREAM_H_
 #define TEXT_STREAM_H_
@@ -31,7 +32,7 @@ private:
 	std::vector<char> m_data;
 	std::string m_stream_name;
 	Uint32 m_size;
-	Uint32 m_current_position;
+	Uint32 m_last_current_position;
 	MHASH m_td;
 	std::string m_hash;
 public:
@@ -41,15 +42,59 @@ public:
 	 * @returns: true if operation is successful
 	 */
 	bool load_from_disk(const std::string& path);
-	char get_data(Uint32 init_position, Uint32 final_position) const;
-	Uint32 get_data_dim () const;
+	
+	/*
+	 * Get a data set from a file.
+	 * @dimension: number of single data
+	 * @returns: a data chunk containing data set
+	 */
+	DataChunk& get_data(Uint16 dimension) const;
+	
+	/*
+	 * Get data dimension.
+	 * @returns: data set dimension
+	 */
+	Uint32 get_data_dim() const;
+	
+	/*
+	 * Set stream name.
+	 * @name: stream name
+	 */
 	void set_stream_name(std::string& name);
-	std::string& get_stream_name() const;
-	void set_payload_size(Uint32 size) const;
-	Uint32 get_payload_size();
-	void set_current_position(Uint32 new_position);
-	Uint32 get_current_position();
-	std::string& get_stream_hash();
+	
+	/*
+	 * Get stream name.
+	 * @returns: stream name
+	 */
+	std::string get_stream_name() const;
+	
+	/*
+	 * Set payload size.
+	 * @size: payload size
+	 */
+	void set_payload_size(Uint32 size);
+	
+	/*
+	 * Set cursor's last position in stream.
+	 * @new_position: new position to be set for cursor
+	 */
+	void set_last_current_position(Uint32 new_position);
+	
+	/*
+	 * Get cursor's last position in stream.
+	 * @returns: last position
+	 */
+	Uint32 get_last_current_position() const;
+	
+	/*
+	 * Get stream hash.
+	 * @returns: hash code calculated on stream content
+	 */
+	std::string get_stream_hash() const;
+	
+	/*
+	 * Update stream hash.
+	 */
 	void update_stream_hash();
 	
 	/*

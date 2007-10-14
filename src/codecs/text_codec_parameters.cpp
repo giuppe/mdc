@@ -1,7 +1,7 @@
 /***************************************************************************
-           text_codec_parameters.h  -  Text Codec Parameters class
+           text_codec_parameters.cpp  -  Text Codec Parameters
                              -------------------
-    begin                : Oct 4 2007
+    begin                : Oct 14 2007
     copyright            : Livio Pipitone
     email                : livent@tiscalinet.it
  ***************************************************************************/
@@ -14,18 +14,13 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include "defs.h"
+#include "text_codec_parameters.h"
 #include "../common/data_chunk.h"
 #include "../common/serializable.h"
 
-#ifndef TEXT_CODEC_PARAMETERS_H_
-#define TEXT_CODEC_PARAMETERS_H_
+DataChunk& TextCodecParameters::serialize() {
+	DataChunk* dc = new DataChunk;
+	return *dc;
+}
 
-class TextCodecParameters : public Serializable {
-public:
-	DataChunk& serialize();
-	void deserialize(const DataChunk&);
-	~TextCodecParameters();
-};
-
-#endif /*TEXT_CODEC_PARAMETERS_H_*/
+void deserialize(const DataChunk&) {}
