@@ -19,6 +19,7 @@
 #include "defs.h"
 #include <vector>
 #include "../common/data_chunk.h"
+#include <cassert>
 
 bool TextStream::load_from_disk(const std::string& path) {
 	FILE *m_f;
@@ -49,9 +50,14 @@ Uint32 TextStream::get_last_current_position() const {
 DataChunk& TextStream::get_data(Uint16 dimension) const {
 	if (!m_data.empty()) {
 		DataChunk* d = new DataChunk;
-		for (Uint32 i=m_last_current_position; i <  m_last_current_position+dimension; i++)
-			d->append(m_data.at(m_last_current_position));
-		return *d;
+		if (m_last_current_position+dimension < m_size)
+			for (Uint32 i = m_last_current_position; i <  m_last_current_position+dimension; i++)
+				d->append(m_data.at(m_last_current_position));
+		else {
+			for (Uint32 i = m_last_current_position; i <  m_size-1; i++)
+				d->append(m_data.at(m_last_current_position));
+			return *d;
+		}
 	}
 }
 
@@ -71,10 +77,12 @@ void TextStream::set_payload_size(Uint32 psize) {
 	m_size = psize;
 }
 
-void TextStream::update_stream_hash() {}
+void TextStream::update_stream_hash() {
+	m_hash = "livent rulez";
+}
 
 std::string TextStream::get_stream_hash() const {
 	return m_hash;
 }
 
-bool save_to_disk(const std::string& path) {}
+bool TextStream::save_to_disk(const std::string& path) {assert(!"this funztion is a stub");}
