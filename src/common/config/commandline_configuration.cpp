@@ -121,8 +121,12 @@ bool CommandlineConfiguration::get_bool(const std::string& section_name, const s
 {
 
 	if(m_arguments.find(object_name)==m_arguments.end())
+	{
+		value=false;
+	
 		return false;
-
+	}
+	
 	std::map<std::string, std::string>::const_iterator it;
 	
 	it = m_arguments.find(object_name);
