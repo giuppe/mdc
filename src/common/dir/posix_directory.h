@@ -14,18 +14,22 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include "abstract_directory.h";
+#include "abstract_directory.h"
 #include <vector>
 #include <string>
+
 
 
 #ifndef POSIX_DIRECTORY_H_
 #define POSIX_DIRECTORY_H_
 
+
 class PosixDirectory : public AbstractDirectory
 {
 public:
 	std::vector<std::string> get_file_names(std::string path);
+	
+	bool load_file(const std::string& path, DataChunk& loaded_data);
 };
 
 #endif /*POSIX_DIRECTORY_H_*/

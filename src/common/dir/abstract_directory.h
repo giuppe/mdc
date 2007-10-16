@@ -19,10 +19,14 @@
 #ifndef ABSTRACT_DIRECTORY_H_
 #define ABSTRACT_DIRECTORY_H_
 
+class DataChunk;
+
 class AbstractDirectory
 {
 public:
 	virtual std::vector<std::string> get_file_names(std::string path) = 0;
+	
+	virtual bool load_file(const std::string& path, DataChunk& loaded_data) = 0;
 };
 
 #endif /*ABSTRACT_DIRECTORY_H_*/
