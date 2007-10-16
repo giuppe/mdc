@@ -252,3 +252,11 @@ DataChunk::~DataChunk()
 
 
 
+void DataChunk::erase()
+{
+	if(m_lenght!=0)
+			delete [] m_real_data;
+
+	m_lenght=0;
+}
+

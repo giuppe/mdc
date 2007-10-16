@@ -174,6 +174,8 @@ public:
 	
 	bool extract_head(Uint32 lenght, Uint8* &data);
 	
+	void erase();
+	
 };
 
 #endif /*DATA_CHUNK_H_*/
