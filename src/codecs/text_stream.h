@@ -20,7 +20,6 @@
 #include "abstract_stream.h"
 #include <vector>
 #include <string>
-#include "../sha/mhash.h"
 #include "../common/data_chunk.h"
 
 #ifndef TEXT_STREAM_H_
@@ -33,7 +32,6 @@ private:
 	std::string m_stream_name;
 	Uint32 m_size;
 	Uint32 m_last_current_position;
-	MHASH m_td;
 	std::string m_hash;
 public:
 	/*

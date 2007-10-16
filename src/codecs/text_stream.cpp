@@ -18,7 +18,6 @@
 #include <string>
 #include "defs.h"
 #include <vector>
-#include "../sha/mhash.h"
 #include "../common/data_chunk.h"
 
 bool TextStream::load_from_disk(const std::string& path) {
@@ -72,18 +71,10 @@ void TextStream::set_payload_size(Uint32 psize) {
 	m_size = psize;
 }
 
-void TextStream::update_stream_hash() {
-	m_td = mhash_init();
-	//m_td = mhash_init(MHASH_SHA1);
-	if (m_td == MHASH_FAILED) return;
-	else {
-		for (Uint32 i=0; i<m_data.size(); i++)
-			mhash();
-			//mhash(m_td, m_data.at(i), 1);
-		//m_hash = mhash_end();
-	}
-}
+void TextStream::update_stream_hash() {}
 
 std::string TextStream::get_stream_hash() const {
 	return m_hash;
 }
+
+bool save_to_disk(const std::string& path) {}
