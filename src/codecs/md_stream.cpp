@@ -20,6 +20,9 @@
 #include <vector>
 #include <cassert>
 #include "descriptor.h"
+#include "../common/dir/abstract_directory.h"
+#include "../common/dir/directory_factory.h"
+
 
 
 MDStream::MDStream():m_is_empty(true),m_is_inited(false)
@@ -38,6 +41,10 @@ void MDStream::init(Uint8 n_flows, Uint32 sequence_size)
 	for(Uint32 i= 0; i<n_flows; i++)
 	{
 		m_stream[i].resize(sequence_size);
+		for(Uint32 k =0; k<sequence_size; k++)
+		{
+			m_stream[i][k] = new Descriptor();
+		}
 	}
 	
 	m_valid_descriptor.resize(n_flows);
@@ -125,6 +132,14 @@ MDStream::~MDStream()
 
 bool MDStream::load_from_disk(const std::string& path)
 {
-	assert(!"this function is a stub and must be filled.");
+	
+	DataChunk data;
+	AbstractDirectory* dir = DirectoryFactory::createDirectory();
+	if(dir->load_file(path, data)==true)
+	{
+		//ulteriori analisi su data
+		assert(!"Function is a stub - you should fill it up!");
+		return true;
+	}
 	return false;
 }

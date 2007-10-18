@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 	
 	AbstractConfiguration* config = new CommandlineConfiguration(argc, argv);
 	
-	bool call_convert;
+	bool call_convert = false;
 	
 	config->get_bool("", "convert", call_convert);
 	
@@ -101,18 +101,15 @@ void stream_converter(AbstractConfiguration* config)
 	std::string output_filename, input_filename;
 	config->get_string("","output", output_filename);
 	config->get_string("","input", input_filename);
-		
 	DEBUG_OUT("converting "<<input_filename<<" to "<<output_filename<<"\n");
-	
 	CodecRegistry* codecReg = CodecRegistry::instance();
 	AbstractMDCodec* codec;
 	codecReg->get_codec(std::string("text"), codec);
 	AbstractStream* text = new TextStream();
 	text->load_from_disk(input_filename);
+
 	MDStream mdstream;
-	
 	codec->code(text, &mdstream);
-	codec->decode(&mdstream, text);
-	mdstream.save_to_disk(output_filename);
+	//codec->decode(&mdstream, text);
 	
 }
