@@ -34,7 +34,7 @@ public:
 	
 	void register_codec(const std::string& name, AbstractMDCodec* codec);
 	
-	bool get_codec(const std::string& name, AbstractMDCodec* codec) const;
+	bool get_codec(const std::string& name, AbstractMDCodec*& codec) const;
 
 	void init(){};
 	

@@ -28,7 +28,7 @@ void CodecRegistry::register_codec(const std::string& name, AbstractMDCodec* cod
 }
 
 
-bool CodecRegistry::get_codec(const std::string& name, AbstractMDCodec* codec) const
+bool CodecRegistry::get_codec(const std::string& name, AbstractMDCodec*& codec) const
 {
 	if(m_codecs.count(name)==0)
 	{
