@@ -35,7 +35,7 @@ private:
 	
 	Uint32 m_lenght;
 	
-	bool m_initialized;
+	//bool m_initialized;
 	
 	DataChunk(const DataChunk&){};
 	
@@ -51,7 +51,7 @@ public:
 	/**
 	 * Default DataChunk constructor.
 	 */
-	DataChunk():m_lenght(0),m_initialized(false){};
+	DataChunk():m_lenght(0){};
 	
 	~DataChunk();
 	

@@ -42,7 +42,7 @@ Uint32 DataChunk::get_lenght() const
 
 void DataChunk::set_content(Uint8* data, Uint32 lenght)
 {
-	m_initialized = true;
+
 	m_data = data;
 	m_real_data = m_data;
 	m_lenght = lenght;
