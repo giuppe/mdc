@@ -21,7 +21,6 @@
 #include "md_stream.h"
 #include "descriptor.h"
 #include "../common/data_chunk.h"
-#include <vector>
 
 void TextMDCodec::set_flows_number(Uint8 descriptors) {
 	m_flows_number = descriptors;
@@ -35,26 +34,23 @@ void TextMDCodec::set_descriptor_dimension(Uint16 total_dimension) {
 	m_descr_dim_total = total_dimension;
 }
 
-void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) 
+void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 {
-	std::vector<Uint32> m_seq;
 	std::string m_codec_name = "text";
 	Uint16 m_payload_size = 10240;
 	for (Uint8 i=1; i<=m_flows_number; i++) {
-		m_seq[i] = 0;
 		m_descriptors_number = (stream->get_data_dim()/(m_flows_number*m_descr_dim_total));
-		for (Uint8 j=0; j<m_descriptors_number; j++) {
+		for (Uint32 j=0; j<m_descriptors_number; j++) {
 			Descriptor* descriptor= new Descriptor;
 			descriptor->set_hash(stream->get_stream_hash());
 			descriptor->set_file_name(stream->get_stream_name()+".mdc");
 			descriptor->set_flow_id(i);
-			descriptor->set_sequence_number(m_seq[i]);
+			descriptor->set_sequence_number(j);
 			descriptor->set_codec_name(m_codec_name);
 			descriptor->set_payload_size(m_payload_size);			
 			descriptor->set_payload(stream->get_data(m_payload_size));
 			stream->set_last_current_position(stream->get_last_current_position()+m_payload_size);
 			md_stream->set_descriptor(descriptor);
-			m_seq[i]++;
 		}
 	}
 }

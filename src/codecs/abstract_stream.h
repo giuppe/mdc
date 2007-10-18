@@ -45,7 +45,7 @@ public:
 	 * @dimension: quantity of data to be selected
 	 * @returns: data chunk containing data from current position to new current position
 	 */
-	virtual DataChunk& get_data(Uint16 dimension) const = 0;
+	virtual DataChunk& get_data(Uint16 dimension) = 0;
 	
 	/*
 	 * Get data dimension from file.
@@ -66,12 +66,6 @@ public:
 	 * @returns: name
 	 */
 	virtual std::string get_stream_name() const = 0;
-	
-	/*
-	 * Set payload size.
-	 * @size: size to be set
-	 */
-	virtual void set_payload_size(Uint32 size) = 0;
 	
 	/*
 	 * Set last position in file.

@@ -30,7 +30,6 @@ class TextStream : public AbstractStream
 private:
 	std::vector<char> m_data;
 	std::string m_stream_name;
-	Uint32 m_size;
 	Uint32 m_last_current_position;
 	std::string m_hash;
 public:
@@ -46,7 +45,7 @@ public:
 	 * @dimension: number of single data
 	 * @returns: a data chunk containing data set
 	 */
-	DataChunk& get_data(Uint16 dimension) const;
+	DataChunk& get_data(Uint16 dimension);
 	
 	/*
 	 * Get data dimension.
@@ -65,12 +64,6 @@ public:
 	 * @returns: stream name
 	 */
 	std::string get_stream_name() const;
-	
-	/*
-	 * Set payload size.
-	 * @size: payload size
-	 */
-	void set_payload_size(Uint32 size);
 	
 	/*
 	 * Set cursor's last position in stream.

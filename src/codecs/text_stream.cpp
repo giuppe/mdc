@@ -27,9 +27,8 @@ bool TextStream::load_from_disk(const std::string& path) {
 	if (path.size() > 0)
 		if (fopen(path.c_str(), "r") != NULL){
 			m_f = fopen(path.c_str(), "r");
-			while (fscanf(m_f, "%c", &c) > 0) {
+			while (fscanf(m_f, "%c", &c) > 0)
 				m_data.push_back(c);
-			}
 			fclose(m_f);
 			m_last_current_position = 0;
 			this->update_stream_hash();
@@ -49,15 +48,19 @@ Uint32 TextStream::get_last_current_position() const {
 	return m_last_current_position;
 }
 
-DataChunk& TextStream::get_data(Uint16 dimension) const {
+DataChunk& TextStream::get_data(Uint16 dimension) {
 	if (!m_data.empty()) {
 		DataChunk* d = new DataChunk;
-		if (m_last_current_position+dimension < m_size)
-			for (Uint32 i = m_last_current_position; i <  m_last_current_position+dimension; i++)
-				d->append(m_data.at(m_last_current_position));
+		if (m_last_current_position+dimension < m_data.size())
+			for (Uint32 i = m_last_current_position; i <  (m_last_current_position+dimension-1); i++) {
+				d->append(m_data.at(i));
+				m_last_current_position++;
+			}
 		else {
-			for (Uint32 i = m_last_current_position; i <  m_size-1; i++)
-				d->append(m_data.at(m_last_current_position));
+			for (Uint32 i = m_last_current_position; i <  (m_data.size()-1); i++) {
+				d->append(m_data.at(i));
+				m_last_current_position++;
+			}
 			return *d;
 		}
 	}
@@ -74,10 +77,6 @@ void TextStream::set_stream_name(std::string& name) {
 
 std::string TextStream::get_stream_name() const {
 	return m_stream_name;
-}
-
-void TextStream::set_payload_size(Uint32 psize) {
-	m_size = psize;
 }
 
 void TextStream::update_stream_hash() {
