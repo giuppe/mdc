@@ -28,6 +28,10 @@ private:
 	Uint32 m_descriptors_number;
 	Uint16 m_descr_dim_total;
 public:
+	/*
+	 * Initialize parameter of a text mdcodec.
+	 */
+	TextMDCodec();
 	
 	/*
 	 * Get flows number.
