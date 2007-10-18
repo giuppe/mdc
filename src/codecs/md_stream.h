@@ -43,11 +43,13 @@ private:
 	
 	bool m_is_inited;
 	
-	void init(Uint8 n_flows, Uint32 sequence_size);
+
 	
 public:
 	
 	MDStream();
+	
+	void init(Uint8 n_flows, Uint32 sequence_size);
 	
 	MDStream(Uint8 n_flows, Uint32 sequence_size);
 	

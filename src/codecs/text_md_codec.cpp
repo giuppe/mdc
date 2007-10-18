@@ -38,8 +38,11 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 {
 	std::string m_codec_name = "text";
 	Uint16 m_payload_size = 10240;
+	m_descriptors_number = (stream->get_data_dim()/(m_flows_number*m_descr_dim_total));
+	md_stream->init(m_flows_number, m_descriptors_number);
+	
 	for (Uint8 i=1; i<=m_flows_number; i++) {
-		m_descriptors_number = (stream->get_data_dim()/(m_flows_number*m_descr_dim_total));
+		
 		for (Uint32 j=0; j<m_descriptors_number; j++) {
 			Descriptor* descriptor= new Descriptor;
 			descriptor->set_hash(stream->get_stream_hash());
