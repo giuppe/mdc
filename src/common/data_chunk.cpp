@@ -58,7 +58,7 @@ void DataChunk::operator +=(const DataChunk& data)
 
 void DataChunk::append(Uint32 lenght, Uint8* data)
 {
-	LOG_INFO("Appending "<<lenght<<" bytes to datachunk.");
+//	LOG_INFO("Appending "<<lenght<<" bytes to datachunk.");
 	Uint8* new_data = new Uint8[this->m_lenght+lenght];
 
 	if(this->m_lenght != 0)
@@ -75,7 +75,7 @@ void DataChunk::append(Uint32 lenght, Uint8* data)
 	this->m_real_data = this->m_data;
 
 	this->m_lenght += lenght;
-	LOG_INFO("Done appending, new chunk lenght is "<<this->m_lenght);
+//	LOG_INFO("Done appending, new chunk lenght is "<<this->m_lenght);
 }
 
 void DataChunk::append(Uint32 data)
@@ -138,14 +138,14 @@ void DataChunk::append(const char* data)
 
 bool DataChunk::extract_head(Uint32 lenght, Uint8* &data)
 {
-	LOG_INFO("Extracting "<<lenght<<" bytes rom datachunk.")
+//	LOG_INFO("Extracting "<<lenght<<" bytes rom datachunk.")
 	if((lenght!=0)&&(this->m_lenght>=lenght))
 	{
 		data = new Uint8[lenght];
 		memcpy(data, this->m_data, lenght);
 		this->m_data += lenght;
 		this->m_lenght -= lenght;
-		LOG_INFO("Extracted. New chunk lenght is "<<this->m_lenght);
+	//	LOG_INFO("Extracted. New chunk lenght is "<<this->m_lenght);
 		return true;
 	}
 	else
