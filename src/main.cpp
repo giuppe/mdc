@@ -112,7 +112,7 @@ void stream_converter(AbstractConfiguration* config)
 	MDStream mdstream;
 	
 	codec->code(text, &mdstream);
-	
-	//mdstream.save_to_disk(output_filename);
+	codec->decode(&mdstream, text);
+	mdstream.save_to_disk(output_filename);
 	
 }
