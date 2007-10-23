@@ -55,10 +55,8 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 			descriptor->set_sequence_number(j);
 			descriptor->set_codec_name(m_codec_name);
 			descriptor->set_payload_size(m_payload_size);
-			DataChunk dc;
-			dc += stream->get_data(m_payload_size);
-			descriptor->set_payload(dc);
-			//stream->set_last_current_position(stream->get_last_current_position()+m_payload_size);
+			descriptor->set_payload(stream->get_data(m_payload_size));
+			stream->set_last_current_position(stream->get_last_current_position()+m_payload_size);
 			md_stream->set_descriptor(descriptor);
 		}
 	}
