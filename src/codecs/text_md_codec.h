@@ -26,7 +26,7 @@ class TextMDCodec : public AbstractMDCodec{
 private:
 	Uint8 m_flows_number;
 	Uint32 m_descriptors_number;
-	Uint16 m_descr_dim_total;
+	Uint16 m_descr_total_dim;
 public:
 	/*
 	 * Initialize parameter of a text mdcodec.

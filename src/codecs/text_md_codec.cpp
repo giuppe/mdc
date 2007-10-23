@@ -25,7 +25,7 @@
 TextMDCodec::TextMDCodec() {
 	m_flows_number = 1;
 	m_descriptors_number = 0;
-	m_descr_dim_total = 1;
+	m_descr_total_dim = 1;
 }
 
 void TextMDCodec::set_flows_number(Uint8 descriptors) {
@@ -37,14 +37,14 @@ Uint8 TextMDCodec::get_flows_number() {
 }
 
 void TextMDCodec::set_descriptor_dimension(Uint16 total_dimension) {
-	m_descr_dim_total = total_dimension;
+	m_descr_total_dim = total_dimension;
 }
 
 void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 {
 	std::string m_codec_name = "text";
-	Uint16 m_payload_size = 10240;
-	m_descriptors_number = (stream->get_data_dim()/(m_flows_number*m_descr_dim_total));
+	Uint16 m_payload_size = 8000;
+	m_descriptors_number = (stream->get_data_dim()/(m_flows_number*m_payload_size))+1;
 	md_stream->init(m_flows_number, m_descriptors_number);
 	for (Uint8 i=1; i<=m_flows_number; i++) {
 		for (Uint32 j=0; j<m_descriptors_number; j++) {
@@ -54,9 +54,11 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 			descriptor->set_flow_id(i);
 			descriptor->set_sequence_number(j);
 			descriptor->set_codec_name(m_codec_name);
-			descriptor->set_payload_size(m_payload_size);			
-			descriptor->set_payload(stream->get_data(m_payload_size));
-			stream->set_last_current_position(stream->get_last_current_position()+m_payload_size);
+			descriptor->set_payload_size(m_payload_size);
+			DataChunk dc;
+			dc += stream->get_data(m_payload_size);
+			descriptor->set_payload(dc);
+			//stream->set_last_current_position(stream->get_last_current_position()+m_payload_size);
 			md_stream->set_descriptor(descriptor);
 		}
 	}
