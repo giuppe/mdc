@@ -61,6 +61,7 @@ DataChunk& TextStream::get_data(Uint16 dimension) {
 			m_last_current_position = m_data.size()-1;
 		}
 	}
+	return *d;
 }
 
 Uint32 TextStream::get_data_dim() const {
