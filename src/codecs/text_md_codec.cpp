@@ -26,6 +26,7 @@ TextMDCodec::TextMDCodec() {
 	m_flows_number = 1;
 	m_descriptors_number = 0;
 	m_descr_total_dim = 1;
+	Uint32 m_seq_cont = 0;
 }
 
 void TextMDCodec::set_flows_number(Uint8 descriptors) {
@@ -46,7 +47,7 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 	Uint16 m_payload_size = 8000;
 	m_descriptors_number = (stream->get_data_dim()/(m_flows_number*m_payload_size))+1;
 	md_stream->init(m_flows_number, m_descriptors_number);
-	for (Uint8 i=1; i<=m_flows_number; i++) {
+	for (Uint8 i=0; i<m_flows_number; i++) {
 		for (Uint32 j=0; j<m_descriptors_number; j++) {
 			Descriptor* descriptor= new Descriptor;
 			descriptor->set_hash(stream->get_stream_hash());
@@ -62,4 +63,21 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 	}
 }
 
-void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {}
+void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {//FIXME
+	Descriptor* descriptor = new Descriptor;
+	if (descriptor->get_codec_name() == "text") {
+		if (m_flows_id.size() == 0) {//only 1 flow - first step
+			m_flows_id.push_back(descriptor->get_flow_id());
+			if (descriptor->get_sequence_number() >= (m_seq_cont+1) || descriptor->get_sequence_number() == 0)
+				DataChunk* dc = descriptor->get_payload();//other??
+		}
+		else {//new flows or present flows - other steps
+			for (Uint8 i=0; i<m_flows_id.size(); i++)
+				if (descriptor->get_sequence_number() == m_flows_id.at(i)) {
+					//it's my flows' descriptor
+				}
+				else {//it's my new flow descriptor
+				}
+		}
+	}
+}

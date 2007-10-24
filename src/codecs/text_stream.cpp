@@ -25,7 +25,7 @@ bool TextStream::load_from_disk(const std::string& path) {
 	FILE *m_f;
 	char c;
 	if (path.size() > 0)
-		if (fopen(path.c_str(), "r") != NULL){
+		if (fopen(path.c_str(), "r") != NULL) {
 			m_f = fopen(path.c_str(), "r");
 			while (fscanf(m_f, "%c", &c) > 0)
 				m_data.push_back(c);
@@ -33,6 +33,20 @@ bool TextStream::load_from_disk(const std::string& path) {
 			m_last_current_position = 0;
 			this->update_stream_hash();
 			m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of(".")-1);
+			return true;
+		}
+		else return false;
+	else return false;
+}
+
+bool TextStream::save_to_disk(const std::string& path) {//FIXME
+	FILE *m_f;
+	if (path.size() > 0)
+		if (fopen(path.c_str(), "w") != NULL) {
+			m_f = fopen(path.c_str(), "w");
+			for (Uint16 i=0; i<m_data.size(); i++)
+				//write characters
+			fclose(m_f);
 			return true;
 		}
 		else return false;
@@ -84,5 +98,3 @@ void TextStream::update_stream_hash() {
 std::string TextStream::get_stream_hash() const {
 	return m_hash;
 }
-
-bool TextStream::save_to_disk(const std::string& path) {assert(!"this function is a stub");}

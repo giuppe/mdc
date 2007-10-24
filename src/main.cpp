@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 	
 	AbstractConfiguration* config = new CommandlineConfiguration(argc, argv);
 	
-	bool call_convert;
+	bool call_convert = false;
 	
 	config->get_bool("", "convert", call_convert);
 	
@@ -91,7 +91,6 @@ int main(int argc, char** argv)
 void deinit_all()
 {
 	NetManager::instance()->deinit();
-	
 	LogManager::instance()->deinit();
 }
 
@@ -108,8 +107,7 @@ void stream_converter(AbstractConfiguration* config)
 	AbstractStream* text = new TextStream();
 	text->load_from_disk(input_filename);
 	MDStream mdstream;
-	codec->code(text, &mdstream);
+	codec->code(text, &mdstream);;
 	//codec->decode(&mdstream, text);
-	//mdstream.save_to_disk(output_filename);
-	
+	//text->save_to_disk(output_filename);//all right to be here?
 }
