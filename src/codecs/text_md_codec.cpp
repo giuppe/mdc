@@ -49,7 +49,7 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 	md_stream->init(m_flows_number, m_descriptors_number);
 	for (Uint8 i=0; i<m_flows_number; i++) {
 		for (Uint32 j=0; j<m_descriptors_number; j++) {
-			Descriptor* descriptor= new Descriptor;
+			Descriptor* descriptor= new Descriptor();
 			descriptor->set_hash(stream->get_stream_hash());
 			descriptor->set_file_name(stream->get_stream_name()+".mdc");
 			descriptor->set_flow_id(i);
