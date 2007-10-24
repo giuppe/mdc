@@ -143,3 +143,15 @@ bool MDStream::load_from_disk(const std::string& path)
 	}
 	return false;
 }
+
+bool MDStream::save_to_disk(const std::string& path)
+{
+	DataChunk data;
+		AbstractDirectory* dir = DirectoryFactory::createDirectory();
+		if(dir->save_file(path, data)==true)
+		{
+			LOG_INFO("Saved MD Stream "<<m_name<<" in "<<path.c_str());
+			return true;
+		}
+		return false;
+}
