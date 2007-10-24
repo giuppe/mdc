@@ -122,7 +122,7 @@ bool PosixDirectory::save_file(const std::string& path, const DataChunk& data_to
 std::string PosixDirectory::get_filename(const std::string& path)
 {
 	std::string::size_type pos = path.find_last_of('/');
-	return path.substr(pos);
+	return path.substr(pos+1);
 }
 
 
