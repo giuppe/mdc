@@ -22,6 +22,15 @@
 #include <cassert>
 
 bool TextStream::load_from_disk(const std::string& path) {
+	AbstractDirectory* dir = DirectoryFactory::createDirectory();
+	if(dir->load_file(path, m_data) == true)
+	{
+		return true;
+	}
+	
+	return false;
+	
+	/*
 	FILE *m_f;
 	char c;
 	if (path.size() > 0)
@@ -37,6 +46,7 @@ bool TextStream::load_from_disk(const std::string& path) {
 		}
 		else return false;
 	else return false;
+	*/
 }
 
 bool TextStream::save_to_disk(const std::string& path) {//FIXME
