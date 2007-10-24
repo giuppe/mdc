@@ -21,7 +21,8 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <cerrno>
-
+#include <cassert>
+#include <string>
 
 std::vector<std::string> PosixDirectory::get_file_names(std::string path)
 {
@@ -82,3 +83,54 @@ bool PosixDirectory::load_file(const std::string& path, DataChunk& loaded_data)
 	}
 	return false;
 }
+
+
+
+bool PosixDirectory::save_file(const std::string& path, const DataChunk& data_to_save)
+{
+	
+	//FIXME: posix_directory can save files < 4MB only
+	
+	DataChunk dc;
+	dc+=data_to_save;
+	
+	FILE *m_f;
+
+	Uint8 byte;
+
+	if (path.size() > 0)
+	{
+		if (fopen(path.c_str(), "w") != NULL) 
+		{
+			m_f = fopen(path.c_str(), "w");
+			for (Uint32 i=0; i<dc.get_lenght(); i++)
+			{
+				//write characters
+				dc.extract_head(byte);
+				fputc(byte, m_f);
+			}
+			
+			fclose(m_f);
+			return true;
+		}
+	}
+	
+	return false;
+	
+}
+
+std::string PosixDirectory::get_filename(const std::string& path)
+{
+	std::string::size_type pos = path.find_last_of('/');
+	return path.substr(pos);
+}
+
+
+std::string PosixDirectory::get_hash_md5(const std::string& path)
+{
+	LOG_ERROR("This function is a stub - returns always md5 for <livio rulez>");
+	return std::string("3b3f9dabbc0cf273e51f04f84b383b1d");
+}
+
+
+

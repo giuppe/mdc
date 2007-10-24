@@ -30,6 +30,14 @@ public:
 	std::vector<std::string> get_file_names(std::string path);
 	
 	bool load_file(const std::string& path, DataChunk& loaded_data);
+
+	bool save_file(const std::string& path, const DataChunk& data_to_save);
+	
+	std::string get_filename(const std::string& path);
+	
+	std::string get_hash_md5(const std::string& path);
+
+	
 };
 
 #endif /*POSIX_DIRECTORY_H_*/
