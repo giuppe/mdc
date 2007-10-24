@@ -101,7 +101,8 @@ DataChunk& TextStream::get_data(Uint16 dimension) {
 	}
 	else {
 		for (Uint32 i=m_last_current_position; i <  (m_data.size()-1); i++) {
-			d->append(m_data.at(i));
+			Sint8 curr_char = m_data.at(i);
+			d->append(curr_char);
 			m_last_current_position = m_data.size()-1;
 		}
 	}

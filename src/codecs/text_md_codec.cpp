@@ -59,7 +59,8 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 			TextCodecParameters* tcp = new TextCodecParameters();
 			descriptor->set_codec_parameter(tcp);
 			descriptor->set_payload_size(m_payload_size);
-			descriptor->set_payload(stream->get_data(m_payload_size));
+			DataChunk* payload = &(stream->get_data(m_payload_size));
+			descriptor->set_payload(*payload);
 			stream->set_last_current_position(stream->get_last_current_position()+m_payload_size);
 			md_stream->set_descriptor(descriptor);
 		}
