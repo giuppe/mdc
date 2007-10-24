@@ -104,10 +104,11 @@ void stream_converter(AbstractConfiguration* config)
 	CodecRegistry* codecReg = CodecRegistry::instance();
 	AbstractMDCodec* codec;
 	codecReg->get_codec(std::string("text"), codec);
-	AbstractStream* text = new TextStream();
-	text->load_from_disk(input_filename);
+	TextStream text;
+	text.load_from_disk(input_filename);
 	MDStream mdstream;
-	codec->code(text, &mdstream);;
+	codec->code(&text, &mdstream);;
 	//codec->decode(&mdstream, text);
 	//text->save_to_disk(output_filename);//all right to be here?
+	mdstream.save_to_disk(output_filename);
 }
