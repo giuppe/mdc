@@ -64,7 +64,7 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 }
 
 void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {//FIXME
-	Descriptor* descriptor = new Descriptor;
+	Descriptor* descriptor = new Descriptor();
 	if (descriptor->get_codec_name() == "text") {
 		if (m_flows_id.size() == 0) {//only 1 flow - first step
 			m_flows_id.push_back(descriptor->get_flow_id());
