@@ -39,6 +39,12 @@ bool TextStream::load_from_disk(const std::string& path) {
 			m_data.push_back((Sint8)curr_char);
 		}
 		
+		this->m_stream_name= dir->get_filename(path);
+		
+		this->m_hash= dir->get_hash_md5(path);
+		
+		this->m_last_current_position=0;
+		
 		return true;
 	}
 	
