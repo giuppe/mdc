@@ -33,6 +33,10 @@ private:
 	Uint32 m_last_current_position;
 	std::string m_hash;
 public:
+	
+	TextStream(){};
+	
+	
 	/*
 	 * Loads a stream from disk.
 	 * @path: filesystem path of file to load;
