@@ -17,14 +17,30 @@
 #include "defs.h"
 #include "../common/data_chunk.h"
 #include "../common/serializable.h"
+#include "abstract_codec_parameters.h"
 
 #ifndef TEXT_CODEC_PARAMETERS_H_
 #define TEXT_CODEC_PARAMETERS_H_
 
-class TextCodecParameters : public Serializable {
+class TextCodecParameters : public AbstractCodecParameters
+{	
 public:
-	DataChunk& serialize();
-	void deserialize(const DataChunk&);
+
+	/*
+	 * Initialize text codec parameters.
+	 */
+	TextCodecParameters();
+
+	/*
+	 * Serialize a data chunk.
+	 * @returns: data chunk
+	 */
+	DataChunk& serialize() const;
+
+	/*
+	 * Deserialize a data chunk.
+	 */
+	void deserialize(const DataChunk& dc);
 	~TextCodecParameters();
 };
 

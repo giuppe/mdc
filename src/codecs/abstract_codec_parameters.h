@@ -1,5 +1,5 @@
 /***************************************************************************
-                          codec_parameters.h  -  Codec Parameters abstract class
+                  codec_parameters.h  -  Codec Parameters abstract class
                              -------------------
     begin                : Jul 13 2007
     copyright          : (C) 2007 by Giuseppe D'Aqui', Livio Pipitone
@@ -13,7 +13,6 @@
  *   as published by the Free Software Foundation.                                  
  *                                                                                                                 
  ***************************************************************************/
-
 
 #include "defs.h"
 #include "../common/data_chunk.h"
@@ -31,14 +30,18 @@
 class AbstractCodecParameters : public Serializable
 {
 protected:
-	
 	Uint32 m_size;
-	
-	
+
 public:
 	
-	virtual DataChunk& serialize( ) = 0;
+	/*
+	 * Serialize a data chunk.
+	 */
+	virtual DataChunk& serialize() const = 0;
 	
+	/*
+	 * Desrialize a data chunk.
+	 */
 	virtual void deserialize(const DataChunk&)= 0;
 	
 	virtual ~AbstractCodecParameters(){};

@@ -18,9 +18,15 @@
 #include "../common/data_chunk.h"
 #include "../common/serializable.h"
 
-DataChunk& TextCodecParameters::serialize() {
+TextCodecParameters::TextCodecParameters() {
+	m_size = 0;
+}
+
+DataChunk& TextCodecParameters::serialize() const {
 	DataChunk* dc = new DataChunk;
 	return *dc;
 }
 
-void deserialize(const DataChunk&) {}
+void TextCodecParameters::deserialize(const DataChunk& dc) {}
+
+TextCodecParameters::~TextCodecParameters() {}

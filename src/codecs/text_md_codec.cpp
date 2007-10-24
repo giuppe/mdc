@@ -21,6 +21,7 @@
 #include "md_stream.h"
 #include "descriptor.h"
 #include "../common/data_chunk.h"
+#include "text_codec_parameters.h"
 
 TextMDCodec::TextMDCodec() {
 	m_flows_number = 1;
@@ -55,6 +56,8 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 			descriptor->set_flow_id(i);
 			descriptor->set_sequence_number(j);
 			descriptor->set_codec_name(m_codec_name);
+			TextCodecParameters* tcp = new TextCodecParameters();
+			descriptor->set_codec_parameter(tcp);
 			descriptor->set_payload_size(m_payload_size);
 			descriptor->set_payload(stream->get_data(m_payload_size));
 			stream->set_last_current_position(stream->get_last_current_position()+m_payload_size);

@@ -22,7 +22,6 @@
 #ifndef DESCRIPTOR_H_
 #define DESCRIPTOR_H_
 
-
 /**
  * A Descriptor is the littlest independent MDC unit.
  * It represents a piece of MDC stream.
@@ -103,10 +102,16 @@ public:
 	std::string get_codec_name() const;
 	
 	/*
-	 * Get codec parameter.
+	 * Get codec parameters.
 	 * @returns: codec parameters
 	 */
 	AbstractCodecParameters* get_codec_parameter() const;
+	
+	/*
+	 * Set codec parameters.
+	 * @acp: abstract codec parameters
+	 */
+	void set_codec_parameter(AbstractCodecParameters* acp);
 	
 	/*
 	 * Set payload size.

@@ -66,9 +66,12 @@ std::string Descriptor::get_codec_name() const
 	return m_codec_name;
 }
 
-AbstractCodecParameters* Descriptor::get_codec_parameter() const
-{
+AbstractCodecParameters* Descriptor::get_codec_parameter() const {
 	return m_codec_parameters;
+}
+
+void Descriptor::set_codec_parameter(AbstractCodecParameters* acp) {
+	m_codec_parameters = acp;
 }
 
 Descriptor::~Descriptor()
