@@ -17,6 +17,8 @@
 #include <SDL/SDL.h>
 #include <string>
 #include <vector>
+#include "../common/serializable.h"
+#include "../common/data_chunk.h"
 
 
 #ifndef MDSTREAM_H_
@@ -24,7 +26,7 @@
 
 class Descriptor;
 
-class MDStream
+class MDStream : public Serializable
 {
 	
 private:
@@ -100,6 +102,11 @@ public:
 	 * @returns: true if stream is empty
 	 */
 	bool is_empty(){return m_is_empty;}
+	
+	
+	DataChunk& serialize() const;
+	
+	void deserialize(const DataChunk&);
 	
 };
 

@@ -147,6 +147,7 @@ bool MDStream::load_from_disk(const std::string& path)
 bool MDStream::save_to_disk(const std::string& path)
 {
 	DataChunk data;
+	data += this->serialize();
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
 		if(dir->save_file(path, data)==true)
 		{
@@ -154,4 +155,16 @@ bool MDStream::save_to_disk(const std::string& path)
 			return true;
 		}
 		return false;
+}
+
+
+DataChunk& MDStream::serialize() const
+{
+	assert(!"This function is a stub.");
+}
+
+
+void MDStream::deserialize(const DataChunk& data)
+{
+	assert(!"This function is a stub.");
 }
