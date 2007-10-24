@@ -20,11 +20,25 @@
 #include <vector>
 #include "../common/data_chunk.h"
 #include <cassert>
+#include "../common/dir/abstract_directory.h"
+#include "../common/dir/directory_factory.h"
+
 
 bool TextStream::load_from_disk(const std::string& path) {
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
-	if(dir->load_file(path, m_data) == true)
+	
+	DataChunk dc;
+	
+	if(dir->load_file(path, dc) == true)
 	{
+				
+		while(dc.get_lenght()>0)
+		{
+			Uint8 curr_char;
+			dc.extract_head(curr_char);
+			m_data.push_back((Sint8)curr_char);
+		}
+		
 		return true;
 	}
 	
