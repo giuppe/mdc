@@ -20,41 +20,24 @@
 #include "../common/serializable.h"
 #include "../common/data_chunk.h"
 
-
 #ifndef MDSTREAM_H_
 #define MDSTREAM_H_
 
 class Descriptor;
-
 class MDStream : public Serializable
 {
-	
 private:
-	
 	std::vector<std::vector<Descriptor*> > m_stream;
-	
 	std::vector<std::vector<bool> > m_valid_descriptor;
-	
 	void set_descriptor(Uint8 flow, Uint32 sequence, Descriptor* descriptor);
-	
 	std::string m_name;
-	
 	std::string m_hash;
-	
 	bool m_is_empty;
-	
 	bool m_is_inited;
-	
-
-	
 public:
-	
 	MDStream();
-	
 	void init(Uint8 n_flows, Uint32 sequence_size);
-	
 	MDStream(Uint8 n_flows, Uint32 sequence_size);
-	
 	~MDStream();
 	
 	/*
@@ -101,13 +84,9 @@ public:
 	 * Verifies if a stream is empty.
 	 * @returns: true if stream is empty
 	 */
-	bool is_empty(){return m_is_empty;}
-	
-	
+	bool is_empty() const;
 	DataChunk& serialize() const;
-	
 	void deserialize(const DataChunk&);
-	
 };
 
 #endif /*MDSTREAM_H_*/

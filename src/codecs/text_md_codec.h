@@ -18,6 +18,7 @@
 #include "md_stream.h"
 #include "abstract_stream.h"
 #include "abstract_md_codec.h"
+#include <vector>
 
 #ifndef TEXT_MD_CODEC_H_
 #define TEXT_MD_CODEC_H_
@@ -28,7 +29,7 @@ private:
 	Uint32 m_descriptors_number;
 	Uint16 m_descr_total_dim;
 	std::vector<Uint8> m_flows_id;
-	Uint32 m_seq_cont;
+	std::vector<Uint32> m_seq_counter;
 public:
 	/*
 	 * Initialize parameter of a text mdcodec.

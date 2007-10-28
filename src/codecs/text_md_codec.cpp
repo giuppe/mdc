@@ -22,12 +22,12 @@
 #include "descriptor.h"
 #include "../common/data_chunk.h"
 #include "text_codec_parameters.h"
+#include <vector>
 
 TextMDCodec::TextMDCodec() {
 	m_flows_number = 1;
 	m_descriptors_number = 0;
 	m_descr_total_dim = 1;
-	Uint32 m_seq_cont = 0;
 }
 
 void TextMDCodec::set_flows_number(Uint8 descriptors) {
@@ -68,20 +68,34 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream)
 }
 
 void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {//FIXME
-	Descriptor* descriptor = new Descriptor();
-	if (descriptor->get_codec_name() == "text") {
-		if (m_flows_id.size() == 0) {//only 1 flow - first step
-			m_flows_id.push_back(descriptor->get_flow_id());
-			if (descriptor->get_sequence_number() >= (m_seq_cont+1) || descriptor->get_sequence_number() == 0)
-				DataChunk* dc = descriptor->get_payload();//other??
-		}
-		else {//new flows or present flows - other steps
-			for (Uint8 i=0; i<m_flows_id.size(); i++)
-				if (descriptor->get_sequence_number() == m_flows_id.at(i)) {
-					//it's my flows' descriptor
+	if (!md_stream->is_empty())
+		for (Uint8 i=0; i<m_flows_number; i++)
+			for (Uint32 j=0; j<m_descriptors_number; j++) {
+				Descriptor* descriptor = new Descriptor();
+				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="text")) {
+					Uint8 m_descriptor_flow_id = descriptor->get_flow_id();
+					Uint32 m_descriptor_seq_number = descriptor->get_sequence_number();
+					if (m_flows_id.empty()) {//create only 1 new flow - first step
+						m_flows_id.push_back(m_descriptor_flow_id);//insert flow_id into first position
+						if (m_descriptor_seq_number >= (m_seq_counter.at(m_flows_id.at(0)))) {
+							DataChunk* dc = descriptor->get_payload();//or write directly to output file?
+							m_seq_counter.at(m_flows_id.at(0)) = m_descriptor_seq_number;
+							return;
+						}
+					}
+					else
+						for (Uint8 k=0; k<m_flows_id.size(); k++)
+							if (m_descriptor_flow_id == m_flows_id.at(k))//this is the current flow_id
+								if (m_descriptor_seq_number >= m_seq_counter.at(m_flows_id.at(k))) {
+									DataChunk* dc = descriptor->get_payload();//or write directly to output file?
+									m_seq_counter.at(m_flows_id.at(k)) = m_descriptor_seq_number;
+									return;
+								}
+								else {//it's a new flow's descriptor
+									m_flows_id.push_back(m_descriptor_flow_id);//insert new flow_id
+									DataChunk* dc = descriptor->get_payload();//or write directly to output file?
+									m_seq_counter.at(m_flows_id.at(k)) = m_descriptor_seq_number;
+								}
 				}
-				else {//it's my new flow descriptor
-				}
-		}
-	}
+			}
 }

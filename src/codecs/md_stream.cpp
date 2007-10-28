@@ -168,3 +168,5 @@ void MDStream::deserialize(const DataChunk& data)
 {
 	assert(!"This function is a stub.");
 }
+
+bool MDStream::is_empty() const {return m_is_empty;}

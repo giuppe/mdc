@@ -95,16 +95,18 @@ Uint32 TextStream::get_last_current_position() const {
 DataChunk& TextStream::get_data(Uint16 dimension) {
 	DataChunk* d = new DataChunk();
 	if (m_last_current_position+dimension < m_data.size()) {
-		for (Uint32 i=m_last_current_position; i <  (m_last_current_position+dimension-1); i++)
-			d->append(m_data.at(i));
+		for (Uint32 i=m_last_current_position; i <  (m_last_current_position+dimension-1); i++) {
+			Sint8 curr_char = m_data.at(i);
+			d->append(curr_char);
+		}
 		m_last_current_position += dimension;
 	}
 	else {
 		for (Uint32 i=m_last_current_position; i <  (m_data.size()-1); i++) {
 			Sint8 curr_char = m_data.at(i);
 			d->append(curr_char);
-			m_last_current_position = m_data.size()-1;
 		}
+		m_last_current_position = m_data.size()-1;
 	}
 	return *d;
 }
