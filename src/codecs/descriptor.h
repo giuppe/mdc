@@ -34,12 +34,25 @@ private:
 	std::string m_file_name;
 	std::string m_hash;
 	std::string m_codec_name;
+	Uint32 m_codec_parameters_size;
 	AbstractCodecParameters* m_codec_parameters;
 	Uint32 m_payload_size;
 	Uint8* m_payload;
 public:
 	Descriptor() {};
 	~Descriptor();
+	
+	/*
+	 * Get codec parameter's size.
+	 * @returns: codec parameters' size
+	 */
+	Uint32 get_codec_parameters_size();
+	
+	/*
+	 * Set codec parameters' size.
+	 * @size: size of codec parameters
+	 */
+	void set_codec_parameters_size(Uint32 size);
 	
 	/*
 	 * Get flow identifier.

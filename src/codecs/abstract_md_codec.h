@@ -40,7 +40,7 @@ public:
 	 * Set descriptors dimension by GUI.
 	 * @dimension: descriptors payload dimension and header
 	 */
-	virtual void set_descriptor_dimension(Uint16 total_dimension) = 0;
+	//virtual void set_descriptor_dimension(Uint16 total_dimension) = 0;
 	
 	/*
 	 * Code an abstract stream in an abstract md_stream

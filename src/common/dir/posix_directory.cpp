@@ -24,99 +24,63 @@
 #include <cassert>
 #include <string>
 
-std::vector<std::string> PosixDirectory::get_file_names(std::string path)
-{
+std::vector<std::string> PosixDirectory::get_file_names(std::string path) {
 	std::vector<std::string> result;
-	
 	DIR* directory;
-		
-		struct dirent* directory_entry;
-		
-		if( (directory = opendir(path.c_str())) == NULL ) 
-		{
-		        LOG_ERROR("Error opening "<<path.c_str());
-		        switch(errno)
-		        {
-		        case ENOENT:
-		        	LOG_ERROR("Path not exists.");
-		        	break;
-		        default:
-		        	LOG_ERROR("Filesystem error: "<<errno);
-		        	
-		        }
-		        return result;
+	struct dirent* directory_entry;
+	if((directory = opendir(path.c_str())) == NULL) {
+		LOG_ERROR("Error opening "<<path.c_str());
+		switch(errno) {
+		case ENOENT:
+			LOG_ERROR("Path not exists.");
+			break;
+		default:
+			LOG_ERROR("Filesystem error: "<<errno);
 		}
-		
-		while((directory_entry = readdir(directory)))
-		{
-			if ((strcmp(directory_entry->d_name, ".") == 0 ||  strcmp(directory_entry->d_name, "..") == 0))
-			{
-			      continue;
-			}
-			LOG_INFO("File found: "<<directory_entry->d_name);
-			result.push_back(directory_entry->d_name);
-		}
-		
 		return result;
+	}
+	while((directory_entry = readdir(directory))) {
+		if ((strcmp(directory_entry->d_name, ".")==0 || strcmp(directory_entry->d_name, "..")==0))
+			continue;
+		LOG_INFO("File found: "<<directory_entry->d_name);
+		result.push_back(directory_entry->d_name);
+	}
+	return result;
 }
 
-
-
-bool PosixDirectory::load_file(const std::string& path, DataChunk& loaded_data)
-{
+bool PosixDirectory::load_file(const std::string& path, DataChunk& loaded_data) {
 	loaded_data.erase();
 	FILE *m_f;
 	Uint8 c;
 	if (path.size() > 0)
-	{
-		if (fopen(path.c_str(), "r") != NULL)
-		{
+		if (fopen(path.c_str(), "r") != NULL) {
 			m_f = fopen(path.c_str(), "r");
-			while (fscanf(m_f, "%c", &c) > 0) 
-			{
+			while (fscanf(m_f, "%c", &c) > 0)
 				loaded_data.append(c);
-			}
 			fclose(m_f);
 			return true;
 		}
 		else return false;
-	}
 	return false;
 }
 
-
-
-bool PosixDirectory::save_file(const std::string& path, const DataChunk& data_to_save)
-{
-	
-	//FIXME: posix_directory can save files < 4MB only
-	
+bool PosixDirectory::save_file(const std::string& path, const DataChunk& data_to_save) {
+	//FIXME: manager overwrite output file
 	DataChunk dc;
-	dc+=data_to_save;
-	
+	dc += data_to_save;
 	FILE *m_f;
-
-	Uint8 byte;
-
+	Uint32 byte;
 	if (path.size() > 0)
-	{
-		if (fopen(path.c_str(), "w") != NULL) 
-		{
+		if (fopen(path.c_str(), "w") != NULL) {
 			m_f = fopen(path.c_str(), "w");
-			for (Uint32 i=0; i<dc.get_lenght(); i++)
-			{
-				//write characters
+			while(dc.get_lenght()!=0) {
 				dc.extract_head(byte);
 				fputc(byte, m_f);
 			}
-			
 			fclose(m_f);
 			return true;
 		}
-	}
-	
 	return false;
-	
 }
 
 std::string PosixDirectory::get_filename(const std::string& path)

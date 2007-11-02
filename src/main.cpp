@@ -15,8 +15,8 @@
 #include <SDL/SDL.h>
 #include "common/scheduler.h"
 #include "codecs/codec_registry.h"
-#include "codecs/text_stream.h"
-#include "codecs/text_md_codec.h"
+#include "codecs/text/text_stream.h"
+#include "codecs/text/text_md_codec.h"
 #include "codecs/md_stream.h"
 #include "server_action.h"
 #include "client_test_action.h"
@@ -109,6 +109,5 @@ void stream_converter(AbstractConfiguration* config)
 	MDStream mdstream;
 	codec->code(&text, &mdstream);;
 	codec->decode(&mdstream, &text);
-	text.save_to_disk(output_filename);//it's necessary? it's all right to be here?
 	mdstream.save_to_disk(output_filename);
 }

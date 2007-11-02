@@ -15,15 +15,15 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include "../common/data_chunk.h"
-#include "../common/serializable.h"
-#include "abstract_codec_parameters.h"
+#include "../../common/data_chunk.h"
+#include "../../common/serializable.h"
+#include "../abstract_codec_parameters.h"
 
 #ifndef TEXT_CODEC_PARAMETERS_H_
 #define TEXT_CODEC_PARAMETERS_H_
 
 class TextCodecParameters : public AbstractCodecParameters
-{	
+{
 public:
 
 	/*
@@ -41,6 +41,12 @@ public:
 	 * Deserialize a data chunk.
 	 */
 	void deserialize(const DataChunk& dc);
+	
+	/*
+	 * Get parameters' size.
+	 * @returns: parameters' size
+	 */
+	Uint32 get_size();
 	~TextCodecParameters();
 };
 

@@ -36,7 +36,14 @@ private:
 	bool m_is_inited;
 public:
 	MDStream();
+	
+	/*
+	 * Initialize MDStream.
+	 * @n_flows: flows number in wich the file must be divided;
+	 * @sequence_size: size of each sequence
+	 */
 	void init(Uint8 n_flows, Uint32 sequence_size);
+	
 	MDStream(Uint8 n_flows, Uint32 sequence_size);
 	~MDStream();
 	
@@ -59,7 +66,7 @@ public:
 	 * @path: filesystem path of file to load;
 	 * @returns: true if operation is successful
 	 */
-	 bool load_from_disk(const std::string& path);
+	bool load_from_disk(const std::string& path);
 	
 	/*
 	 * Saves a stream to disk.

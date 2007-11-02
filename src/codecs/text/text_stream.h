@@ -16,11 +16,11 @@
 
 #include <cstdlib>
 #include <cstdio>
-#include "descriptor.h"
-#include "abstract_stream.h"
+#include "../descriptor.h"
+#include "../abstract_stream.h"
 #include <vector>
 #include <string>
-#include "../common/data_chunk.h"
+#include "../../common/data_chunk.h"
 
 #ifndef TEXT_STREAM_H_
 #define TEXT_STREAM_H_

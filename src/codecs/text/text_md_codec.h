@@ -15,9 +15,9 @@
  ***************************************************************************/
 
 #include "text_stream.h"
-#include "md_stream.h"
-#include "abstract_stream.h"
-#include "abstract_md_codec.h"
+#include "../md_stream.h"
+#include "../abstract_stream.h"
+#include "../abstract_md_codec.h"
 #include <vector>
 
 #ifndef TEXT_MD_CODEC_H_
@@ -27,7 +27,7 @@ class TextMDCodec : public AbstractMDCodec{
 private:
 	Uint8 m_flows_number;
 	Uint32 m_descriptors_number;
-	Uint16 m_descr_total_dim;
+	//Uint16 m_descr_total_dim;
 	std::vector<Uint8> m_flows_id;
 	std::vector<Uint32> m_seq_counter;
 public:
@@ -52,7 +52,7 @@ public:
 	 * Set descriptor dimension.
 	 * @total_dimension: dimension of payload and header
 	 */	
-	void set_descriptor_dimension(Uint16 total_dimension);
+	//void set_descriptor_dimension(Uint16 total_dimension);
 	
 	/*
 	 * Code the stream to be sent.

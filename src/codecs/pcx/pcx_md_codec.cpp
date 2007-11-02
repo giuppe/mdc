@@ -1,9 +1,9 @@
 /***************************************************************************
-           text_codec_parameters.cpp  -  Text Codec Parameters
+           pcx_md_codec.cpp  - Menage PCX codec
                              -------------------
-    begin                : Oct 14 2007
-    copyright            : Livio Pipitone
-    email                : livent@tiscalinet.it
+    begin                : Oct 31, 2007
+    copyright            : Ivan Coppa
+    email                : ivan.coppa@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,20 +13,3 @@
  *   as published by the Free Software Foundation.                                  
  *                                                                                                                 
  ***************************************************************************/
-
-#include "text_codec_parameters.h"
-#include "../common/data_chunk.h"
-#include "../common/serializable.h"
-
-TextCodecParameters::TextCodecParameters() {
-	m_size = 0;
-}
-
-DataChunk& TextCodecParameters::serialize() const {
-	DataChunk* dc = new DataChunk;
-	return *dc;
-}
-
-void TextCodecParameters::deserialize(const DataChunk& dc) {}
-
-TextCodecParameters::~TextCodecParameters() {}

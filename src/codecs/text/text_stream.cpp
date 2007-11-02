@@ -18,69 +18,40 @@
 #include <string>
 #include "defs.h"
 #include <vector>
-#include "../common/data_chunk.h"
+#include "../../common/data_chunk.h"
 #include <cassert>
-#include "../common/dir/abstract_directory.h"
-#include "../common/dir/directory_factory.h"
-
+#include "../../common/dir/abstract_directory.h"
+#include "../../common/dir/directory_factory.h"
 
 bool TextStream::load_from_disk(const std::string& path) {
-	AbstractDirectory* dir = DirectoryFactory::createDirectory();
-	
-	DataChunk dc;
-	
-	if(dir->load_file(path, dc) == true)
-	{
-				
-		while(dc.get_lenght()>0)
-		{
-			Uint8 curr_char;
-			dc.extract_head(curr_char);
-			m_data.push_back((Sint8)curr_char);
-		}
-		
-		this->m_stream_name= dir->get_filename(path);
-		
-		this->m_hash= dir->get_hash_md5(path);
-		
-		this->m_last_current_position=0;
-		
-		return true;
-	}
-	
-	return false;
-	
-	/*
-	FILE *m_f;
-	char c;
-	if (path.size() > 0)
-		if (fopen(path.c_str(), "r") != NULL) {
-			m_f = fopen(path.c_str(), "r");
-			while (fscanf(m_f, "%c", &c) > 0)
-				m_data.push_back(c);
-			fclose(m_f);
-			m_last_current_position = 0;
-			this->update_stream_hash();
-			m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of(".")-1);
+	if (path.size() > 0) {
+		AbstractDirectory* dir = DirectoryFactory::createDirectory();
+		DataChunk dc;
+		if (dir->load_file(path, dc)) {
+			while (dc.get_lenght() > 0) {
+				Uint8 curr_char;
+				dc.extract_head(curr_char);
+				m_data.push_back((Sint8)curr_char);
+			}
+			this->m_stream_name = dir->get_filename(path);
+			this->m_hash = dir->get_hash_md5(path);
+			this->m_last_current_position = 0;
 			return true;
 		}
-		else return false;
-	else return false;
-	*/
+	}
+	return false;
 }
 
-bool TextStream::save_to_disk(const std::string& path) {//FIXME
-	FILE *m_f;
-	if (path.size() > 0)
-		if (fopen(path.c_str(), "w") != NULL) {
-			m_f = fopen(path.c_str(), "w");
-			for (Uint16 i=0; i<m_data.size(); i++)
-				//write characters
-			fclose(m_f);
+bool TextStream::save_to_disk(const std::string& path) {
+	if (path.size() > 0) {
+		AbstractDirectory* dir = DirectoryFactory::createDirectory();
+		DataChunk dc;
+		for (Uint32 i=0; i<m_data.size(); i++)
+			dc.append(m_data.at(i));
+		if (dir->save_file(path, dc))
 			return true;
-		}
-		else return false;
-	else return false;
+	}
+	return false;
 }
 
 void TextStream::set_last_current_position(Uint32 new_position) {
@@ -95,15 +66,15 @@ Uint32 TextStream::get_last_current_position() const {
 DataChunk& TextStream::get_data(Uint16 dimension) {
 	DataChunk* d = new DataChunk();
 	if (m_last_current_position+dimension < m_data.size()) {
-		for (Uint32 i=m_last_current_position; i <  (m_last_current_position+dimension-1); i++) {
+		for (Uint32 i=m_last_current_position; i<(m_last_current_position+dimension-1); i++) {
 			Sint8 curr_char = m_data.at(i);
 			d->append(curr_char);
 		}
 		m_last_current_position += dimension;
 	}
 	else {
-		for (Uint32 i=m_last_current_position; i <  (m_data.size()-1); i++) {
-			Sint8 curr_char = m_data.at(i);
+		for (Uint32 i=m_last_current_position; i < (m_data.size()-1); i++) {
+			Sint8 curr_char = m_data[i];
 			d->append(curr_char);
 		}
 		m_last_current_position = m_data.size()-1;

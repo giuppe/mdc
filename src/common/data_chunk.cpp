@@ -14,14 +14,10 @@
  *                                                                                                                 
  ***************************************************************************/
 
-
 #include "defs.h"
 #include "data_chunk.h"
 #include <cstring>
 #include <SDL/SDL_net.h>
-
-
-
 
 Uint8* DataChunk::get_data() const
 {
@@ -37,45 +33,28 @@ Uint32 DataChunk::get_lenght() const
 	return m_lenght;
 }
 
-
-
-
 void DataChunk::set_content(Uint8* data, Uint32 lenght)
 {
-
 	m_data = data;
 	m_real_data = m_data;
 	m_lenght = lenght;
 }
 
-
-
-
-void DataChunk::operator +=(const DataChunk& data)
-{
+void DataChunk::operator +=(const DataChunk& data) {
 	append(data.m_lenght, data.m_data);
 }
 
-void DataChunk::append(Uint32 lenght, Uint8* data)
-{
-//	LOG_INFO("Appending "<<lenght<<" bytes to datachunk.");
+void DataChunk::append(Uint32 lenght, Uint8* data) {
 	Uint8* new_data = new Uint8[this->m_lenght+lenght];
-
-	if(this->m_lenght != 0)
+	if (this->m_lenght != 0)
 		memcpy(new_data, this->m_data, this->m_lenght);
-
 	Uint8* second_segment = new_data + sizeof(Uint8)*(this->m_lenght);
-
 	memcpy(second_segment, data, lenght);
-	
-	if(this->m_lenght != 0)
+	if (this->m_lenght != 0)
 		delete []this->m_data;
-
 	this->m_data = new_data;
 	this->m_real_data = this->m_data;
-
 	this->m_lenght += lenght;
-//	LOG_INFO("Done appending, new chunk lenght is "<<this->m_lenght);
 }
 
 void DataChunk::append(Uint32 data)

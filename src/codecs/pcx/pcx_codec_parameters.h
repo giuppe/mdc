@@ -1,9 +1,9 @@
 /***************************************************************************
-                  codec_parameters.h  -  Codec Parameters abstract class
+           pcx_codec_parameters.h  -  PCX Codec Parameters class
                              -------------------
-    begin                : Jul 13 2007
-    copyright          : (C) 2007 by Giuseppe D'Aqui', Livio Pipitone
-    email                : kumber@tiscalinet.it
+    begin                : Oct 31 2007
+    copyright            : Ivan Coppa
+    email                : ivan.coppa@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,41 +15,41 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include "../common/data_chunk.h"
-#include "../common/serializable.h"
+#include "../../common/data_chunk.h"
+#include "../../common/serializable.h"
+#include "../abstract_codec_parameters.h"
 
-#ifndef ABSTRACT_CODEC_PARAMETERS_H_
-#define ABSTRACT_CODEC_PARAMETERS_H_
+#ifndef PCX_CODEC_PARAMETER_
+#define PCX_CODEC_PARAMETER_
 
-/**
- * This abstract class represents generic codec parameters.
- * Codec parameters are informations about coding, such as 
- * color bit depth in an image, sampling/quantization parameters etc.
- * You must derive this class for each codec you create.  
-*/
-class AbstractCodecParameters : public Serializable
+
+
+class PcxCodecParameters : public AbstractCodecParameters
 {
-protected:
-	Uint32 m_size;
 public:
-	
+
+	/*
+	 * Initialize text codec parameters.
+	 */
+	PcxCodecParameters();
+
 	/*
 	 * Serialize a data chunk.
+	 * @returns: data chunk
 	 */
-	virtual DataChunk& serialize() const = 0;
-	
+	DataChunk& serialize() const;
+
 	/*
 	 * Deserialize a data chunk.
 	 */
-	virtual void deserialize(const DataChunk&)= 0;
+	void deserialize(const DataChunk& dc);
 	
 	/*
-	 * Returns parameters' size.
+	 * Get parameters' size.
+	 * @returns: parameters' size
 	 */
-	virtual Uint32 get_size() = 0;
-	
-	virtual ~AbstractCodecParameters(){};
-
+	Uint32 get_size();
+	~PcxCodecParameters();
 };
 
-#endif /*ABSTRACT_CODEC_PARAMETERS_H_*/
+#endif /*PCX_CODEC_PARAMETER_*/
