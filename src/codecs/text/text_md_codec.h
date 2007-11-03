@@ -67,7 +67,7 @@ public:
 	 * @stream: abstract stream to be decoded
 	 */
 	void decode(const MDStream* md_stream, AbstractStream* stream);
-	~TextMDCodec(){};
+	~TextMDCodec();
 };
 
 #endif /*TEXT_MD_CODEC_H_*/

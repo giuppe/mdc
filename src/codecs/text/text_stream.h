@@ -32,11 +32,9 @@ private:
 	std::string m_stream_name;
 	Uint32 m_last_current_position;
 	std::string m_hash;
-public:
-	
+public:	
 	TextStream(){};
-	
-	
+
 	/*
 	 * Loads a stream from disk.
 	 * @path: filesystem path of file to load;
@@ -98,7 +96,7 @@ public:
 	 * @returns: true if operation is successful
 	 */
 	bool save_to_disk(const std::string& path);
-	~TextStream(){};
+	~TextStream();
 };
 
 #endif /*TEXT_STREAM_H_*/

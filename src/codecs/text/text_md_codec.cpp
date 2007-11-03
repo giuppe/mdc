@@ -100,3 +100,17 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {
 				}
 			}
 }
+
+TextMDCodec::~TextMDCodec() {
+	delete &m_flows_number;
+	delete &m_descriptors_number;
+	//delete m_descr_total_dim;
+	if (!m_seq_counter.empty())
+		for (Uint32 i=0; i<m_seq_counter.size(); i++)
+			delete &m_seq_counter[i];
+	else delete &m_seq_counter;
+	if (!m_flows_id.empty())
+		for (Uint8 i=0; i<m_flows_id.size(); i++)
+			delete &m_flows_id[i];
+	else delete &m_flows_id;
+}

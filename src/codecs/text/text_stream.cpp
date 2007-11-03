@@ -102,3 +102,13 @@ void TextStream::update_stream_hash() {
 std::string TextStream::get_stream_hash() const {
 	return m_hash;
 }
+
+TextStream::~TextStream() {
+	if (!m_data.empty())
+		for (Uint32 i=0; i<m_data.size(); i++)
+			delete &m_data[i];
+	else delete &m_data;
+	delete &m_hash;
+	delete &m_last_current_position;
+	delete &m_stream_name;
+}
