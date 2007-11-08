@@ -69,11 +69,11 @@ bool PosixDirectory::save_file(const std::string& path, const DataChunk& data_to
 	DataChunk dc;
 	dc += data_to_save;
 	FILE *m_f;
-	Uint32 byte;
+	Uint8 byte;
 	if (path.size() > 0)
 		if (fopen(path.c_str(), "w") != NULL) {
 			m_f = fopen(path.c_str(), "w");
-			while(dc.get_lenght()!=0) {
+			while(dc.get_lenght()>0) {
 				dc.extract_head(byte);
 				fputc(byte, m_f);
 			}

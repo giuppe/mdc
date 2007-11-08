@@ -107,7 +107,7 @@ void stream_converter(AbstractConfiguration* config)
 	TextStream text;
 	text.load_from_disk(input_filename);
 	MDStream mdstream;
-	codec->code(&text, &mdstream);;
-	codec->decode(&mdstream, &text);
+	codec->code(&text, &mdstream);
+	//codec->decode(&mdstream, &text);
 	mdstream.save_to_disk(output_filename);
 }

@@ -33,7 +33,7 @@ private:
 	Uint32 m_last_current_position;
 	std::string m_hash;
 public:	
-	TextStream(){};
+	TextStream();
 
 	/*
 	 * Loads a stream from disk.
@@ -66,12 +66,6 @@ public:
 	 * @returns: stream name
 	 */
 	std::string get_stream_name() const;
-	
-	/*
-	 * Set cursor's last position in stream.
-	 * @new_position: new position to be set for cursor
-	 */
-	void set_last_current_position(Uint32 new_position);
 	
 	/*
 	 * Get cursor's last position in stream.

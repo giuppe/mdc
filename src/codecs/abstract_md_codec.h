@@ -17,7 +17,6 @@
 #include "md_stream.h"
 #include "abstract_stream.h"
 
-
 #ifndef ABSTRACTMDCODEC_H_
 #define ABSTRACTMDCODEC_H_
 
@@ -35,12 +34,6 @@ public:
 	 * @returns: flows number
 	 */
 	virtual Uint8 get_flows_number() = 0;
-	
-	/*
-	 * Set descriptors dimension by GUI.
-	 * @dimension: descriptors payload dimension and header
-	 */
-	//virtual void set_descriptor_dimension(Uint16 total_dimension) = 0;
 	
 	/*
 	 * Code an abstract stream in an abstract md_stream

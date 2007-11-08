@@ -68,12 +68,6 @@ public:
 	virtual std::string get_stream_name() const = 0;
 	
 	/*
-	 * Set last position in file.
-	 * @new_position: position to be considered as new current position
-	 */
-	virtual void set_last_current_position(Uint32 new_position) = 0;
-	
-	/*
 	 * Get last current position in file.
 	 * @returns: last current position
 	 */

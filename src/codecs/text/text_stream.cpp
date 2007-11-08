@@ -23,6 +23,8 @@
 #include "../../common/dir/abstract_directory.h"
 #include "../../common/dir/directory_factory.h"
 
+TextStream::TextStream() {m_last_current_position = 0;}
+
 bool TextStream::load_from_disk(const std::string& path) {
 	if (path.size() > 0) {
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
@@ -54,26 +56,19 @@ bool TextStream::save_to_disk(const std::string& path) {
 	return false;
 }
 
-void TextStream::set_last_current_position(Uint32 new_position) {
-	if (m_last_current_position+new_position < m_data.size()-1)
-		m_last_current_position = new_position;
-}
-
-Uint32 TextStream::get_last_current_position() const {
-	return m_last_current_position;
-}
+Uint32 TextStream::get_last_current_position() const {return m_last_current_position;}
 
 DataChunk& TextStream::get_data(Uint16 dimension) {
 	DataChunk* d = new DataChunk();
 	if (m_last_current_position+dimension < m_data.size()) {
-		for (Uint32 i=m_last_current_position; i<(m_last_current_position+dimension-1); i++) {
-			Sint8 curr_char = m_data.at(i);
+		for (Uint32 i=m_last_current_position; i<(m_last_current_position+dimension); i++) {
+			Sint8 curr_char = m_data[i];
 			d->append(curr_char);
 		}
 		m_last_current_position += dimension;
 	}
 	else {
-		for (Uint32 i=m_last_current_position; i < (m_data.size()-1); i++) {
+		for (Uint32 i=m_last_current_position; i < m_data.size(); i++) {
 			Sint8 curr_char = m_data[i];
 			d->append(curr_char);
 		}
@@ -82,33 +77,14 @@ DataChunk& TextStream::get_data(Uint16 dimension) {
 	return *d;
 }
 
-Uint32 TextStream::get_data_dim() const {
-	return m_data.size();
-}
+Uint32 TextStream::get_data_dim() const {return m_data.size();}
 
 void TextStream::set_stream_name(std::string& name) {
 	if (name.size() > 0)
 		m_stream_name = name;
 }
 
-std::string TextStream::get_stream_name() const {
-	return m_stream_name;
-}
-
-void TextStream::update_stream_hash() {
-	m_hash = "livent rulez";
-}
-
-std::string TextStream::get_stream_hash() const {
-	return m_hash;
-}
-
-TextStream::~TextStream() {
-	if (!m_data.empty())
-		for (Uint32 i=0; i<m_data.size(); i++)
-			delete &m_data[i];
-	else delete &m_data;
-	delete &m_hash;
-	delete &m_last_current_position;
-	delete &m_stream_name;
-}
+std::string TextStream::get_stream_name() const {return m_stream_name;}
+void TextStream::update_stream_hash() {m_hash = "livent rulez";}
+std::string TextStream::get_stream_hash() const {return m_hash;}
+TextStream::~TextStream() {}

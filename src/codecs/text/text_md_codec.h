@@ -27,7 +27,6 @@ class TextMDCodec : public AbstractMDCodec{
 private:
 	Uint8 m_flows_number;
 	Uint32 m_descriptors_number;
-	//Uint16 m_descr_total_dim;
 	std::vector<Uint8> m_flows_id;
 	std::vector<Uint32> m_seq_counter;
 public:
@@ -47,12 +46,6 @@ public:
 	 * @flows: flows number
 	 */
 	void set_flows_number(Uint8 flows);
-	
-	/*
-	 * Set descriptor dimension.
-	 * @total_dimension: dimension of payload and header
-	 */	
-	//void set_descriptor_dimension(Uint16 total_dimension);
 	
 	/*
 	 * Code the stream to be sent.

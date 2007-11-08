@@ -111,14 +111,18 @@ DataChunk& MDStream::serialize() const {
 				temp_stream[flow][sequence] = m_stream[flow][sequence];
 			}
 	dc->append(valid_descriptors_number);
-	if (valid_descriptors_number > 0)
+	if (valid_descriptors_number > 0) {
 		for (Uint8 flow=0; flow<temp_stream.size(); flow++)
 			for (Uint32 sequence=0; sequence<temp_stream[flow].size(); sequence++) {
-				Descriptor* current_descriptor = new Descriptor();
-				current_descriptor = temp_stream[flow][sequence];
-				dc->operator +=(*current_descriptor->get_payload());//non accoda il payload
+				if (valid_descriptors_number > 0) {
+					Descriptor* current_descriptor = temp_stream[flow][sequence];
+					(*dc) += current_descriptor->serialize();
+					valid_descriptors_number--;
+				}
 			}
-	return *dc;
+		return *dc;
+	}
+	else return *dc;
 }
 
 void MDStream::deserialize(const DataChunk& data) {assert(!"This function is a stub.");}

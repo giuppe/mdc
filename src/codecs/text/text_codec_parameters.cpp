@@ -29,6 +29,4 @@ DataChunk& TextCodecParameters::serialize() const {
 
 void TextCodecParameters::deserialize(const DataChunk& dc) {}
 
-TextCodecParameters::~TextCodecParameters() {
-	delete &m_size;
-}
+TextCodecParameters::~TextCodecParameters() {}
