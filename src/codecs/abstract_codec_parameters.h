@@ -41,7 +41,7 @@ public:
 	/*
 	 * Deserialize a data chunk.
 	 */
-	virtual void deserialize(const DataChunk&)= 0;
+	virtual void deserialize(const DataChunk&) = 0;
 	
 	/*
 	 * Returns parameters' size.

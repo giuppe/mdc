@@ -6,7 +6,5 @@
 1 byte		flow_id
 4 bytes		sequence_number
 ??			codec name (null terminated)
-4 bytes		codec parameters size
-??			codec parameters
 2 bytes		payload size
 ??			payload

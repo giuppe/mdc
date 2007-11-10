@@ -53,15 +53,11 @@ char* MDCMessage::get_type_string() const
 	return type;
 }
 
-void MDCMessage::set_type_string(const char* type)
-{
+void MDCMessage::set_type_string(const char* type) {
 	Uint8* byte_type = new Uint8[4];
-		
 	memcpy(byte_type, type, 4);
 	set_type(byte_type);
 }
-
-
 
 DataChunk& MDCMessage::serialize() const
 {

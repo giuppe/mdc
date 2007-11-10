@@ -76,9 +76,9 @@ MDStream::~MDStream() {
 bool MDStream::load_from_disk(const std::string& path) {
 	DataChunk data;
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
-	if(dir->load_file(path, data)) {
-		//ulteriori analisi su data
-		assert(!"Function is a stub - you should fill it up!");
+	if (dir->load_file(path, data)) {
+		deserialize(data);
+		LOG_INFO("Loaded MD Stream "<<m_name<<" from "<<path.c_str());
 		return true;
 	}
 	return false;
@@ -86,9 +86,9 @@ bool MDStream::load_from_disk(const std::string& path) {
 
 bool MDStream::save_to_disk(const std::string& path) {
 	DataChunk data;
-	data += this->serialize();
+	data += serialize();
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
-	if(dir->save_file(path, data)) {
+	if (dir->save_file(path, data)) {
 		LOG_INFO("Saved MD Stream "<<m_name<<" in "<<path.c_str());
 		return true;
 	}
@@ -116,6 +116,7 @@ DataChunk& MDStream::serialize() const {
 			for (Uint32 sequence=0; sequence<temp_stream[flow].size(); sequence++) {
 				if (valid_descriptors_number > 0) {
 					Descriptor* current_descriptor = temp_stream[flow][sequence];
+					//dc->append(current_descriptor->get_descriptor_total_dimension());
 					(*dc) += current_descriptor->serialize();
 					valid_descriptors_number--;
 				}
@@ -125,5 +126,28 @@ DataChunk& MDStream::serialize() const {
 	else return *dc;
 }
 
-void MDStream::deserialize(const DataChunk& data) {assert(!"This function is a stub.");}
+void MDStream::deserialize(const DataChunk& data) {//FIXME
+	if (data.get_lenght() > 0) {
+		DataChunk* temp_dc = new DataChunk();
+		temp_dc->operator +=(data);
+		Uint8 flows_number;
+		temp_dc->extract_head(flows_number);
+		Uint32 sequences_number;
+		temp_dc->extract_head(sequences_number);
+		Uint32 valid_descriptors_number;
+		temp_dc->extract_head(valid_descriptors_number);
+		std::vector<std::vector<Descriptor*> > output_stream;
+		for (Uint8 flow=0; flow<flows_number; flow++)
+			for (Uint32 sequence=0; sequence<sequences_number; sequence++) {
+				//Uint16 descriptor_size;
+				//temp_dc->extract_head(descriptor_size);
+				//tagliare il descrittore corrente e passarlo alla deserializzazione
+				
+				Descriptor* d = new Descriptor();
+				d->deserialize(*temp_dc);
+				valid_descriptors_number--;
+			}
+	}
+}
+
 bool MDStream::is_empty() const {return m_is_empty;}

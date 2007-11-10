@@ -25,7 +25,7 @@
 #include <vector>
 
 TextMDCodec::TextMDCodec() {
-	m_flows_number = 3;
+	m_flows_number = 2;
 	m_descriptors_number = 0;
 	m_seq_counter.push_back(0);
 }
@@ -35,10 +35,11 @@ Uint8 TextMDCodec::get_flows_number() {return m_flows_number;}
 
 void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 	std::string m_codec_name = "text";
-	Uint16 m_payload_size = 13;
+	Uint16 m_payload_size = 50;
 	m_descriptors_number = (stream->get_data_dim()/(m_flows_number*m_payload_size))+1;
 	md_stream->init(m_flows_number, m_descriptors_number);
 	bool finished = false;
+	TextCodecParameters* tcp = new TextCodecParameters();
 	for (Uint8 i=0; i<m_flows_number; i++) {
 		for (Uint32 j=0; j<m_descriptors_number; j++) {
 			if (stream->get_data_dim()-stream->get_last_current_position() > 0) {
@@ -48,9 +49,10 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
 				descriptor->set_codec_name(m_codec_name);
-				TextCodecParameters* tcp = new TextCodecParameters();
-				descriptor->set_codec_parameters_size(tcp->get_size());
-				descriptor->set_codec_parameter(tcp);
+				if (m_codec_name != "text") {
+					descriptor->set_codec_parameters_size(tcp->get_size());
+					descriptor->set_codec_parameter(tcp);
+				}
 				if (stream->get_data_dim()-stream->get_last_current_position() < m_payload_size) {
 					m_payload_size = stream->get_data_dim() - stream->get_last_current_position();
 					finished = true;

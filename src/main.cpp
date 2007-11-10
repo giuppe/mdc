@@ -82,21 +82,16 @@ int main(int argc, char** argv)
 	delete client;
 	delete sched;
 	}
-	
 	delete config;
-	
 	return 0;
 }
 
-void deinit_all()
-{
+void deinit_all() {
 	NetManager::instance()->deinit();
 	LogManager::instance()->deinit();
 }
 
-
-void stream_converter(AbstractConfiguration* config)
-{
+void stream_converter(AbstractConfiguration* config) {
 	std::string output_filename, input_filename;
 	config->get_string("","output", output_filename);
 	config->get_string("","input", input_filename);
@@ -104,10 +99,11 @@ void stream_converter(AbstractConfiguration* config)
 	CodecRegistry* codecReg = CodecRegistry::instance();
 	AbstractMDCodec* codec;
 	codecReg->get_codec(std::string("text"), codec);
-	TextStream text;
-	text.load_from_disk(input_filename);
+	//TextStream text;
+	//text.load_from_disk(input_filename);
 	MDStream mdstream;
-	codec->code(&text, &mdstream);
+	//codec->code(&text, &mdstream);
+	mdstream.load_from_disk(input_filename);
 	//codec->decode(&mdstream, &text);
-	mdstream.save_to_disk(output_filename);
+	//mdstream.save_to_disk(output_filename);
 }

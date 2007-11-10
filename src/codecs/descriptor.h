@@ -36,10 +36,11 @@ private:
 	std::string m_codec_name;
 	Uint32 m_codec_parameters_size;
 	AbstractCodecParameters* m_codec_parameters;
-	Uint32 m_payload_size;
+	Uint16 m_payload_size;
 	Uint8* m_payload;
+	Uint16 m_total_dimension;
 public:
-	Descriptor() {};
+	Descriptor();
 	~Descriptor();
 	
 	/*
@@ -130,13 +131,13 @@ public:
 	 * Set payload size.
 	 * @psize: payload size
 	 */
-	void set_payload_size(Uint32 psize);
+	void set_payload_size(Uint16 psize);
 	
 	/*
 	 * Get payload size.
 	 * @returns: payload size
 	 */
-	Uint32 get_payload_size();
+	Uint16 get_payload_size();
 	
 	/*
 	 * Set payload.
@@ -161,6 +162,14 @@ public:
 	 * It is the opposite of serialize();
 	 */
 	void deserialize(const DataChunk& data);
+	
+	/**
+	 * Get descriptor total dimension.
+	 * It is the total dimension of this descriptor, formed by header dimension
+	 * and by payload dimension.
+	 * @returns: total dimension
+	 */
+	Uint16 get_descriptor_total_dimension();
 };
 
 #endif /*DESCRIPTOR_H_*/
