@@ -76,7 +76,7 @@ void DataChunk::append(Sint32 data)
 void DataChunk::append(Uint16 data)
 {
 	Uint8* new_data = new Uint8[sizeof(Uint16)];
-	SDLNet_Write32(data, new_data);
+	SDLNet_Write16(data, new_data);
 	append(sizeof(Uint16), new_data);
 	delete [] new_data;
 }
@@ -84,7 +84,7 @@ void DataChunk::append(Uint16 data)
 void DataChunk::append(Sint16 data)
 {
 	Uint8* new_data = new Uint8[sizeof(Sint16)];
-	SDLNet_Write32((Uint16)data, new_data);
+	SDLNet_Write16((Uint16)data, new_data);
 	append(sizeof(Sint16), new_data);
 	delete [] new_data;
 }
