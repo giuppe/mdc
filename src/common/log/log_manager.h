@@ -76,24 +76,40 @@
 #define LOG_WARN(x) {*LogManager::instance()<<"WARN : ["<<typeid(this).name()<<"::"<<__func__<<"]" <<x<<"\n";}
 #define LOG_ERROR(x) {*LogManager::instance()<<"ERROR: ["<<typeid(this).name()<<"::"<<__func__<<"]" <<x<<"\n";}
 #define LOG_FATAL(x) {*LogManager::instance()<<"FATAL: ["<<typeid(this).name()<<"::"<<__func__<<"]" <<x<<"\n";}
+#define LOG_INFO_STATIC(x) {*LogManager::instance()<<"INFO : ["<<__func__<<"]" <<x<<"\n";}
+#define LOG_WARN_STATIC(x) {*LogManager::instance()<<"WARN : ["<<__func__<<"]" <<x<<"\n";}
+#define LOG_ERROR_STATIC(x) {*LogManager::instance()<<"ERROR: ["<<__func__<<"]" <<x<<"\n";}
+#define LOG_FATAL_STATIC(x) {*LogManager::instance()<<"FATAL: ["<<__func__<<"]" <<x<<"\n";}
 #else 
 #if LOG_LEVEL == 2
 #define LOG_INFO(x) 
 #define LOG_WARN(x) {*LogManager::instance()<<"WARN : ["<<typeid(this).name()<<"::"<<__func__<<"]" <<x<<"\n";}
 #define LOG_ERROR(x) {*LogManager::instance()<<"ERROR: ["<<typeid(this).name()<<"::"<<__func__<<"]" <<x<<"\n";}
 #define LOG_FATAL(x) {*LogManager::instance()<<"FATAL: ["<<typeid(this).name()<<"::"<<__func__<<"]" <<x<<"\n";}
+#define LOG_INFO_STATIC(x)
+#define LOG_WARN_STATIC(x) {*LogManager::instance()<<"WARN : ["<<__func__<<"]" <<x<<"\n";}
+#define LOG_ERROR_STATIC(x) {*LogManager::instance()<<"ERROR: ["<<__func__<<"]" <<x<<"\n";}
+#define LOG_FATAL_STATIC(x) {*LogManager::instance()<<"FATAL: ["<<__func__<<"]" <<x<<"\n";}
 #else 
 #if LOG_LEVEL == 1
 #define LOG_INFO(x) 
 #define LOG_WARN(x) 
 #define LOG_ERROR(x) {*LogManager::instance()<<"ERROR: ["<<typeid(this).name()<<"::"<<__func__<<"]" <<x<<"\n";}
 #define LOG_FATAL(x) {*LogManager::instance()<<"FATAL: ["<<typeid(this).name()<<"::"<<__func__<<"]" <<x<<"\n";}
+#define LOG_INFO_STATIC(x)
+#define LOG_WARN_STATIC(x)
+#define LOG_ERROR_STATIC(x) {*LogManager::instance()<<"ERROR: ["<<__func__<<"]" <<x<<"\n";}
+#define LOG_FATAL_STATIC(x) {*LogManager::instance()<<"FATAL: ["<<__func__<<"]" <<x<<"\n";}
 #else 
 #if LOG_LEVEL == 0
 #define LOG_INFO(x) 
 #define LOG_WARN(x) 
 #define LOG_ERROR(x) 
 #define LOG_FATAL(x) {*LogManager::instance()<<"FATAL: ["<<typeid(this).name()<<"::"<<__func__<<"]" <<x<<"\n";}
+#define LOG_INFO_STATIC(x)
+#define LOG_WARN_STATIC(x)
+#define LOG_ERROR_STATIC(x)
+#define LOG_FATAL_STATIC(x) {*LogManager::instance()<<"FATAL: ["<<__func__<<"]" <<x<<"\n";}
 #endif
 #endif
 #endif
