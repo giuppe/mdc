@@ -19,6 +19,7 @@
 #include <map>
 #include <string>
 #include "abstract_md_codec.h"
+#include "text/text_md_codec.h"
 
 
 void CodecRegistry::register_codec(const std::string& name, AbstractMDCodec* codec)
@@ -46,7 +47,22 @@ bool CodecRegistry::get_codec(const std::string& name, AbstractMDCodec*& codec) 
 	return true;
 }
 
+void CodecRegistry::init()
+{
+	AbstractMDCodec* textcodec = new TextMDCodec();
+	const std::string text("text");
+	this->register_codec(text, textcodec);
+}
 
+void CodecRegistry::deinit()
+{
+	std::map<std::string, AbstractMDCodec*>::const_iterator it;
+	for ( it=m_codecs.begin() ; it != m_codecs.end(); it++ )
+	{
+		delete it->second;
+	}
+	
+}
 
 
 CodecRegistry* CodecRegistry::_instance = 0;

@@ -1,9 +1,9 @@
 /***************************************************************************
-                          codec_registry.h  -  Insert description
+                          data_chunk.cpp  -  DataChunk class
                              -------------------
-    begin                : Jul 26, 2007
-    copyright          : (C) 2007 by Giuseppe D'Aqui'
-    email                : giuseppe.da@gmail.com
+    begin                : Nov 12 2007
+    copyright            : (C) 2007 by Giuseppe D'Aqui'
+    email                : kumber@tiscalinet.it
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,46 +15,25 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include <map>
+#include "abstract_stream.h"
+#include "text/text_stream.h"
+#include "pcx/pcx_stream.h"
 #include <string>
-#include "abstract_md_codec.h"
+#include "stream_factory.h"
 
-#ifndef CODEC_REGISTRY_H_
-#define CODEC_REGISTRY_H_
-
-
-
-class CodecRegistry
+AbstractStream* StreamFactory::create_stream(std::string codec_name)
 {
-private:
-	std::map<std::string, AbstractMDCodec*> m_codecs;
-	
-	
-public:
-	
-	void register_codec(const std::string& name, AbstractMDCodec* codec);
-	
-	bool get_codec(const std::string& name, AbstractMDCodec*& codec) const;
+	LOG_INFO_STATIC("Creating stream of type: "<<codec_name);
+	if(codec_name=="text")
+	{
+		return new TextStream();
+	}
+/*	else if(codec_name=="pcx")
+	{
+		return new PCXStream();
+	}
+*/
+	LOG_FATAL_STATIC("Unable to manage stream of type: "<<codec_name);
+	exit(1);
+}
 
-	void init();
-	
-	void deinit();
-	// begin Singleton stuff
-
-private:
-
-static CodecRegistry* _instance;
-
-protected:
-
-CodecRegistry(){};
-~CodecRegistry(){deinit();}
-
-public:
-
-static CodecRegistry* instance();
-
-// end Singleton stuff
-};
-
-#endif /*CODEC_REGISTRY_H_*/

@@ -1,9 +1,9 @@
 /***************************************************************************
-                          codec_registry.h  -  Insert description
+                          data_chunk.cpp  -  DataChunk class
                              -------------------
-    begin                : Jul 26, 2007
-    copyright          : (C) 2007 by Giuseppe D'Aqui'
-    email                : giuseppe.da@gmail.com
+    begin                : Nov 12 2007
+    copyright            : (C) 2007 by Giuseppe D'Aqui'
+    email                : kumber@tiscalinet.it
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,46 +15,16 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include <map>
+#include "abstract_stream.h"
 #include <string>
-#include "abstract_md_codec.h"
 
-#ifndef CODEC_REGISTRY_H_
-#define CODEC_REGISTRY_H_
+#ifndef STREAM_FACTORY_H_
+#define STREAM_FACTORY_H_
 
-
-
-class CodecRegistry
+class StreamFactory
 {
-private:
-	std::map<std::string, AbstractMDCodec*> m_codecs;
-	
-	
 public:
-	
-	void register_codec(const std::string& name, AbstractMDCodec* codec);
-	
-	bool get_codec(const std::string& name, AbstractMDCodec*& codec) const;
-
-	void init();
-	
-	void deinit();
-	// begin Singleton stuff
-
-private:
-
-static CodecRegistry* _instance;
-
-protected:
-
-CodecRegistry(){};
-~CodecRegistry(){deinit();}
-
-public:
-
-static CodecRegistry* instance();
-
-// end Singleton stuff
+	static AbstractStream* create_stream(std::string codec_name);
 };
 
-#endif /*CODEC_REGISTRY_H_*/
+#endif /*STREAM_FACTORY_H_*/

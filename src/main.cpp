@@ -15,9 +15,8 @@
 #include <SDL/SDL.h>
 #include "common/scheduler.h"
 #include "codecs/codec_registry.h"
-#include "codecs/text/text_stream.h"
-#include "codecs/text/text_md_codec.h"
 #include "codecs/md_stream.h"
+#include "codecs/stream_factory.h"
 #include "server_action.h"
 #include "client_test_action.h"
 
@@ -41,9 +40,7 @@ int main(int argc, char** argv)
 	SDL_Delay(1000);
 
 	CodecRegistry* codecReg = CodecRegistry::instance();
-	AbstractMDCodec* textcodec = new TextMDCodec();
-	const std::string text("text");
-	codecReg->register_codec(text, textcodec);
+	codecReg->init();
 	
 	AbstractConfiguration* config = new CommandlineConfiguration(argc, argv);
 	
@@ -87,23 +84,40 @@ int main(int argc, char** argv)
 }
 
 void deinit_all() {
+	CodecRegistry::instance()->deinit();
 	NetManager::instance()->deinit();
 	LogManager::instance()->deinit();
 }
 
-void stream_converter(AbstractConfiguration* config) {
-	std::string output_filename, input_filename;
+
+void stream_converter(AbstractConfiguration* config)
+{
+	std::string output_filename, input_filename, codec_name;
+
 	config->get_string("","output", output_filename);
 	config->get_string("","input", input_filename);
+	config->get_string("","codec", codec_name);
 	DEBUG_OUT("converting "<<input_filename<<" to "<<output_filename<<"\n");
+	DEBUG_OUT("\t using "<<codec_name<<" as codec");
 	CodecRegistry* codecReg = CodecRegistry::instance();
 	AbstractMDCodec* codec;
+	bool exists_codec = false;
+	exists_codec = codecReg->get_codec(codec_name, codec);
+	if(!exists_codec)
+	{
+		DEBUG_OUT("Unable to find codec "<<codec_name);
+		exit(1);
+	}
+	AbstractStream* stream = StreamFactory::create_stream(codec_name);
+	stream->load_from_disk(input_filename);
+	
 	codecReg->get_codec(std::string("text"), codec);
 	//TextStream text;
 	//text.load_from_disk(input_filename);
 	MDStream mdstream;
-	//codec->code(&text, &mdstream);
-	mdstream.load_from_disk(input_filename);
+	codec->code(stream, &mdstream);
 	//codec->decode(&mdstream, &text);
-	//mdstream.save_to_disk(output_filename);
+	//text.save_to_disk(output_filename);
+	mdstream.save_to_disk(output_filename);
+
 }
