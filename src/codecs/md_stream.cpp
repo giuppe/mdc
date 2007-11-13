@@ -124,6 +124,7 @@ DataChunk& MDStream::serialize() const {
 	if (valid_descriptors_number > 0) {
 		for (Uint8 flow=0; flow<temp_stream.size(); flow++)
 			for (Uint32 sequence=0; sequence<temp_stream[flow].size(); sequence++) {
+
 				if (valid_descriptors_number > 0) {
 					Descriptor* current_descriptor = temp_stream[flow][sequence];
 					dc->append(current_descriptor->get_descriptor_total_dimension());
