@@ -109,15 +109,12 @@ void stream_converter(AbstractConfiguration* config)
 		exit(1);
 	}
 	AbstractStream* stream = StreamFactory::create_stream(codec_name);
-	stream->load_from_disk(input_filename);
-	
 	codecReg->get_codec(std::string("text"), codec);
-	//TextStream text;
-	//text.load_from_disk(input_filename);
+	stream->load_from_disk(input_filename);
 	MDStream mdstream;
 	codec->code(stream, &mdstream);
-	//codec->decode(&mdstream, &text);
-	//text.save_to_disk(output_filename);
+	//mdstream.load_from_disk(input_filename);
+	//codec->decode(&mdstream, stream);
 	mdstream.save_to_disk(output_filename);
-
+	//stream->save_to_disk(output_filename);
 }

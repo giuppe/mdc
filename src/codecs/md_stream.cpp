@@ -48,6 +48,16 @@ bool MDStream::get_descriptor(Uint8 flow, Uint32 sequence, Descriptor* &descript
 	return false;
 }
 
+Uint32 MDStream::get_sequences_number() const {
+	Uint32 max_sequence = 0;
+	for (Uint8 i=0; i<m_valid_descriptor.size(); i++)
+		if (m_valid_descriptor[i].size() > max_sequence)
+			max_sequence = m_valid_descriptor[i].size();
+	return max_sequence;
+}
+
+Uint8 MDStream::get_flows_number() const {return m_valid_descriptor.size();}
+
 void MDStream::set_descriptor(Descriptor* descriptor) {
 	m_is_empty = false;
 	Uint8 flow = descriptor->get_flow_id();
@@ -116,7 +126,7 @@ DataChunk& MDStream::serialize() const {
 			for (Uint32 sequence=0; sequence<temp_stream[flow].size(); sequence++) {
 				if (valid_descriptors_number > 0) {
 					Descriptor* current_descriptor = temp_stream[flow][sequence];
-					//dc->append(current_descriptor->get_descriptor_total_dimension());
+					dc->append(current_descriptor->get_descriptor_total_dimension());
 					(*dc) += current_descriptor->serialize();
 					valid_descriptors_number--;
 				}
@@ -126,7 +136,7 @@ DataChunk& MDStream::serialize() const {
 	else return *dc;
 }
 
-void MDStream::deserialize(const DataChunk& data) {//FIXME
+void MDStream::deserialize(const DataChunk& data) {
 	if (data.get_lenght() > 0) {
 		DataChunk* temp_dc = new DataChunk();
 		temp_dc->operator +=(data);
@@ -134,19 +144,22 @@ void MDStream::deserialize(const DataChunk& data) {//FIXME
 		temp_dc->extract_head(flows_number);
 		Uint32 sequences_number;
 		temp_dc->extract_head(sequences_number);
+		init(flows_number, sequences_number);
 		Uint32 valid_descriptors_number;
 		temp_dc->extract_head(valid_descriptors_number);
 		std::vector<std::vector<Descriptor*> > output_stream;
-		for (Uint8 flow=0; flow<flows_number; flow++)
-			for (Uint32 sequence=0; sequence<sequences_number; sequence++) {
-				//Uint16 descriptor_size;
-				//temp_dc->extract_head(descriptor_size);
-				//tagliare il descrittore corrente e passarlo alla deserializzazione
-				
-				Descriptor* d = new Descriptor();
-				d->deserialize(*temp_dc);
-				valid_descriptors_number--;
-			}
+		while (valid_descriptors_number > 0) {
+			Uint16 descriptor_size;
+			temp_dc->extract_head(descriptor_size);
+			Uint8* current_descriptor;
+			temp_dc->extract_head(descriptor_size, current_descriptor);
+			DataChunk* temp_curr_descriptor = new DataChunk();
+			temp_curr_descriptor->append(descriptor_size, current_descriptor);
+			Descriptor* d = new Descriptor();
+			d->deserialize(*temp_curr_descriptor);
+			valid_descriptors_number--;
+			this->set_descriptor(d);
+		}
 	}
 }
 

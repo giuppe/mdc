@@ -20,7 +20,11 @@
 #include <cassert>
 #include <string>
 
-Descriptor::Descriptor() {m_total_dimension = 0;}
+Descriptor::Descriptor() {
+	m_total_dimension = 0;
+	m_codec_parameters_size = 0;
+}
+
 Uint8 Descriptor::get_flow_id() const {return m_flow_id;}
 void Descriptor::set_flow_id(Uint8 id) {m_flow_id = id;}
 Uint32 Descriptor::get_sequence_number() const {return m_sequence_number;}
@@ -46,10 +50,14 @@ void Descriptor::set_codec_name(const std::string& codec_name) {
 
 std::string Descriptor::get_codec_name() const {return m_codec_name;}
 AbstractCodecParameters* Descriptor::get_codec_parameter() const {return m_codec_parameters;}
-void Descriptor::set_codec_parameter(AbstractCodecParameters* acp) {m_codec_parameters = acp;}
+
+void Descriptor::set_codec_parameter(AbstractCodecParameters* acp) {
+	m_codec_parameters = acp;
+	m_total_dimension += m_codec_parameters->get_size();
+}
 
 Descriptor::~Descriptor() {
-	if (m_codec_parameters->get_size() > 0)
+	if (m_codec_parameters_size > 0)
 		delete m_codec_parameters;
 	delete[] m_payload;
 }
@@ -57,34 +65,35 @@ Descriptor::~Descriptor() {
 DataChunk& Descriptor::serialize() const {
 	DataChunk* result = new DataChunk();
 	MDCMessage msg;
-	msg.set_type_string("DESC");//bug: non è NULL terminated
+	msg.set_type_string("DESC");
 	(*result)+=msg.serialize();
-	result->append(this->m_hash.c_str());
-	result->append(this->m_file_name.c_str());
+	result->append(m_hash.c_str());
+	result->append(m_file_name.c_str());
 	result->append(m_flow_id);
-	result->append(this->m_sequence_number);
-	result->append(this->m_codec_name.c_str());
+	result->append(m_sequence_number);
+	result->append(m_codec_name.c_str());
 	if (m_codec_name != "text") {
-		result->append(this->m_codec_parameters_size);
+		result->append(m_codec_parameters_size);
 		(*result)+=m_codec_parameters->serialize();
 	}
-	result->append(this->m_payload_size);//possibile bug: scrive correttamente?
-	result->append(this->m_payload_size, this->m_payload);
+	result->append(m_payload_size);
+	result->append(m_payload_size, this->m_payload);
 	return (*result);
 }
 
-void Descriptor::deserialize(const DataChunk& data) {//FIXME: estrae sempre il primo descrittore
+void Descriptor::deserialize(const DataChunk& data) {
 	if (data.get_lenght() > 0) {
 		DataChunk* temp_dc = new DataChunk();
 		temp_dc->operator +=(data);
 		std::string preamble;
 		char* current_char;
-		for (Uint8 i=0; i<2; i++) {
+		temp_dc->extract_head(current_char);
+		preamble.append(current_char);
+		Uint8* desc;
+		temp_dc->extract_head(4, desc);
+		if (preamble == "MDC") {
 			temp_dc->extract_head(current_char);
-			preamble.append(current_char);
-		}
-		if ((preamble.find_first_of("MDC")==0) && (preamble.find_first_of("DESC"))==1) {
-			m_hash.append(preamble.substr(7, preamble.size()));
+			m_hash.append(current_char);
 			temp_dc->extract_head(current_char);
 			m_file_name.append(current_char);
 			temp_dc->extract_head(m_flow_id);
@@ -100,7 +109,7 @@ void Descriptor::deserialize(const DataChunk& data) {//FIXME: estrae sempre il p
 				m_codec_parameters->deserialize(*codec_parameters_dc);
 			}
 			temp_dc->extract_head(m_payload_size);
-			temp_dc->extract_head(50, m_payload);
+			temp_dc->extract_head((Uint32)m_payload_size, m_payload);
 		}
 	}
 }
@@ -117,4 +126,7 @@ DataChunk* Descriptor::get_payload() {
 
 Uint32 Descriptor::get_codec_parameters_size() {return m_codec_parameters_size;}
 void Descriptor::set_codec_parameters_size(Uint32 size) {m_codec_parameters_size = size;}
-Uint16 Descriptor::get_descriptor_total_dimension() {return (m_total_dimension+19);}
+
+Uint16 Descriptor::get_descriptor_total_dimension() {
+	return (m_total_dimension+m_codec_parameters_size+15+m_payload_size);
+}

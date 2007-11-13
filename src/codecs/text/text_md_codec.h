@@ -29,14 +29,14 @@ private:
 	Uint32 m_descriptors_number;
 	std::vector<Uint8> m_flows_id;
 	std::vector<Uint32> m_seq_counter;
+	Uint16 m_payload_size;
 public:
 	/*
 	 * Initialize parameter of a text mdcodec.
 	 */
 	TextMDCodec();
 	
-	/*
-	 * Get flows number.
+	/* Get flows number.
 	 * @returns: flows number
 	 */
 	Uint8 get_flows_number();

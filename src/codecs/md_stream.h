@@ -94,6 +94,18 @@ public:
 	bool is_empty() const;
 	DataChunk& serialize() const;
 	void deserialize(const DataChunk&);
+	
+	/*
+	 * Gets maximum sequences number
+	 * @returns: sequences number
+	 */
+	Uint32 get_sequences_number() const;
+	
+	/*
+	 * Gets flows' number
+	 * @returns: flows' number
+	 */
+	Uint8 get_flows_number() const;
 };
 
 #endif /*MDSTREAM_H_*/
