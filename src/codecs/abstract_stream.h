@@ -83,6 +83,12 @@ public:
 	 * Update hash based on file content.
 	 */
 	virtual void update_stream_hash() = 0;
+	
+	/*
+	 * Insert data to the current stream.
+	 * @data: data to be added;
+	 */
+	virtual void set_data(DataChunk& data) = 0;
 };
 
 #endif /*ABSTRACTSTREAM_H_*/

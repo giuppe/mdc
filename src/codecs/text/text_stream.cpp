@@ -23,7 +23,12 @@
 #include "../../common/dir/abstract_directory.h"
 #include "../../common/dir/directory_factory.h"
 
-TextStream::TextStream() {m_last_current_position = 0;}
+TextStream::TextStream() {
+	m_last_current_position = 0;
+	m_data.resize(0);
+	m_real_data = NULL;
+	m_real_data_size = 0;
+}
 
 bool TextStream::load_from_disk(const std::string& path) {
 	if (path.size() > 0) {
@@ -46,12 +51,20 @@ bool TextStream::load_from_disk(const std::string& path) {
 
 bool TextStream::save_to_disk(const std::string& path) {
 	if (path.size() > 0) {
-		AbstractDirectory* dir = DirectoryFactory::createDirectory();
-		DataChunk dc;
-		for (Uint32 i=0; i<m_data.size(); i++)
-			dc.append(m_data.at(i));
-		if (dir->save_file(path, dc))
-			return true;
+		if (m_data.size() > 0) {
+			AbstractDirectory* dir = DirectoryFactory::createDirectory();
+			DataChunk dc;
+			for (Uint32 i=0; i<m_data.size(); i++)
+				dc.append(m_data[i]);
+			if (dir->save_file(path, dc)) return true;
+		}
+		if (m_real_data != NULL) {
+			AbstractDirectory* dir = DirectoryFactory::createDirectory();
+			DataChunk dc;
+			for (Uint32 i=0; i<m_real_data_size; i++)
+				dc.append(m_real_data[i]);
+			if (dir->save_file(path, dc)) return true;
+		}
 	}
 	return false;
 }
@@ -87,4 +100,13 @@ void TextStream::set_stream_name(std::string& name) {
 std::string TextStream::get_stream_name() const {return m_stream_name;}
 void TextStream::update_stream_hash() {m_hash = "livent rulez";}
 std::string TextStream::get_stream_hash() const {return m_hash;}
-TextStream::~TextStream() {}
+
+TextStream::~TextStream() {
+	if (m_real_data_size > 0)
+		delete[] m_real_data;
+}
+
+void TextStream::set_data (DataChunk& data) {
+	m_real_data_size = data.get_lenght();
+	m_real_data = data.get_data();
+}

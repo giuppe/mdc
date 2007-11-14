@@ -34,6 +34,7 @@ private:
 	std::string m_hash;
 	bool m_is_empty;
 	bool m_is_inited;
+	Uint32 m_valid_descriptors_number;
 public:
 	MDStream();
 	
@@ -106,6 +107,12 @@ public:
 	 * @returns: flows' number
 	 */
 	Uint8 get_flows_number() const;
+	
+	/*
+	 * Gets the valid descriptors number
+	 * @returns: valid descriptors number
+	 */
+	Uint32 get_valid_descriptors_number() const;
 };
 
 #endif /*MDSTREAM_H_*/

@@ -32,6 +32,8 @@ private:
 	std::string m_stream_name;
 	Uint32 m_last_current_position;
 	std::string m_hash;
+	Uint8* m_real_data;
+	Uint32 m_real_data_size;
 public:	
 	TextStream();
 
@@ -90,6 +92,12 @@ public:
 	 * @returns: true if operation is successful
 	 */
 	bool save_to_disk(const std::string& path);
+	
+	/*
+	 * Insert data to the current stream.
+	 * @data: data to be added;
+	 */
+	void set_data(DataChunk& data);
 	~TextStream();
 };
 

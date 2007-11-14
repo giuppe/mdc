@@ -34,7 +34,6 @@ void TextMDCodec::set_flows_number(Uint8 descriptors) {m_flows_number = descript
 Uint8 TextMDCodec::get_flows_number() {return m_flows_number;}
 
 void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
-	Uint32 size = stream->get_data_dim();
 	m_descriptors_number = (stream->get_data_dim()/(m_flows_number*m_payload_size))+1;
 	md_stream->init(m_flows_number, m_descriptors_number);
 	bool finished = false;
@@ -67,32 +66,44 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 }
 
 void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {
-	if (!md_stream->is_empty())
+	if (!md_stream->is_empty()) {
+		std::string name;
+		DataChunk* dc = new DataChunk();
+		Uint32 valid_descriptor_counter = md_stream->get_valid_descriptors_number();
 		for (Uint8 i=0; i<md_stream->get_flows_number(); i++)
 			for (Uint32 j=0; j<md_stream->get_sequences_number(); j++) {
 				Descriptor* descriptor = new Descriptor();
 				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="text")) {
+					name = descriptor->get_file_name();
 					Uint8 m_descriptor_flow_id = descriptor->get_flow_id();
 					Uint32 m_descriptor_seq_number = descriptor->get_sequence_number();
 					if (m_flows_id.empty()) {
 						m_flows_id.push_back(m_descriptor_flow_id);
 						if (m_descriptor_seq_number >= (m_seq_counter[m_flows_id[0]])) {
-							DataChunk* dc = new DataChunk();
 							(*dc) += *(descriptor->get_payload());
 							m_seq_counter[m_flows_id[0]] = m_descriptor_seq_number;
+							valid_descriptor_counter--;
 						}
 					}
 					else
 						for (Uint8 k=0; k<m_flows_id.size(); k++)
-							if (m_descriptor_flow_id == m_flows_id[k]) {
-								if (m_descriptor_seq_number < m_seq_counter[m_flows_id[k]])
-									m_flows_id.push_back(m_descriptor_flow_id);
-								DataChunk* dc = new DataChunk();
+							if ((m_descriptor_flow_id>m_flows_id[k]) && (m_descriptor_seq_number<m_seq_counter[m_flows_id[k]])) {
+								m_flows_id.push_back(m_descriptor_flow_id);
 								(*dc) += *(descriptor->get_payload());
 								m_seq_counter[m_flows_id[k]] = m_descriptor_seq_number;
+								valid_descriptor_counter--;
+							}
+							else if ((m_descriptor_flow_id==m_flows_id[k]) && (valid_descriptor_counter>0)) {
+								(*dc) += *(descriptor->get_payload());
+								m_seq_counter[m_flows_id[k]] = m_descriptor_seq_number;
+								valid_descriptor_counter--;
 							}
 				}
 			}
+		stream->set_stream_name(name);
+		stream->update_stream_hash();
+		stream->set_data(*dc);
+	}
 }
 
 TextMDCodec::~TextMDCodec() {}
