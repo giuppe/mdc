@@ -22,7 +22,7 @@
 
 Descriptor::Descriptor() {
 	m_total_dimension = 0;
-	m_codec_parameters_size = 0;
+	//m_codec_parameters_size = 0;
 }
 
 Uint8 Descriptor::get_flow_id() const {return m_flow_id;}
@@ -57,10 +57,8 @@ void Descriptor::set_codec_parameter(AbstractCodecParameters* acp) {
 }
 
 Descriptor::~Descriptor() {
-	if (m_codec_parameters_size > 0)
 		delete m_codec_parameters;
-	if(m_payload_size>0)
-		delete[] m_payload;
+
 }
 
 DataChunk& Descriptor::serialize() const {
@@ -73,11 +71,12 @@ DataChunk& Descriptor::serialize() const {
 	result->append(m_flow_id);
 	result->append(m_sequence_number);
 	result->append(m_codec_name.c_str());
-	result->append(m_codec_parameters_size);
-	if (m_codec_name != "text")
-		(*result)+=m_codec_parameters->serialize();
-	result->append(m_payload_size);
-	result->append(m_payload_size, this->m_payload);
+	DataChunk temp_codec_parameters;
+	temp_codec_parameters += m_codec_parameters->serialize();
+	result->append(temp_codec_parameters.get_lenght());
+	(*result)+=temp_codec_parameters;
+	result->append(m_payload.get_lenght());
+	(*result)+=this->m_payload;
 	return (*result);
 }
 
@@ -100,33 +99,49 @@ void Descriptor::deserialize(const DataChunk& data) {
 			temp_dc->extract_head(m_sequence_number);
 			temp_dc->extract_head(current_char);
 			m_codec_name.append(current_char);
-			temp_dc->extract_head(m_codec_parameters_size);
-			if (m_codec_name != "text") {
-				Uint8* current_parameters_data;
-				temp_dc->extract_head(m_codec_parameters_size, current_parameters_data);
-				DataChunk* codec_parameters_dc = new DataChunk();
-				codec_parameters_dc->append(m_codec_parameters_size, current_parameters_data);
-				m_codec_parameters->deserialize(*codec_parameters_dc);
-			}
-			temp_dc->extract_head(m_payload_size);
-			temp_dc->extract_head((Uint32)m_payload_size, m_payload);
+			Uint32 codec_parameters_size = 0;
+			temp_dc->extract_head(codec_parameters_size);
+			DataChunk* codec_parameters_dc = new DataChunk();
+			temp_dc->extract_head(codec_parameters_size, *codec_parameters_dc);
+			//FIXME: m_codec_parameter is not initialized here! maybe a factory could help
+			m_codec_parameters->deserialize(*codec_parameters_dc);
+			
+			Uint16 payload_size = 0;
+			temp_dc->extract_head(payload_size);
+			temp_dc->extract_head((Uint32)payload_size, m_payload);
 		}
 	}
 }
 
-void Descriptor::set_payload_size(Uint16 psize) {m_payload_size = psize;}
-Uint16 Descriptor::get_payload_size() {return m_payload_size;}
-void Descriptor::set_payload(DataChunk& payload) {m_payload = payload.get_data();}
+//void Descriptor::set_payload_size(Uint16 psize) {m_payload_size = psize;}
+Uint16 Descriptor::get_payload_size() const {return m_payload.get_lenght();}
 
-DataChunk* Descriptor::get_payload() {
+void Descriptor::set_payload(DataChunk& payload)
+{
+	m_payload.erase();
+	m_payload+=payload;
+}
+
+DataChunk* Descriptor::get_payload() const
+{
 	DataChunk* payload = new DataChunk();
-	payload->append(m_payload_size, m_payload);
+	(*payload)+=m_payload;
 	return payload;
 }
 
-Uint32 Descriptor::get_codec_parameters_size() {return m_codec_parameters_size;}
-void Descriptor::set_codec_parameters_size(Uint32 size) {m_codec_parameters_size = size;}
+Uint32 Descriptor::get_codec_parameters_size() const
+{
+	return m_codec_parameters->get_size();
+}
 
-Uint16 Descriptor::get_descriptor_total_dimension() {
-	return (m_total_dimension+m_codec_parameters_size+15+m_payload_size);
+/*
+void Descriptor::set_codec_parameters_size(Uint32 size)
+{
+	m_codec_parameters_size = size;
+}
+*/
+
+Uint16 Descriptor::get_descriptor_total_dimension() 
+{
+	return (m_total_dimension+get_codec_parameters_size()+15+m_payload.get_lenght());
 }
