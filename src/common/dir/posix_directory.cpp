@@ -78,6 +78,7 @@ bool PosixDirectory::load_file(const std::string& path, DataChunk& loaded_data) 
 			}
 
 			loaded_data.append(lSize, buffer);
+			delete[] buffer;
 			fclose(m_f);
 			return true;
 		}
