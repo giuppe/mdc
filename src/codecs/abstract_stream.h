@@ -39,13 +39,6 @@ public:
 	 * @returns: true if operation is successful
 	 */
 	virtual bool save_to_disk(const std::string& path) = 0;
-
-	/*
-	 * Get data from the stream.
-	 * @dimension: quantity of data to be selected
-	 * @returns: data chunk containing data from current position to new current position
-	 */
-	virtual DataChunk& get_data(Uint16 dimension) = 0;
 	
 	
 	/*
@@ -67,12 +60,6 @@ public:
 	 * @returns: name
 	 */
 	virtual std::string get_stream_name() const = 0;
-	
-	/*
-	 * Get last current position in file.
-	 * @returns: last current position
-	 */
-	virtual Uint32 get_last_current_position() const = 0;
 	
 	/*
 	 * Get stream hash.

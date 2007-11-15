@@ -41,7 +41,7 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 	Uint64 offset = 0;
 	for (Uint8 i=0; i<m_flows_number; i++) {
 		for (Uint32 j=0; j<m_descriptors_number; j++) {
-			if (stream->get_data_dim()-stream->get_last_current_position() > 0) {
+			if (stream->get_data_dim()-offset > 0) {
 				Descriptor* descriptor= new Descriptor();
 				descriptor->set_hash(stream->get_stream_hash());
 				descriptor->set_file_name(stream->get_stream_name()+".mdc");

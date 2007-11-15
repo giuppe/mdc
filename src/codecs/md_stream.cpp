@@ -37,7 +37,6 @@ void MDStream::init(Uint8 n_flows, Uint32 sequence_size) {
 	m_valid_descriptor.resize(n_flows);
 	for(Uint8 i=0; i<n_flows; i++)
 		m_valid_descriptor[i].resize(sequence_size, false);
-	//m_valid_descriptors_number = 0;
 	m_is_inited = true;
 }
 

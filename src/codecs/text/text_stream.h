@@ -30,19 +30,9 @@ class TextStream : public AbstractStream
 private:
 	std::vector<char> m_data;
 	std::string m_stream_name;
-	Uint32 m_last_current_position;
 	std::string m_hash;
-	Uint8* m_real_data;
-	Uint32 m_real_data_size;
 public:	
 	TextStream();
-
-	/*  --- WARNING --- DEPRECATED ---
-	 * Loads a stream from disk.
-	 * @path: filesystem path of file to load;
-	 * @returns: true if operation is successful
-	 */
-	bool load_from_disk(const std::string& path);
 
 	/*
 	 * Get a data set from a file.
@@ -78,12 +68,6 @@ public:
 	std::string get_stream_name() const;
 
 	/*
-	 * Get cursor's last position in stream.
-	 * @returns: last position
-	 */
-	Uint32 get_last_current_position() const;
-
-	/*
 	 * Get stream hash.
 	 * @returns: hash code calculated on stream content
 	 */
@@ -107,6 +91,13 @@ public:
 	 */
 	void set_data(DataChunk& data);
 	~TextStream();
+	
+	/*
+	 * Loadss a stream from disk.
+	 * @path: filesystem path of file to load;
+	 * @returns: true if operation is successful
+	 */
+	bool load_from_disk(const std::string& path);
 };
 
 #endif /*TEXT_STREAM_H_*/
