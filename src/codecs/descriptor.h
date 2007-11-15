@@ -34,10 +34,14 @@ private:
 	std::string m_file_name;
 	std::string m_hash;
 	std::string m_codec_name;
-	Uint32 m_codec_parameters_size;
+	//Uint32 m_codec_parameters_size;
 	AbstractCodecParameters* m_codec_parameters;
+	/*
 	Uint16 m_payload_size;
 	Uint8* m_payload;
+	*/
+	DataChunk m_payload;
+	
 	Uint16 m_total_dimension;
 public:
 	Descriptor();
@@ -47,13 +51,13 @@ public:
 	 * Get codec parameter's size.
 	 * @returns: codec parameters' size
 	 */
-	Uint32 get_codec_parameters_size();
+	Uint32 get_codec_parameters_size() const;
 	
 	/*
 	 * Set codec parameters' size.
 	 * @size: size of codec parameters
 	 */
-	void set_codec_parameters_size(Uint32 size);
+	//void set_codec_parameters_size(Uint32 size);
 	
 	/*
 	 * Get flow identifier.
@@ -131,13 +135,13 @@ public:
 	 * Set payload size.
 	 * @psize: payload size
 	 */
-	void set_payload_size(Uint16 psize);
+	//void set_payload_size(Uint16 psize);
 	
 	/*
 	 * Get payload size.
 	 * @returns: payload size
 	 */
-	Uint16 get_payload_size();
+	Uint16 get_payload_size() const;
 	
 	/*
 	 * Set payload.
@@ -149,7 +153,7 @@ public:
 	 * Get payload.
 	 * @returns: data chunk containing payload
 	 */
-	DataChunk* get_payload();
+	DataChunk* get_payload() const;
 	
 	/**
 	 * This function serializes the Descriptor state and produces a DataChunk for net sending.
