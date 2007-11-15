@@ -1,6 +1,5 @@
 1 byte	  flows number
 4 byte	  max sequences number
-4 byte    valid descriptors number
 {
 2 byte    descriptor size
 ??        descriptor

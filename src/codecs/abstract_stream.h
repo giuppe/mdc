@@ -89,6 +89,14 @@ public:
 	 * @data: data to be added;
 	 */
 	virtual void set_data(DataChunk& data) = 0;
+	
+	/*
+	 * Gets data from a file.
+	 * @offset: initial position;
+	 * @size: data quantity taken;
+	 * @returns: a DataChunk containing the data readed.
+	 */
+	virtual DataChunk& get_data(Uint64 offset, Uint64 size) = 0;
 };
 
 #endif /*ABSTRACTSTREAM_H_*/

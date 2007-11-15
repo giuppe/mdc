@@ -37,7 +37,7 @@ private:
 public:	
 	TextStream();
 
-	/*
+	/*  --- WARNING --- DEPRECATED ---
 	 * Loads a stream from disk.
 	 * @path: filesystem path of file to load;
 	 * @returns: true if operation is successful
