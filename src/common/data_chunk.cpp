@@ -39,6 +39,7 @@ void DataChunk::set_content(Uint8* data, Uint32 lenght)
 	m_real_data = m_data;
 	m_lenght = lenght;
 }
+ 
 
 void DataChunk::operator +=(const DataChunk& data) {
 	append(data.m_lenght, data.m_data);
@@ -239,3 +240,11 @@ void DataChunk::erase()
 	m_lenght=0;
 }
 
+bool DataChunk::extract_head(Uint32 lenght, DataChunk &data)
+{
+	data.erase();
+	Uint8* buffer;
+	this->extract_head(lenght, buffer);
+	data.append(lenght, buffer);
+	
+}
