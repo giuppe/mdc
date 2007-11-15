@@ -50,16 +50,39 @@ std::vector<std::string> PosixDirectory::get_file_names(std::string path) {
 bool PosixDirectory::load_file(const std::string& path, DataChunk& loaded_data) {
 	loaded_data.erase();
 	FILE *m_f;
-	Uint8 c;
+
+	Uint32 lSize;
+	Uint8* buffer;
+	size_t result;
+	
 	if (path.size() > 0)
-		if (fopen(path.c_str(), "r") != NULL) {
-			m_f = fopen(path.c_str(), "r");
-			while (fscanf(m_f, "%c", &c) > 0)
-				loaded_data.append(c);
+	{
+		m_f = fopen(path.c_str(), "r");
+			
+		if (m_f != NULL) 
+		{
+			// obtain file size:
+			fseek (m_f , 0 , SEEK_END);
+			lSize = ftell (m_f);
+			rewind (m_f);
+
+			// allocate memory to contain the whole file:
+			buffer = new Uint8[lSize];
+			
+			result = fread (buffer,1,lSize,m_f);
+			
+			if (result != lSize)
+			{
+				LOG_ERROR("Reading error on file "<<path);
+				return false;
+			}
+
+			loaded_data.append(lSize, buffer);
 			fclose(m_f);
 			return true;
 		}
-		else return false;
+	}
+	
 	return false;
 }
 
