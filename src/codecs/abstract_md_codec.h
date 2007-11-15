@@ -22,13 +22,16 @@
 
 class AbstractMDCodec
 {
+protected:
+	Uint8 m_flows_number;
+	Uint16 m_payload_size;
 public:
 	
 	/*
 	 * Get flows number.
 	 * @returns: flows number
 	 */
-	virtual Uint8 get_flows_number() = 0;
+	Uint8 get_flows_number(){return m_flows_number;};
 	
 	/*
 	 * Code an abstract stream in an abstract md_stream
@@ -50,13 +53,13 @@ public:
 	 * @number: flows number into which the generic stream must to be divided before coding
 	 * process
 	 */
-	virtual void set_flows_number (Uint8 number) = 0;
+	void set_flows_number (Uint8 number){m_flows_number = number;};
 	
 	/*
 	 * Sets the payload size of descriptor.
 	 * @size: desidered size of each descriptor
 	 */
-	virtual void set_payload_size (Uint16 size) = 0;
+	void set_payload_size (Uint16 size){m_payload_size = size;};
 };
 
 #endif /*ABSTRACTMDCODEC_H_*/

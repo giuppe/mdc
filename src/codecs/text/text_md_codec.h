@@ -25,21 +25,16 @@
 
 class TextMDCodec : public AbstractMDCodec{
 private:
-	Uint8 m_flows_number;
 	Uint32 m_descriptors_number;
 	std::vector<Uint8> m_flows_id;
 	std::vector<Uint32> m_seq_counter;
-	Uint16 m_payload_size;
+
 public:
 	/*
 	 * Initialize parameter of a text mdcodec.
 	 */
 	TextMDCodec();
 	
-	/* Get flows number.
-	 * @returns: flows number
-	 */
-	Uint8 get_flows_number();
 	
 	/*
 	 * Code the stream to be sent.
@@ -57,17 +52,17 @@ public:
 	~TextMDCodec();
 	
 	/*
-	 * Sets the flows number.
-	 * @number: flows number into which the generic stream must to be divided before coding
-	 * process
-	 */
-	void set_flows_number (Uint8 number);
-	
-	/*
-	 * Sets the payload size of descriptor.
-	 * @size: desidered size of each descriptor
-	 */
-	void set_payload_size (Uint16 size);
+		 * Sets the flows number.
+		 * @number: flows number into which the generic stream must to be divided before coding
+		 * process
+		 */
+		void set_flows_number (Uint8 number);
+		
+		/*
+		 * Sets the payload size of descriptor.
+		 * @size: desidered size of each descriptor
+		 */
+		void set_payload_size (Uint16 size);
 };
 
 #endif /*TEXT_MD_CODEC_H_*/

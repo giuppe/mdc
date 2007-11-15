@@ -30,7 +30,6 @@ TextMDCodec::TextMDCodec() {
 	m_payload_size = 1000;
 }
 
-Uint8 TextMDCodec::get_flows_number() {return m_flows_number;}
 
 void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 	Uint32 flow_dimension = (stream->get_data_dim()/m_flows_number)+1;
@@ -87,10 +86,22 @@ TextMDCodec::~TextMDCodec() {}
 
 void TextMDCodec::set_flows_number (Uint8 number) {
 	if ((number>0) || (number<65))
+	{
 		m_flows_number = number;
+	}
+	else
+	{
+		LOG_ERROR("Trying to set flows number to "<<number<<">64 (Max flows number for TextMDCodec)");
+	}
 }
 
 void TextMDCodec::set_payload_size (Uint16 size) {
 	if ((size>25) || (size<55000))
+	{
 		m_payload_size = size;
+	}
+	else
+	{
+		LOG_ERROR("Trying to set preferred payload to "<<size<<": for TextMDCodec should be in range [25,55000]");
+	}
 }
