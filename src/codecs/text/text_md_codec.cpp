@@ -55,9 +55,10 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 				if (stream->get_data_dim()-offset-1 < m_payload_size)
 					m_payload_size = stream->get_data_dim() - offset;
 				descriptor->set_payload_size(m_payload_size);
-				DataChunk* payload = &(stream->get_data(offset, m_payload_size));
+				DataChunk payload; 
+				payload+=(stream->get_data(offset, m_payload_size));
 				offset += m_payload_size;
-				descriptor->set_payload(*payload);
+				descriptor->set_payload(payload);
 				md_stream->set_descriptor(descriptor);
 			}
 		}
