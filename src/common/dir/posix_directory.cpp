@@ -91,17 +91,31 @@ bool PosixDirectory::save_file(const std::string& path, const DataChunk& data_to
 	DataChunk dc;
 	dc += data_to_save;
 	FILE *m_f;
-	Uint8 byte;
+	Uint64 lSize;
+	Uint8* buffer;
+	size_t result;
+	
 	if (path.size() > 0)
-		if (fopen(path.c_str(), "w") != NULL) {
-			m_f = fopen(path.c_str(), "w");
-			while(dc.get_lenght()>0) {
-				dc.extract_head(byte);
-				fputc(byte, m_f);
+	{
+		m_f = fopen(path.c_str(), "w");
+		if (m_f != NULL) 
+		{
+			lSize = dc.get_lenght();
+			
+			dc.extract_head(lSize, buffer);
+			
+			result = fwrite (buffer,1,lSize,m_f);
+						
+			if (result != lSize)
+			{
+				LOG_ERROR("Write error on file "<<path);
+				return false;
 			}
+			
 			fclose(m_f);
 			return true;
 		}
+	}
 	return false;
 }
 
