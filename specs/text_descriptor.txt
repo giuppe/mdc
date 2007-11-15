@@ -1,9 +1,7 @@
-A text file is divided into 1-64 flows each containing a part of file. All flows contains
-approssimatively the same quantity of data. Any difference can be seen between last flow and
-others. Each flow contain any descriptors. All flows contains the same number of descriptors.
-Each descriptor contains approssimatively the same quantity of data correlated to its flow.
-Any difference can be seen between last descriptor of the last flow and the overall other
-descriptors. Each descriptor is formed as the follow:
+The MDC text codec function take a stream containing the text file and an empty md_stream
+that must be filled with flows and descriptors. The code() function cycles on flows and
+sequences numbers and, if the stream not be at end of file, create a new empty descriptor.
+Now fills up the descriptor with corrects value as follows: 
 
 Byte		Content
 dimension	description
@@ -18,5 +16,10 @@ dimension	description
 1 byte		flow_id
 4 bytes		sequence_number
 ??			codec name (null terminated)
+4 bytes		codec parameters size
 2 bytes		payload size
 ??			payload
+
+For text codec is not necessary and has been added only the codec parameters size that is 0.
+The payload is extracted from the stream and added to the current descriptor.
+The "offset" parameter is used to monitorize the getting data procedure.

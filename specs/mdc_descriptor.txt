@@ -1,3 +1,10 @@
+A file is divided into 1-64 flows each containing a part of file. All flows contains
+approssimatively the same quantity of data. Any difference can be seen between last flow and
+others. Each flow contain any descriptors. All flows contains the same number of descriptors.
+Each descriptor contains approssimatively the same quantity of data correlated to its flow.
+Any difference can be seen between last descriptor of the last flow and the overall other
+descriptors. Each descriptor is formed as the follow:
+
 3 bytes  	"MDC"
 1 byte		version
 4 bytes		"DESC"
