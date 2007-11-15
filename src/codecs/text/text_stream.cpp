@@ -90,6 +90,19 @@ DataChunk& TextStream::get_data(Uint16 dimension) {
 	return *d;
 }
 
+DataChunk& TextStream::get_data(Uint64 offset, Uint64 size) 
+{
+	DataChunk* d = new DataChunk();
+	Uint8* buffer = new Uint8[size];
+	for(Uint64 i=0; i<size; i++)
+	{
+		buffer[i]=m_data[offset+i];
+	}
+	d->append(size, buffer);
+	return *d;
+}
+
+
 Uint32 TextStream::get_data_dim() const {return m_data.size();}
 
 void TextStream::set_stream_name(std::string& name) {
