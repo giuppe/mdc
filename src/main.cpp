@@ -141,7 +141,7 @@ void stream_converter(AbstractConfiguration* config)
 	}
 		
 	
-	
+	delete stream;
 	//
 	
 }
