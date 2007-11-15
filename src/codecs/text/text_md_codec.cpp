@@ -26,8 +26,10 @@
 
 TextMDCodec::TextMDCodec() {
 	m_seq_counter.push_back(0);
-	m_flows_number = 64;
-	m_payload_size = 1;
+
+	m_flows_number = 2;
+	m_payload_size = 1000;
+
 }
 
 void TextMDCodec::set_flows_number(Uint8 descriptors) {m_flows_number = descriptors;}
