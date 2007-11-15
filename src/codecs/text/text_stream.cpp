@@ -99,6 +99,7 @@ DataChunk& TextStream::get_data(Uint64 offset, Uint64 size)
 		buffer[i]=m_data[offset+i];
 	}
 	d->append(size, buffer);
+	delete[] buffer;
 	return *d;
 }
 
