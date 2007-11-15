@@ -145,6 +145,7 @@ bool DataChunk::extract_head(Uint32& data)
 	if(result == true)
 	{
 		data = SDLNet_Read32(new_data);
+		delete new_data;
 	}
 	return result;
 }
@@ -156,6 +157,7 @@ bool DataChunk::extract_head(Sint32& data)
 	if(result == true)
 	{
 		data = (Sint32)SDLNet_Read32(new_data);
+		delete new_data;
 	}
 	return result;
 }
@@ -168,6 +170,7 @@ bool DataChunk::extract_head(Uint16& data)
 	if(result == true)
 	{
 		data = SDLNet_Read16(new_data);
+		delete new_data;
 	}
 	return result;
 }
@@ -179,6 +182,7 @@ bool DataChunk::extract_head(Sint16& data)
 	if(result == true)
 	{
 		data = (Sint16)SDLNet_Read16(new_data);
+		delete new_data;
 	}
 	return result;
 }
@@ -190,6 +194,7 @@ bool DataChunk::extract_head(Uint8& data)
 	if(result == true)
 	{
 		data = *new_data;
+		delete new_data;
 	}
 	return result;
 }
@@ -201,6 +206,7 @@ bool DataChunk::extract_head(Sint8& data)
 	if(result == true)
 	{
 		data = (Sint8)*new_data;
+		delete new_data;
 	}
 	return result;
 }
