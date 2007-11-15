@@ -44,11 +44,15 @@ int main(int argc, char** argv)
 	
 	AbstractConfiguration* config = new CommandlineConfiguration(argc, argv);
 	
-	bool call_convert = false;
+	bool call_convert1 = false;
+	bool call_convert2 = false;
+		
 	
-	config->get_bool("", "convert", call_convert);
+	config->get_bool("", "code", call_convert1);
 	
-	if(call_convert==true)
+	config->get_bool("", "decode", call_convert2');
+	
+	if((call_convert1==true)||(call_convert2==true))
 	{
 		stream_converter(config);
 	}
@@ -94,27 +98,50 @@ void stream_converter(AbstractConfiguration* config)
 {
 	std::string output_filename, input_filename, codec_name;
 
+	bool is_coding = false;
+	bool is_decoding = false;
+	
 	config->get_string("","output", output_filename);
 	config->get_string("","input", input_filename);
 	config->get_string("","codec", codec_name);
+	config->get_bool("","code", is_coding);
+	config->get_bool("","decode", is_decoding);
+	
 	DEBUG_OUT("converting "<<input_filename<<" to "<<output_filename<<"\n");
-	DEBUG_OUT("\t using "<<codec_name<<" as codec");
-	CodecRegistry* codecReg = CodecRegistry::instance();
-	AbstractMDCodec* codec;
-	bool exists_codec = false;
-	exists_codec = codecReg->get_codec(codec_name, codec);
-	if(!exists_codec)
+		DEBUG_OUT("\t using "<<codec_name<<" as codec");
+		CodecRegistry* codecReg = CodecRegistry::instance();
+		AbstractMDCodec* codec;
+		bool exists_codec = false;
+		exists_codec = codecReg->get_codec(codec_name, codec);
+		if(!exists_codec)
+		{
+			DEBUG_OUT("Unable to find codec "<<codec_name);
+			exit(1);
+		}
+		AbstractStream* stream = StreamFactory::create_stream(codec_name);
+		codecReg->get_codec(codec_name, codec);
+		//stream->load_from_disk(input_filename);
+		MDStream mdstream;
+		
+	
+	if(is_coding == true)
 	{
-		DEBUG_OUT("Unable to find codec "<<codec_name);
-		exit(1);
+		stream->load_from_disk(input_filename);
+			
+		codec->code(stream, &mdstream);
+		mdstream.save_to_disk(output_filename);
+				
 	}
-	AbstractStream* stream = StreamFactory::create_stream(codec_name);
-	codecReg->get_codec(std::string("text"), codec);
-	//stream->load_from_disk(input_filename);
-	MDStream mdstream;
-	//codec->code(stream, &mdstream);
-	mdstream.load_from_disk(input_filename);
-	codec->decode(&mdstream, stream);
-	//mdstream.save_to_disk(output_filename);
-	stream->save_to_disk(output_filename);
+	else if(is_decoding == true)
+	{
+		mdstream.load_from_disk(input_filename);
+		codec->decode(&mdstream, stream);
+		stream->save_to_disk(output_filename);
+						
+	}
+		
+	
+	
+	//
+	
 }
