@@ -30,7 +30,6 @@ TextMDCodec::TextMDCodec() {
 	m_payload_size = 1000;
 }
 
-void TextMDCodec::set_flows_number(Uint8 descriptors) {m_flows_number = descriptors;}
 Uint8 TextMDCodec::get_flows_number() {return m_flows_number;}
 
 void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
@@ -85,3 +84,13 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {
 }
 
 TextMDCodec::~TextMDCodec() {}
+
+void TextMDCodec::set_flows_number (Uint8 number) {
+	if ((number>0) || (number<65))
+		m_flows_number = number;
+}
+
+void TextMDCodec::set_payload_size (Uint16 size) {
+	if ((size>25) || (size<55000))
+		m_payload_size = size;
+}

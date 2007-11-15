@@ -23,11 +23,6 @@
 class AbstractMDCodec
 {
 public:
-	/*
-	 * Set flows number.
-	 * @flows: flows number
-	 */
-	virtual void set_flows_number(Uint8 flows) = 0;
 	
 	/*
 	 * Get flows number.
@@ -41,8 +36,27 @@ public:
 	 * @md_stream: abstract description of a generic stream coded by MDC
 	 */
 	virtual void code(AbstractStream* stream, MDStream* md_stream) = 0;
+	
+	/*
+	 * Decode an abstract md_stream and fills up an abstract stream
+	 * @stream: abstract description of a generic stream
+	 * @md_stream: abstract description of a generic stream coded by MDC
+	 */
 	virtual void decode(const MDStream* md_stream, AbstractStream* stream) = 0;
 	virtual ~AbstractMDCodec(){};
+	
+	/*
+	 * Sets the flows number.
+	 * @number: flows number into which the generic stream must to be divided before coding
+	 * process
+	 */
+	virtual void set_flows_number (Uint8 number) = 0;
+	
+	/*
+	 * Sets the payload size of descriptor.
+	 * @size: desidered size of each descriptor
+	 */
+	virtual void set_payload_size (Uint16 size) = 0;
 };
 
 #endif /*ABSTRACTMDCODEC_H_*/

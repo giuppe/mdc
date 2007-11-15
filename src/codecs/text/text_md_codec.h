@@ -42,12 +42,6 @@ public:
 	Uint8 get_flows_number();
 	
 	/*
-	 * Set flows number.
-	 * @flows: flows number
-	 */
-	void set_flows_number(Uint8 flows);
-	
-	/*
 	 * Code the stream to be sent.
 	 * @stream: abstract stream to be coded
 	 * @md_stream: flow group
@@ -61,6 +55,19 @@ public:
 	 */
 	void decode(const MDStream* md_stream, AbstractStream* stream);
 	~TextMDCodec();
+	
+	/*
+	 * Sets the flows number.
+	 * @number: flows number into which the generic stream must to be divided before coding
+	 * process
+	 */
+	void set_flows_number (Uint8 number);
+	
+	/*
+	 * Sets the payload size of descriptor.
+	 * @size: desidered size of each descriptor
+	 */
+	void set_payload_size (Uint16 size);
 };
 
 #endif /*TEXT_MD_CODEC_H_*/
