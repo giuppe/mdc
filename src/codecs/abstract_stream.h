@@ -41,11 +41,18 @@ public:
 	virtual bool save_to_disk(const std::string& path) = 0;
 
 	/*
-	 * Get data from memory.
+	 * Get data from the stream.
 	 * @dimension: quantity of data to be selected
 	 * @returns: data chunk containing data from current position to new current position
 	 */
 	virtual DataChunk& get_data(Uint16 dimension) = 0;
+	
+	/*
+		 * Get data from the stream.
+		 * @dimension: quantity of data to be selected
+		 * @returns: data chunk containing data from current position to new current position
+		 */
+		virtual DataChunk& get_data(Uint64 offset, Uint64 size) = 0;
 	
 	/*
 	 * Get data dimension from file.
