@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 	
 	config->get_bool("", "code", call_convert1);
 	
-	config->get_bool("", "decode", call_convert2');
+	config->get_bool("", "decode", call_convert2);
 	
 	if((call_convert1==true)||(call_convert2==true))
 	{
