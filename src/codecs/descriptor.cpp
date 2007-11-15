@@ -72,10 +72,9 @@ DataChunk& Descriptor::serialize() const {
 	result->append(m_flow_id);
 	result->append(m_sequence_number);
 	result->append(m_codec_name.c_str());
-	if (m_codec_name != "text") {
-		result->append(m_codec_parameters_size);
+	result->append(m_codec_parameters_size);
+	if (m_codec_name != "text")
 		(*result)+=m_codec_parameters->serialize();
-	}
 	result->append(m_payload_size);
 	result->append(m_payload_size, this->m_payload);
 	return (*result);
@@ -100,8 +99,8 @@ void Descriptor::deserialize(const DataChunk& data) {
 			temp_dc->extract_head(m_sequence_number);
 			temp_dc->extract_head(current_char);
 			m_codec_name.append(current_char);
+			temp_dc->extract_head(m_codec_parameters_size);
 			if (m_codec_name != "text") {
-				temp_dc->extract_head(m_codec_parameters_size);
 				Uint8* current_parameters_data;
 				temp_dc->extract_head(m_codec_parameters_size, current_parameters_data);
 				DataChunk* codec_parameters_dc = new DataChunk();

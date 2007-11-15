@@ -48,10 +48,9 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
 				descriptor->set_codec_name(std::string("text"));
-				if (descriptor->get_codec_name() != "text") {
-					descriptor->set_codec_parameters_size(tcp->get_size());
+				descriptor->set_codec_parameters_size(tcp->get_size());
+				if (descriptor->get_codec_name() != "text")
 					descriptor->set_codec_parameter(tcp);
-				}
 				if (stream->get_data_dim()-offset-1 < m_payload_size)
 					m_payload_size = stream->get_data_dim() - offset;
 				descriptor->set_payload_size(m_payload_size);
