@@ -59,7 +59,8 @@ void Descriptor::set_codec_parameter(AbstractCodecParameters* acp) {
 Descriptor::~Descriptor() {
 	if (m_codec_parameters_size > 0)
 		delete m_codec_parameters;
-	delete[] m_payload;
+	if(m_payload_size>0)
+		delete[] m_payload;
 }
 
 DataChunk& Descriptor::serialize() const {
@@ -118,7 +119,7 @@ Uint16 Descriptor::get_payload_size() {return m_payload_size;}
 void Descriptor::set_payload(DataChunk& payload) {m_payload = payload.get_data();}
 
 DataChunk* Descriptor::get_payload() {
-	DataChunk* payload = new DataChunk;
+	DataChunk* payload = new DataChunk();
 	payload->append(m_payload_size, m_payload);
 	return payload;
 }
