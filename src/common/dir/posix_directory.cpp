@@ -51,7 +51,7 @@ bool PosixDirectory::load_file(const std::string& path, DataChunk& loaded_data) 
 	loaded_data.erase();
 	FILE *m_f;
 
-	Uint32 lSize;
+	Uint64 lSize;
 	Uint8* buffer;
 	size_t result;
 	
