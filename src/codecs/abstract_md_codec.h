@@ -24,7 +24,7 @@ class AbstractMDCodec
 {
 protected:
 	Uint8 m_flows_number;
-	Uint16 m_payload_size;
+	Uint16 m_preferred_payload_size;
 public:
 	
 	/*
@@ -59,7 +59,7 @@ public:
 	 * Sets the payload size of descriptor.
 	 * @size: desidered size of each descriptor
 	 */
-	void set_payload_size (Uint16 size){m_payload_size = size;};
+	void set_preferred_payload_size (Uint16 size){m_preferred_payload_size = size;};
 };
 
 #endif /*ABSTRACTMDCODEC_H_*/

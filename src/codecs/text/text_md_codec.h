@@ -25,7 +25,7 @@
 
 class TextMDCodec : public AbstractMDCodec{
 private:
-	Uint32 m_descriptors_number;
+	//Uint32 m_descriptors_number;
 	std::vector<Uint8> m_flows_id;
 	std::vector<Uint32> m_seq_counter;
 
@@ -62,7 +62,7 @@ public:
 		 * Sets the payload size of descriptor.
 		 * @size: desidered size of each descriptor
 		 */
-		void set_payload_size (Uint16 size);
+		void set_preferred_payload_size (Uint16 size);
 };
 
 #endif /*TEXT_MD_CODEC_H_*/
