@@ -17,6 +17,7 @@
 #include "descriptor.h"
 #include "../common/data_chunk.h"
 #include "../messages/mdc_message.h"
+#include "codec_parameters_factory.h"
 #include <cassert>
 #include <string>
 
@@ -84,30 +85,39 @@ void Descriptor::deserialize(const DataChunk& data) {
 	if (data.get_lenght() > 0) {
 		DataChunk* temp_dc = new DataChunk();
 		temp_dc->operator +=(data);
-		std::string preamble;
-		char* current_char;
-		temp_dc->extract_head(current_char);
-		preamble.append(current_char);
-		Uint8* desc;
-		temp_dc->extract_head(4, desc);
-		if (preamble == "MDC") {
-			temp_dc->extract_head(current_char);
-			m_hash.append(current_char);
-			temp_dc->extract_head(current_char);
-			m_file_name.append(current_char);
+		
+		char* file_name;
+		char* file_hash;
+		char* codec_name;
+				
+		DataChunk preamble;
+		temp_dc->extract_head(8, preamble);
+		MDCMessage msg;
+		msg.deserialize(preamble);
+		if (msg.get_type_string() == "DESC") {
+			temp_dc->extract_head(file_hash);
+			m_hash = file_hash;
+			temp_dc->extract_head(file_name);
+			m_file_name = file_name;
 			temp_dc->extract_head(m_flow_id);
 			temp_dc->extract_head(m_sequence_number);
-			temp_dc->extract_head(current_char);
-			m_codec_name.append(current_char);
+			temp_dc->extract_head(codec_name);
+			m_codec_name= codec_name;
 			Uint32 codec_parameters_size = 0;
 			temp_dc->extract_head(codec_parameters_size);
 			DataChunk* codec_parameters_dc = new DataChunk();
 			temp_dc->extract_head(codec_parameters_size, *codec_parameters_dc);
-			//FIXME: m_codec_parameter is not initialized here! maybe a factory could help
+			
+			m_codec_parameters=CodecParametersFactory::create_codec_parameters(m_codec_name);
+			
 			m_codec_parameters->deserialize(*codec_parameters_dc);
 			
+			delete codec_parameters_dc;
+			
 			Uint16 payload_size = 0;
+			
 			temp_dc->extract_head(payload_size);
+			
 			temp_dc->extract_head((Uint32)payload_size, m_payload);
 		}
 	}
