@@ -122,7 +122,10 @@ void DataChunk::append(const char* data)
 bool DataChunk::extract_head(Uint32 lenght, Uint8* &data)
 {
 //	LOG_INFO("Extracting "<<lenght<<" bytes rom datachunk.")
-	if((lenght!=0)&&(this->m_lenght>=lenght))
+	if(lenght==0)
+		return false;
+	
+	if((this->m_lenght>=lenght))
 	{
 		data = new Uint8[lenght];
 		memcpy(data, this->m_data, lenght);
