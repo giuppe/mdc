@@ -76,7 +76,8 @@ DataChunk& Descriptor::serialize() const {
 	temp_codec_parameters += m_codec_parameters->serialize();
 	result->append(temp_codec_parameters.get_lenght());
 	(*result)+=temp_codec_parameters;
-	result->append(m_payload.get_lenght());
+	Uint16 payload_size = m_payload.get_lenght();
+	result->append(payload_size);
 	(*result)+=this->m_payload;
 	return (*result);
 }
