@@ -67,7 +67,7 @@ void Descriptor::deserialize(const DataChunk& data) {
 		temp_dc->extract_head(8, preamble);
 		MDCMessage msg;
 		msg.deserialize(preamble);
-		if (msg.get_type_string() == "DESC") {
+		if (msg.get_type_string() == std::string("DESC")) {
 			temp_dc->extract_head(file_hash);
 			m_hash = file_hash;
 			temp_dc->extract_head(file_name);
