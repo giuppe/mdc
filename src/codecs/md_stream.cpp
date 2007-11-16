@@ -109,17 +109,9 @@ DataChunk& MDStream::serialize() const {
 	DataChunk* dc = new DataChunk();
 	dc->append(Uint8(m_stream.size()));
 	dc->append(Uint32(m_stream[0].size()));
-	/*
-	std::vector<std::vector<Descriptor*> > temp_stream;
-	temp_stream.resize(m_stream.size());
-	for (Uint8 i=0; i<temp_stream.size(); i++)
-		temp_stream[i].resize(m_stream[i].size());
-	*/
 	for (Uint8 flow=0; flow<m_stream.size(); flow++)
 		for (Uint32 sequence=0; sequence<m_stream[flow].size(); sequence++)
-			if (m_valid_descriptor[flow][sequence]) 
-			{
-				//temp_stream[flow][sequence] = m_stream[flow][sequence];
+			if (m_valid_descriptor[flow][sequence]) {
 				Descriptor* current_descriptor = m_stream[flow][sequence];
 				DataChunk temp;
 				temp += (*current_descriptor).serialize();
@@ -127,18 +119,6 @@ DataChunk& MDStream::serialize() const {
 				dc->append(descriptor_size);
 				(*dc) += temp;
 			}
-	/*
-	for (Uint8 flow=0; flow<temp_stream.size(); flow++)
-		for (Uint32 sequence=0; sequence<temp_stream[flow].size(); sequence++) {
-			if (m_valid_descriptor[flow][sequence]) {
-				Descriptor* current_descriptor = temp_stream[flow][sequence];
-				DataChunk temp;
-				temp += current_descriptor->serialize();
-				dc->append(temp.get_lenght());
-				(*dc) += temp;
-			}
-		}
-	*/
 	return *dc;
 }
 

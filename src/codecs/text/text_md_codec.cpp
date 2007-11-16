@@ -28,26 +28,19 @@
 TextMDCodec::TextMDCodec() {
 	m_seq_counter.push_back(0);
 	m_flows_number = 2;
-	m_preferred_payload_size = 1000;
+	m_preferred_payload_size = 50;
 }
 
 
 void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 	Uint32 stream_size = stream->get_data_dim();
 	Uint32 flow_dimension = (stream_size/m_flows_number)+1;
-	
 	Uint32 descriptors_number = (Uint32)ceil(((double)flow_dimension)/((double)m_preferred_payload_size));
 	Uint16 max_payload_size = (flow_dimension/descriptors_number)+1;
 	md_stream->init(m_flows_number, descriptors_number);
-	
 	Uint64 offset = 0;
 	for (Uint8 i=0; i<m_flows_number; i++) {
 		for (Uint32 j=0; j<descriptors_number; j++) {
-			if((i==1)&&(j==161))
-			{
-				Uint32 temp;
-				temp = 1;
-			}
 			if (stream_size-offset > 0) {
 				Descriptor* descriptor= new Descriptor();
 				descriptor->set_hash(stream->get_stream_hash());
@@ -55,19 +48,12 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
 				descriptor->set_codec_name(std::string("text"));
-				//descriptor->set_codec_parameters_size(tcp->get_size());
 				TextCodecParameters* tcp = new TextCodecParameters();
 				descriptor->set_codec_parameter(tcp);
 				Uint16 payload_size;
 				if (stream_size-offset-1 < max_payload_size)
-				{
 					payload_size = stream_size - offset;
-				}
-				else
-				{
-					payload_size = max_payload_size;
-				}
-				//descriptor->set_payload_size(m_payload_size);
+				else payload_size = max_payload_size;
 				DataChunk payload; 
 				payload+=(stream->get_data(offset, payload_size));
 				offset += payload_size;

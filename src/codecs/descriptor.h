@@ -34,15 +34,8 @@ private:
 	std::string m_file_name;
 	std::string m_hash;
 	std::string m_codec_name;
-	//Uint32 m_codec_parameters_size;
 	AbstractCodecParameters* m_codec_parameters;
-	/*
-	Uint16 m_payload_size;
-	Uint8* m_payload;
-	*/
 	DataChunk m_payload;
-	
-	Uint16 m_total_dimension;
 public:
 	Descriptor();
 	~Descriptor();
@@ -52,12 +45,6 @@ public:
 	 * @returns: codec parameters' size
 	 */
 	Uint32 get_codec_parameters_size() const;
-	
-	/*
-	 * Set codec parameters' size.
-	 * @size: size of codec parameters
-	 */
-	//void set_codec_parameters_size(Uint32 size);
 	
 	/*
 	 * Get flow identifier.
@@ -132,12 +119,6 @@ public:
 	void set_codec_parameter(AbstractCodecParameters* acp);
 	
 	/*
-	 * Set payload size.
-	 * @psize: payload size
-	 */
-	//void set_payload_size(Uint16 psize);
-	
-	/*
 	 * Get payload size.
 	 * @returns: payload size
 	 */
@@ -166,14 +147,6 @@ public:
 	 * It is the opposite of serialize();
 	 */
 	void deserialize(const DataChunk& data);
-	
-	/**
-	 * Get descriptor total dimension.
-	 * It is the total dimension of this descriptor, formed by header dimension
-	 * and by payload dimension.
-	 * @returns: total dimension
-	 */
-	Uint16 get_descriptor_total_dimension();
 };
 
 #endif /*DESCRIPTOR_H_*/
