@@ -20,6 +20,31 @@ dimension	description
 2 bytes		payload size
 ??			payload
 
-For text codec is not necessary and has been added only the codec parameters size that is 0.
-The payload is extracted from the stream and added to the current descriptor.
-The "offset" parameter is used to monitorize the getting data procedure.
+First 8 byte are fixed and does not varying during the coding procedure.
+Stream hash is an hash extracted from the stream's file name. In this implementation it's
+statically setted to "livent rulez". Subsequently, there is the real file name anding in
+".mdc".
+
+Flow id is an identifier of a single flow in a MDC text stream. Is strongly reccomended to 
+set this value to a base 2 multiple between 2 and 64 value. But is also possible to set this
+value at any integer value from 1 to 64 flows. Coded file will contain the exact flows
+number indicated.
+
+Sequence number is a value that takes count of single descriptors, but it's used by
+algorithm as a user independent parameter.
+
+Codec name is the name of codec: in this case it's "text".
+
+For text codec is not necessary the "codec parameter" and has been added with size to 0
+whitout any real codec parameter.
+
+Payload size is the size of payload of a single descriptor and contains a value, for text
+implementation, between 25 and 55.000 bytes. This value represents the user preferred
+payload size. The algorithm can vary it if it's necessary for load balacing between
+descriptors and flows: the product between flows number and real descriptor payload must
+approximate as best as possible (it's a lower bound) text file size.
+
+The payload is extracted from the stream from an initial point called "offset" to a final
+point setted by the "offset" + "payload_size" parameter. Then, payload is added to the
+current descriptor. The "offset" parameter is used to monitorize this procedure.
+The stream contains a copy of text file contents.
