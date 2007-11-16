@@ -46,6 +46,9 @@ void DataChunk::operator +=(const DataChunk& data) {
 }
 
 void DataChunk::append(Uint32 lenght, Uint8* data) {
+	if(lenght==0) 
+		return;
+	
 	Uint8* new_data = new Uint8[this->m_lenght+lenght];
 	if (this->m_lenght != 0)
 		memcpy(new_data, this->m_data, this->m_lenght);
