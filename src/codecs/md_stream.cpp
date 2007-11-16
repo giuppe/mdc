@@ -35,8 +35,8 @@ void MDStream::init(Uint8 n_flows, Uint32 sequence_size) {
 			m_stream[i][k] = new Descriptor();*/
 	}
 	m_valid_descriptor.resize(n_flows);
-	for(Uint8 i=0; i<n_flows; i++)
-		m_valid_descriptor[i].resize(sequence_size, false);
+	for(Uint8 k=0; k<n_flows; k++)
+		m_valid_descriptor[k].resize(sequence_size, false);
 	m_is_inited = true;
 }
 
@@ -131,8 +131,10 @@ void MDStream::deserialize(const DataChunk& data) {
 		Uint32 sequences_number;
 		temp_dc->extract_head(sequences_number);
 		init(flows_number, sequences_number);
-		std::vector<std::vector<Descriptor*> > output_stream;
-		for (Uint32 i=0; i<(flows_number*sequences_number); i++) {
+		//std::vector<std::vector<Descriptor*> > output_stream;
+		//for (Uint32 i=0; i<(flows_number*sequences_number); i++)
+		while(temp_dc->get_lenght()>0)
+		{
 			Uint16 descriptor_size;
 			temp_dc->extract_head(descriptor_size);
 			Uint8* current_descriptor;
