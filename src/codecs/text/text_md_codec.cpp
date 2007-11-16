@@ -28,7 +28,7 @@
 TextMDCodec::TextMDCodec() {
 	m_seq_counter.push_back(0);
 	m_flows_number = 2;
-	m_preferred_payload_size = 50;
+	m_preferred_payload_size = 1000;
 }
 
 
