@@ -123,7 +123,8 @@ DataChunk& MDStream::serialize() const {
 				Descriptor* current_descriptor = m_stream[flow][sequence];
 				DataChunk temp;
 				temp += (*current_descriptor).serialize();
-				dc->append(temp.get_lenght());
+				Uint16 descriptor_size = temp.get_lenght();
+				dc->append(descriptor_size);
 				(*dc) += temp;
 			}
 	/*
