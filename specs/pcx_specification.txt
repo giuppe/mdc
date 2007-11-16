@@ -26,35 +26,26 @@ image with same or less quality.
 
 3) Convert pcx into a pcx_mdc (Code)
 3.1)Open file
-method:
-	bool PcxStream::load_from_disk(const std::string& path);
-This method load data from file to memory in to a char vector.
+Load data from file to memory into a char vector.
 3.2)Code
-Method:
-	void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream)
+
 This method receive 2 stream pointer. The first one is a stream contains file
 data, the second one is the container for our pcx_mdc data.
-First of all we create a PcxCodecParameters object and call
-extractPcxCodecParameters() method that extract the first 128byte (header) of 
-pcx data.
+First of all we extract the first 128byte (header) of pcx data.
 After the method cycles on data and part pixel data into descriptors. Each
 descriptor have a flow number that suggest the flow which belongs. 
 In each descriptor we insert the header (look MDC_PCX file header format) that 
-contains the PcxCodecParameters that we extracted from pcx_file data.
+contains the codec parameters that we extracted from pcx_file data.
 The encoder read the data and flow bytes alternating pixel into flows  
 (ex. 2 flows: flow1 even-numbered pixel, flow2 odd-numbered pixel)
 
 
 4) Convert pcx_mdc into a pcx (Decode)
 4.1) Decode
-Method:
-	 void PcxMDCodec::decode(const MDStream* md_stream, AbstractStream* stream)
 The decoder receive mcd_file's data stream. It take the flows number and take
 the available flows. It reconstruct the pcx data with all available flows
 (if all, will be reconstructed the original image else the reconstructed image 
 will have same resolution but less details )
 
 4.2) Write file
-Method:
-	bool PcxStream::save_to_disk(const std::string& path);
-This method write the pcx decoded file to disk.
+Write the pcx decoded file to disk.
