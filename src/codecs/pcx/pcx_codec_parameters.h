@@ -18,14 +18,19 @@
 #include "../../common/data_chunk.h"
 #include "../../common/serializable.h"
 #include "../abstract_codec_parameters.h"
+#include "pcx_stream.h"
+#include <string>
+#include <vector>
 
-#ifndef PCX_CODEC_PARAMETER_
-#define PCX_CODEC_PARAMETER_
-
-
+#ifndef PCX_CODEC_PARAMETERS_H_
+#define PCX_CODEC_PARAMETERS_H_
 
 class PcxCodecParameters : public AbstractCodecParameters
 {
+protected:
+	Uint8 m_headerinfo[128];
+	Uint8 m_bytes_per_line;
+	DataChunk sdata;
 public:
 
 	/*
@@ -33,6 +38,8 @@ public:
 	 */
 	PcxCodecParameters();
 
+	void extractPcxCodecParameters(AbstractStream* stream);
+	
 	/*
 	 * Serialize a data chunk.
 	 * @returns: data chunk
@@ -49,7 +56,15 @@ public:
 	 * @returns: parameters' size
 	 */
 	Uint32 get_size();
+	
+	/*
+	 * Get parameters' bytes_per_line.
+	 * @returns: parameters' bytes_per_line
+	 */
+	Uint8 get_bytes_per_line();
+	
 	~PcxCodecParameters();
 };
 
-#endif /*PCX_CODEC_PARAMETER_*/
+
+#endif /*PCX_CODEC_PARAMETERS_H_*/
