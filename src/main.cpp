@@ -24,70 +24,85 @@ using namespace std;
 
 void deinit_all();
 
-void stream_converter(AbstractConfiguration*);
+void stream_converter(AbstractConfiguration*, std::string, std::string, std::string);
 
 int main(int argc, char** argv) {
-	std::cout<<"Multiple Description Codec v0.1";
+	std::cout<<"\nMultiple Description Codec v0.1\n";
 	atexit(deinit_all);
 	SDL_Init(SDL_INIT_TIMER);
 	LogManager::instance()->init(true, "./mdc_log.txt");
 	NetManager::instance()->init();
 	SDL_Delay(1000);
-
 	CodecRegistry* codecReg = CodecRegistry::instance();
 	codecReg->init();
-	
 	AbstractConfiguration* config = new CommandlineConfiguration(argc, argv);
 	bool get_help = false;
+	config->get_bool("", "help", get_help);
+	if (get_help) {
+		std::cout<<"Multiple Description Codec\n\n";
+		std::cout<<"Use: mdc [OPTION]\n";
+		cout<<"\t--input \t input filename.\n";
+		cout<<"\t--output \t output filename.\n";
+		cout<<"\t--code \t\t activate coding from input file to output MDC file.\n";
+		cout<<"\t--decode \t activate decoding from input MDC file to output file.\n";
+		cout<<"\t--codec \t select codec type to use for coding input file.\n";
+		cout<<"\t--flows \t number of output coded flows.\n";
+		cout<<"\t--payload \t preferred payload size of each descriptor.\n";
+		cout<<"\t--help \t\t show this help page.\n\n";
+		cout<<"Examples:\n";
+		cout<<"  mdc --input input_file.txt --codec text --code --output output_file.mdc.\n";
+		cout<<"  mdc --input input_file.mdc --codec text --decode --output output_file.txt.\n\n";
+		cout<<"---------------------------------------------------------------\n\n";
+		return 0;
+	}
 	bool call_convert1 = false;
 	bool call_convert2 = false;
 	config->get_bool("", "code", call_convert1);
 	config->get_bool("", "decode", call_convert2);
-	config->get_bool("", "help", get_help);
-	if (get_help) {
-		std::cout<<"Multiple Description Codec\n";
-		std::cout<<"Uso: mdc [OPZIONE]\n";
-		cout<<"\t--input \t input file name and path.\n";
-		cout<<"\t--output \t output file name and path.\n";
-		cout<<"\t--code \t\t code input file to output MDC file.\n";
-		cout<<"\t--decode \t decode input MDC file to output file.\n";
-		cout<<"\t--codec \t select codec type to use for coding input file.\n";
-		cout<<"\t--flows \t number of output coded flows.\n";
-		cout<<"\t--payload \t preferred payload size of each descriptor.\n";
-		cout<<"\t--help \t show this help page.\n";
-		return 0;
+	if (call_convert1 || call_convert2) {
+		std::string output_filename, input_filename, codec_name;
+		output_filename.resize(0);
+		input_filename.resize(0);
+		codec_name.resize(0);
+		config->get_string("", "output", output_filename);
+		config->get_string("", "input", input_filename);
+		config->get_string("", "codec", codec_name);
+		if ((input_filename=="true") || (input_filename=="false") || (input_filename=="")) {
+			cout << "Input file parameter is missing.\n\n";
+			return 0;
+		}
+		else {
+			if ((codec_name=="true") || (codec_name=="false") || (codec_name=="")) {
+				cout << "Codec name parameter is missing.\n\n";
+				return 0;
+			}
+			else {
+				if ((output_filename=="true") || (output_filename=="false") || (output_filename=="")) {
+					cout << "Output file parameter is missing.\n\n";
+					return 0;
+				}
+				else {
+					stream_converter(config, output_filename, input_filename, codec_name);
+					Scheduler* sched = new Scheduler();
+					ServerAction* server = new ServerAction();
+					ClientTestAction* client = new ClientTestAction();
+					sched->add_action(server);
+					sched->add_action(client);
+					server->start();
+					client->start();
+					Uint32 times = 100;
+					while(--times != 0) {
+						sched->execute_all();
+						SDL_Delay(100);
+					}
+					delete server;
+					delete client;
+					delete sched;
+				}
+			}
+		}
 	}
-	if((call_convert1==true)||(call_convert2==true))
-	{
-		stream_converter(config);
-	}
-	else
-	{
-	Scheduler* sched = new Scheduler();
-	ServerAction* server = new ServerAction();
-	
-	ClientTestAction* client = new ClientTestAction();
-	
-	
-	sched->add_action(server);
-	
-	sched->add_action(client);
-	
-	server->start();
-	
-	client->start();
-	
-	Uint32 times = 100;
-	while(--times != 0)
-	{
-		sched->execute_all();
-		SDL_Delay(100);
-	}
-	
-	delete server;
-	delete client;
-	delete sched;
-	}
+	else cout << "\nAction parameter is missing.\n\n";
 	delete config;
 	return 0;
 }
@@ -98,15 +113,9 @@ void deinit_all() {
 	LogManager::instance()->deinit();
 }
 
-
-void stream_converter(AbstractConfiguration* config)
-{
-	std::string output_filename, input_filename, codec_name;
+void stream_converter(AbstractConfiguration* config, std::string output_filename, std::string input_filename, std::string codec_name) {
 	bool is_coding = false;
 	bool is_decoding = false;
-	config->get_string("","output", output_filename);
-	config->get_string("","input", input_filename);
-	config->get_string("","codec", codec_name);
 	config->get_bool("","code", is_coding);
 	config->get_bool("","decode", is_decoding);
 	DEBUG_OUT("converting "<<input_filename<<" to "<<output_filename<<"\n");
