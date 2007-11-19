@@ -1,0 +1,35 @@
+PeerCollection (Collection of known peers)
+Only One per instance
+Used by:
+-SendingManager: reads all the list
+-Others: add an ip:port to the list
+-Others: remove an ip:port to the list
+
+States:
+
+
+
+StreamRepository (manage the access to the streams on disk)
+Only One per instance
+Used by:
+SendingManager: search by parts of name, getting a list of stream names
+SendingManager: obtain a MDStream providing his hash
+StreamManager: refresh StreamRepository status regularly
+
+States:
+
+
+
+
+ReceiveFilterList (it's like a whitelist of permitted packets)
+Only One per instance
+Used by:
+Receiver: verify a descriptor, passing sender ip and stream hash, getting boolean
+ReceiveManager: adds an entry composed by sender ip and stream hash
+ReceiveManager: refresh list removing entries in timeout
+Others: sets timeout of entries on list
+
+States:
+Each entry will be composed of an ip address (Uint32), an hash (String), and a timestamp.
+Also, the object contains a timeout period, used for eliminating outdated entries on refreshing.
+ 

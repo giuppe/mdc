@@ -1,0 +1,59 @@
+sending-manager (called by site-manager) should:
+-respond to LIST with ALST
+--searching his repository of mdc streams
+
+-respond to PEER with APER
+--searching in his repository of peers
+
+-update collection of peers
+--every time somebody asks for a stream, add him to the list of peers
+--external parts of the app can add an ip to the list 
+
+-respond to SINF with ASNF
+--getting stream meta-data, reading them from repository of streams
+
+-respond to SREQ with ASRQ
+--sending ASRQ
+--filling the "list of stuff to send" for the sender
+
+
+
+
+sender (asynchronous) should:
+-iterate through a list of stuff to send, sending it
+--this list reports: ip and port of the receiver, stream hash, flow id and sequence id
+--then it extract the corresponding descriptor, serialize it and send to specified ip:port
+
+
+
+receiver (asynchronous) should: (manage data packet)
+-listen on port 5552
+
+-receive every descriptor
+
+-filter every descriptor with the help of a list, filled with result of ASRQs
+--the list contains: sender ip and stream hash
+--if the new descriptor fits on these constraints, write it to disk
+
+
+
+client-manager should:
+-integrate tightly with User Interface
+-send LIST when user prefers
+-displaying results when receiving ALST
+--maintaining a "list of last searches"
+
+
+receive-manager (called by site-manager):
+-on ASRQ, add sender specification to list of receiver filtering
+
+
+
+site-manager (asynchronous): (manage control packets)
+-listen on port 5551
+-receive packets
+-assign them to managers
+
+
+stream-manager (asynchronous):
+-refresh stream repository regularly
