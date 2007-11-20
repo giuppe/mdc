@@ -1,4 +1,3 @@
 - classe Repository per gestire i depositi dei flussi (directory e file)
 - classe Peer per rappresentare lo stato dei peer
 - buffer a finestra mobile su MDStream
-- codec di esempio
