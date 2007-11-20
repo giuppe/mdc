@@ -13,12 +13,20 @@ StreamRepository (manage the access to the streams on disk)
 Only One per instance
 Used by:
 SendingManager: search by parts of name, getting a list of stream names
-SendingManager: obtain a MDStream providing his hash
-StreamManager: refresh StreamRepository status regularly
+SendingManager: obtain a MDStream providing its hash
+StreamManager: refresh StreamRepository status regularly, saving modified streams on disk
+Receiver: create a new MDStream providing its flows number and sequence number
+Receiver: obtain a MDStream providing its hash
 
 States:
 
 
+
+DescriptorsToSendList (manage list of stuff to send)
+Only One per Sender
+Used by:
+SendingManager: on SREQ, adds requested descriptors specifying destination ip, dest port, hash, flow id and sequence id
+Sender: extract requests one at a time
 
 
 ReceiveFilterList (it's like a whitelist of permitted packets)
