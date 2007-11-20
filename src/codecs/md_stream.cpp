@@ -106,20 +106,27 @@ bool MDStream::save_to_disk(const std::string& path) {
 }
 
 DataChunk& MDStream::serialize() const {
-	DataChunk* dc = new DataChunk();
-	dc->append(Uint8(m_stream.size()));
-	dc->append(Uint32(m_stream[0].size()));
-	for (Uint8 flow=0; flow<m_stream.size(); flow++)
-		for (Uint32 sequence=0; sequence<m_stream[flow].size(); sequence++)
-			if (m_valid_descriptor[flow][sequence]) {
+	DataChunk* result = new DataChunk();
+	DataChunk temp;
+	DataChunk* temp_descriptor;
+	Uint8 flows_number = m_stream.size();
+	Uint32 sequence_size = m_stream[0].size();
+	result->append(flows_number);
+	result->append(sequence_size);
+	
+	for (Uint8 flow=0; flow<flows_number; flow++)
+		for (Uint32 sequence=0; sequence<sequence_size; sequence++)
+			if (m_valid_descriptor[flow][sequence]==true)
+			{
+				//LOG_INFO("Writing descriptor ("<<flow<<", "<<sequence<<")");
+				temp.erase();
 				Descriptor* current_descriptor = m_stream[flow][sequence];
-				DataChunk temp;
 				temp += (*current_descriptor).serialize();
 				Uint16 descriptor_size = temp.get_lenght();
-				dc->append(descriptor_size);
-				(*dc) += temp;
+				result->append(descriptor_size);
+				result->operator+=(temp);
 			}
-	return *dc;
+	return *result;
 }
 
 void MDStream::deserialize(const DataChunk& data) {
