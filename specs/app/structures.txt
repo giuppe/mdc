@@ -15,7 +15,7 @@ Used by:
 SendingManager: search by parts of name, getting a list of stream names
 SendingManager: obtain a MDStream providing its hash
 StreamManager: refresh StreamRepository status regularly, saving modified streams on disk
-Receiver: create a new MDStream providing its flows number and sequence number
+Receiver: add a non-empty MDStream to the repo
 Receiver: obtain a MDStream providing its hash
 
 States:
