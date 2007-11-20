@@ -20,6 +20,7 @@
 #include <string>
 #include "abstract_md_codec.h"
 #include "text/text_md_codec.h"
+#include "pcx/pcx_md_codec.h"
 
 
 void CodecRegistry::register_codec(const std::string& name, AbstractMDCodec* codec)
@@ -49,9 +50,10 @@ bool CodecRegistry::get_codec(const std::string& name, AbstractMDCodec*& codec) 
 
 void CodecRegistry::init()
 {
-	AbstractMDCodec* textcodec = new TextMDCodec();
-	const std::string text("text");
-	this->register_codec(text, textcodec);
+
+	this->register_codec(std::string("text"), new TextMDCodec());
+	this->register_codec(std::string("pcx"), new PcxMDCodec());
+		
 }
 
 void CodecRegistry::deinit()
