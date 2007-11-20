@@ -14,7 +14,7 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include "md_stream.h"
+#include "mdc/md_stream.h"
 #include "abstract_stream.h"
 
 #ifndef ABSTRACTMDCODEC_H_

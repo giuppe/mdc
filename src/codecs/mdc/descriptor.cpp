@@ -15,9 +15,9 @@
  ***************************************************************************/
 
 #include "descriptor.h"
-#include "../common/data_chunk.h"
-#include "../messages/mdc_message.h"
-#include "codec_parameters_factory.h"
+#include "../../common/data_chunk.h"
+#include "../../messages/mdc_message.h"
+#include "../codec_parameters_factory.h"
 #include <cassert>
 #include <string>
 

@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include "../codecs/md_stream.h"
+#include "../codecs/mdc/md_stream.h"
 #include <map>
 #include <string>
 

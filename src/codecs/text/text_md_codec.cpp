@@ -18,8 +18,8 @@
 #include <string>
 #include "defs.h"
 #include "text_stream.h"
-#include "../md_stream.h"
-#include "../descriptor.h"
+#include "../mdc/md_stream.h"
+#include "../mdc/descriptor.h"
 #include "../../common/data_chunk.h"
 #include "text_codec_parameters.h"
 #include <vector>

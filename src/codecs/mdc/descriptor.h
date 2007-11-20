@@ -15,9 +15,9 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include "../common/data_chunk.h"
-#include "abstract_codec_parameters.h"
-#include "../common/serializable.h"
+#include "../../common/data_chunk.h"
+#include "../abstract_codec_parameters.h"
+#include "../../common/serializable.h"
 
 #ifndef DESCRIPTOR_H_
 #define DESCRIPTOR_H_

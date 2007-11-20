@@ -16,7 +16,6 @@
 
 #include <cstdlib>
 #include <cstdio>
-#include "../descriptor.h"
 #include "../abstract_stream.h"
 #include <vector>
 #include <string>

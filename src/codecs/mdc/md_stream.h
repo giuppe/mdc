@@ -17,8 +17,8 @@
 #include <SDL/SDL.h>
 #include <string>
 #include <vector>
-#include "../common/serializable.h"
-#include "../common/data_chunk.h"
+#include "../../common/serializable.h"
+#include "../../common/data_chunk.h"
 
 #ifndef MDSTREAM_H_
 #define MDSTREAM_H_

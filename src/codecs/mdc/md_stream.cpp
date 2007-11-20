@@ -18,8 +18,8 @@
 #include <vector>
 #include <cassert>
 #include "descriptor.h"
-#include "../common/dir/abstract_directory.h"
-#include "../common/dir/directory_factory.h"
+#include "../../common/dir/abstract_directory.h"
+#include "../../common/dir/directory_factory.h"
 
 MDStream::MDStream():m_is_empty(true),m_is_inited(false) {}
 

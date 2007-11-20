@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "text_stream.h"
-#include "../md_stream.h"
+#include "../mdc/md_stream.h"
 #include "../abstract_stream.h"
 #include "../abstract_md_codec.h"
 #include <vector>

@@ -15,7 +15,7 @@
 #include <SDL/SDL.h>
 #include "common/scheduler.h"
 #include "codecs/codec_registry.h"
-#include "codecs/md_stream.h"
+#include "codecs/mdc/md_stream.h"
 #include "codecs/stream_factory.h"
 #include "server_action.h"
 #include "client_test_action.h"
