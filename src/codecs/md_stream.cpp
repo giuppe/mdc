@@ -29,11 +29,8 @@ MDStream::MDStream(Uint8 n_flows, Uint32 sequence_size):m_is_empty(true),m_is_in
 
 void MDStream::init(Uint8 n_flows, Uint32 sequence_size) {
 	m_stream.resize(n_flows);
-	for(Uint32 i=0; i<n_flows; i++) {
+	for(Uint32 i=0; i<n_flows; i++)
 		m_stream[i].resize(sequence_size);
-	/*	for(Uint32 k=0; k<sequence_size; k++)
-			m_stream[i][k] = new Descriptor();*/
-	}
 	m_valid_descriptor.resize(n_flows);
 	for(Uint8 k=0; k<n_flows; k++)
 		m_valid_descriptor[k].resize(sequence_size, false);
@@ -108,12 +105,10 @@ bool MDStream::save_to_disk(const std::string& path) {
 DataChunk& MDStream::serialize() const {
 	DataChunk* result = new DataChunk();
 	DataChunk temp;
-	DataChunk* temp_descriptor;
 	Uint8 flows_number = m_stream.size();
 	Uint32 sequence_size = m_stream[0].size();
 	result->append(flows_number);
 	result->append(sequence_size);
-	
 	for (Uint8 flow=0; flow<flows_number; flow++)
 		for (Uint32 sequence=0; sequence<sequence_size; sequence++)
 			if (m_valid_descriptor[flow][sequence]==true)
@@ -138,8 +133,6 @@ void MDStream::deserialize(const DataChunk& data) {
 		Uint32 sequences_number;
 		temp_dc->extract_head(sequences_number);
 		init(flows_number, sequences_number);
-		//std::vector<std::vector<Descriptor*> > output_stream;
-		//for (Uint32 i=0; i<(flows_number*sequences_number); i++)
 		while(temp_dc->get_lenght()>0)
 		{
 			Uint16 descriptor_size;

@@ -81,28 +81,28 @@ int main(int argc, char** argv) {
 					cout << "Output file parameter is missing.\n\n";
 					return 0;
 				}
-				else {
-					stream_converter(config, output_filename, input_filename, codec_name);
-					Scheduler* sched = new Scheduler();
-					ServerAction* server = new ServerAction();
-					ClientTestAction* client = new ClientTestAction();
-					sched->add_action(server);
-					sched->add_action(client);
-					server->start();
-					client->start();
-					Uint32 times = 100;
-					while(--times != 0) {
-						sched->execute_all();
-						SDL_Delay(100);
-					}
-					delete server;
-					delete client;
-					delete sched;
-				}
+				else stream_converter(config, output_filename, input_filename, codec_name);
 			}
 		}
 	}
-	else cout << "\nAction parameter is missing.\n\n";
+	else {
+		cout << "\nAction parameter is missing, daemon start.\n\n";
+		Scheduler* sched = new Scheduler();
+		ServerAction* server = new ServerAction();
+		ClientTestAction* client = new ClientTestAction();
+		sched->add_action(server);
+		sched->add_action(client);
+		server->start();
+		client->start();
+		Uint32 times = 100;
+		while(--times != 0) {
+			sched->execute_all();
+			SDL_Delay(100);
+		}
+		delete server;
+		delete client;
+		delete sched;
+	}
 	delete config;
 	return 0;
 }
