@@ -55,13 +55,13 @@ public:
 	 * Get parameters' size.
 	 * @returns: parameters' size
 	 */
-	Uint32 get_size();
+	Uint32 get_size() const;
 	
 	/*
 	 * Get parameters' bytes_per_line.
 	 * @returns: parameters' bytes_per_line
 	 */
-	Uint8 get_bytes_per_line();
+	Uint8 get_bytes_per_line() const;
 	
 	~PcxCodecParameters();
 };

@@ -41,14 +41,14 @@ public:
 	 * @stream: abstract stream to be coded
 	 * @md_stream: flow group
 	 */
-	void code(AbstractStream* stream, MDStream* md_stream);
+	void code(AbstractStream* stream, MDStream* md_stream) const;
 	
 	/*
 	 * Decode the received stream.
 	 * @md_stream: flow group
 	 * @stream: abstract stream to be decoded
 	 */
-	void decode(const MDStream* md_stream, AbstractStream* stream);
+	void decode(const MDStream* md_stream, AbstractStream* stream) const;
 	~TextMDCodec();
 	
 	/*

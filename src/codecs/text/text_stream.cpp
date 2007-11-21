@@ -25,7 +25,8 @@
 
 TextStream::TextStream() {m_data.resize(0);}
 
-bool TextStream::load_from_disk(const std::string& path) {
+bool TextStream::load_from_disk(const std::string& path) 
+{
 	if (path.size() > 0) {
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
 		DataChunk dc;
@@ -43,7 +44,11 @@ bool TextStream::load_from_disk(const std::string& path) {
 	return false;
 }
 
-bool TextStream::save_to_disk(const std::string& path) {
+
+
+
+bool TextStream::save_to_disk(const std::string& path) const
+{
 	if (path.size()>0 && m_data.size()>0) {
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
 		DataChunk dc;
@@ -56,7 +61,7 @@ bool TextStream::save_to_disk(const std::string& path) {
 	return false;
 }
 
-DataChunk& TextStream::get_data(Uint64 offset, Uint64 size) 
+DataChunk& TextStream::get_data(Uint64 offset, Uint64 size) const 
 {
 	DataChunk* d = new DataChunk();
 	Uint8* buffer = new Uint8[size];
@@ -69,19 +74,58 @@ DataChunk& TextStream::get_data(Uint64 offset, Uint64 size)
 	return *d;
 }
 
-Uint32 TextStream::get_data_dim() const {return m_data.size();}
 
-void TextStream::set_stream_name(std::string& name) {
+
+
+Uint32 TextStream::get_data_dim() const 
+{
+	return m_data.size();
+}
+
+
+
+
+void TextStream::set_stream_name(std::string& name) 
+{
 	if (name.size() > 0)
 		m_stream_name = name;
 }
 
-std::string TextStream::get_stream_name() const {return m_stream_name;}
-void TextStream::update_stream_hash() {m_hash = "livent rulez";}
-std::string TextStream::get_stream_hash() const {return m_hash;}
+
+
+
+std::string TextStream::get_stream_name() const 
+{
+	return m_stream_name;
+}
+
+
+
+
+void TextStream::update_stream_hash() 
+{
+	//FIXME: this should compute a real md5 function
+	m_hash = "livent rulez";
+}
+
+
+
+
+std::string TextStream::get_stream_hash() const 
+{
+	return m_hash;
+}
+
+
+
+
 TextStream::~TextStream() {}
 
-void TextStream::set_data (DataChunk& data) {
+
+
+
+void TextStream::set_data (DataChunk& data) 
+{
 	Uint32 real_data_size = data.get_lenght();
 	m_data.resize(real_data_size);
 	Uint8* real_data = data.get_data();

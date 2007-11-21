@@ -46,7 +46,7 @@ public:
 	/*
 	 * Returns parameters' size.
 	 */
-	virtual Uint32 get_size() = 0;
+	virtual Uint32 get_size() const = 0;
 	
 	virtual ~AbstractCodecParameters(){};
 

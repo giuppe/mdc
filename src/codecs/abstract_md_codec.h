@@ -31,21 +31,24 @@ public:
 	 * Get flows number.
 	 * @returns: flows number
 	 */
-	Uint8 get_flows_number(){return m_flows_number;};
+	Uint8 get_flows_number() const
+	{
+		return m_flows_number;
+	};
 	
 	/*
 	 * Code an abstract stream in an abstract md_stream
 	 * @stream: abstract description of a generic stream
 	 * @md_stream: abstract description of a generic stream coded by MDC
 	 */
-	virtual void code(AbstractStream* stream, MDStream* md_stream) = 0;
+	virtual void code(AbstractStream* stream, MDStream* md_stream) const = 0;
 	
 	/*
 	 * Decode an abstract md_stream and fills up an abstract stream
 	 * @stream: abstract description of a generic stream
 	 * @md_stream: abstract description of a generic stream coded by MDC
 	 */
-	virtual void decode(const MDStream* md_stream, AbstractStream* stream) = 0;
+	virtual void decode(const MDStream* md_stream, AbstractStream* stream) const = 0;
 	virtual ~AbstractMDCodec(){};
 	
 	/*

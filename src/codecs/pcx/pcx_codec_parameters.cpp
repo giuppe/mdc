@@ -21,10 +21,15 @@
 #include "pcx_stream.h"
 #include <string>
 #include <vector>
+#include <cassert>
 
-PcxCodecParameters::PcxCodecParameters() {m_size = 128;}
+PcxCodecParameters::PcxCodecParameters() 
+{
+	m_size = 128;
+}
 
-void PcxCodecParameters::extractPcxCodecParameters(AbstractStream* stream){
+void PcxCodecParameters::extractPcxCodecParameters(AbstractStream* stream)
+{
 	sdata = stream->get_data(0,127); // prendo
 	Uint8* m_data = sdata.get_data();
 	m_bytes_per_line = m_data[66];
@@ -34,11 +39,27 @@ void PcxCodecParameters::extractPcxCodecParameters(AbstractStream* stream){
 	}
 }
 
-Uint8 PcxCodecParameters::get_bytes_per_line(){return m_bytes_per_line;}
 
-Uint32 PcxCodecParameters::get_size() {return m_size;}
 
-DataChunk& PcxCodecParameters::serialize() const {
+
+Uint8 PcxCodecParameters::get_bytes_per_line() const
+{
+	return m_bytes_per_line;
+}
+
+
+
+
+Uint32 PcxCodecParameters::get_size() const
+{
+	return m_size;
+}
+
+
+
+
+DataChunk& PcxCodecParameters::serialize() const 
+{
 	DEBUG_OUT("SERIALIZE: data_lenght: "<<sdata.get_lenght()<<"\n");
 	DataChunk* dc = new DataChunk;
 	for(Uint8 i=0; i < 128 ; i++){
@@ -48,6 +69,9 @@ DataChunk& PcxCodecParameters::serialize() const {
 	return *dc;
 }
 
-void PcxCodecParameters::deserialize(const DataChunk& dc) {}
+void PcxCodecParameters::deserialize(const DataChunk& dc)
+{
+	assert(!"This function is a stub.");
+}
 
 PcxCodecParameters::~PcxCodecParameters() {}

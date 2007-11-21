@@ -38,7 +38,7 @@ public:
 	 * @dimension: number of single data
 	 * @returns: a data chunk containing data set
 	 */
-	DataChunk& get_data(Uint16 dimension);
+	DataChunk& get_data(Uint16 dimension) const;
 
 	/*
 	 * Get parts of a text stream, specifying size and starting from offset.
@@ -46,7 +46,7 @@ public:
 	 * @param size: data size
 	 * @returns: a data chunk containing data selected
 	 */
-	DataChunk& get_data(Uint64 offset, Uint64 size);
+	DataChunk& get_data(Uint64 offset, Uint64 size) const;
 
 	/*
 	 * Get data dimension.
@@ -82,14 +82,19 @@ public:
 	 * @path: filesystem path of file to save;
 	 * @returns: true if operation is successful
 	 */
-	bool save_to_disk(const std::string& path);
+	bool save_to_disk(const std::string& path) const;
 
 	/*
 	 * Insert data to the current stream.
 	 * @data: data to be added;
 	 */
 	void set_data(DataChunk& data);
+	
+	
+	
 	~PcxStream();
+	
+	
 	
 	/*
 	 * Loadss a stream from disk.

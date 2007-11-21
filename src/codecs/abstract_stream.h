@@ -38,7 +38,7 @@ public:
 	 * @path: filesystem path of file to save;
 	 * @returns: true if operation is successful
 	 */
-	virtual bool save_to_disk(const std::string& path) = 0;
+	virtual bool save_to_disk(const std::string& path) const = 0;
 	
 	
 	/*
@@ -84,7 +84,7 @@ public:
 	 * @size: data quantity taken;
 	 * @returns: a DataChunk containing the data readed.
 	 */
-	virtual DataChunk& get_data(Uint64 offset, Uint64 size) = 0;
+	virtual DataChunk& get_data(Uint64 offset, Uint64 size) const = 0;
 };
 
 #endif /*ABSTRACTSTREAM_H_*/

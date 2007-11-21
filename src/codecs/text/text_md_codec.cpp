@@ -32,7 +32,8 @@ TextMDCodec::TextMDCodec() {
 }
 
 
-void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
+void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
+{
 	Uint32 stream_size = stream->get_data_dim();
 	Uint32 flow_dimension = (stream_size/m_flows_number)+1;
 	Uint32 descriptors_number = (Uint32)ceil(((double)flow_dimension)/((double)m_preferred_payload_size));
@@ -64,7 +65,8 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 	}
 }
 
-void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {
+void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const 
+{
 	if (!md_stream->is_empty()) {
 		std::string name;
 		DataChunk* dc = new DataChunk();

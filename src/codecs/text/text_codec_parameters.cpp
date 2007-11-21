@@ -20,13 +20,26 @@
 
 TextCodecParameters::TextCodecParameters() {m_size = 0;}
 
-Uint32 TextCodecParameters::get_size() {return m_size;}
+Uint32 TextCodecParameters::get_size() const 
+{
+	return m_size;
+}
 
-DataChunk& TextCodecParameters::serialize() const {
+
+
+
+DataChunk& TextCodecParameters::serialize() const 
+{
 	DataChunk* dc = new DataChunk;
 	return *dc;
 }
 
+
+
+
 void TextCodecParameters::deserialize(const DataChunk& dc) {}
+
+
+
 
 TextCodecParameters::~TextCodecParameters() {}

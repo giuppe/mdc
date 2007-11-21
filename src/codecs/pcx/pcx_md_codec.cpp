@@ -27,14 +27,16 @@
 #include <vector>
 #include <cmath>
 
-PcxMDCodec::PcxMDCodec() {
+PcxMDCodec::PcxMDCodec() 
+{
 	m_seq_counter.push_back(0);
-	m_flows_number = 2;
-	m_preferred_payload_size = 50000;
+	m_flows_number = 4;
+	m_preferred_payload_size = 1000;
 }
 
 
-void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
+void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
+{
 	
 	
 	Uint32 stream_size = stream->get_data_dim();
@@ -46,8 +48,8 @@ void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 	
 	PcxCodecParameters* pcp = new PcxCodecParameters();
 	pcp->extractPcxCodecParameters(stream);
-	DEBUG_OUT("descriptors_number: "<<descriptors_number<<"\n");
-	DEBUG_OUT("m_flows_number: "<<m_flows_number<<"\n");
+	LOG_INFO("descriptors_number: "<<descriptors_number<<"\n");
+	LOG_INFO("m_flows_number: "<<m_flows_number<<"\n");
 	
 
 	// start from 128byte
@@ -148,7 +150,8 @@ void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) {
 
 }
 
-void PcxMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {
+void PcxMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const
+{
 	DEBUG_OUT("DECODE\n");
 	if (!md_stream->is_empty()) {
 		std::string name;
@@ -168,9 +171,16 @@ void PcxMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) {
 	}
 }
 
+
+
+
 PcxMDCodec::~PcxMDCodec() {}
 
-void PcxMDCodec::set_flows_number (Uint8 number) {
+
+
+
+void PcxMDCodec::set_flows_number (Uint8 number) 
+{
 	if ((number>0) || (number<65))
 	{
 		m_flows_number = number;
@@ -181,7 +191,11 @@ void PcxMDCodec::set_flows_number (Uint8 number) {
 	}
 }
 
-void PcxMDCodec::set_preferred_payload_size (Uint16 size) {
+
+
+
+void PcxMDCodec::set_preferred_payload_size (Uint16 size)
+{
 	if ((size>25) || (size<55000))
 	{
 		m_preferred_payload_size = size;

@@ -41,28 +41,31 @@ public:
 	 * @stream: abstract stream to be coded
 	 * @md_stream: flow group
 	 */
-	void code(AbstractStream* stream, MDStream* md_stream);
+	void code(AbstractStream* stream, MDStream* md_stream) const;
 	
 	/*
 	 * Decode the received stream.
 	 * @md_stream: flow group
 	 * @stream: abstract stream to be decoded
 	 */
-	void decode(const MDStream* md_stream, AbstractStream* stream);
+	void decode(const MDStream* md_stream, AbstractStream* stream) const;
+	
+	
+	
 	~PcxMDCodec();
 	
 	/*
-		 * Sets the flows number.
-		 * @number: flows number into which the generic stream must to be divided before coding
-		 * process
-		 */
-		void set_flows_number (Uint8 number);
+	 * Sets the flows number.
+	 * @number: flows number into which the generic stream must to be divided before coding
+	 * process
+	 */
+	void set_flows_number (Uint8 number);
 		
-		/*
-		 * Sets the payload size of descriptor.
-		 * @size: desidered size of each descriptor
-		 */
-		void set_preferred_payload_size (Uint16 size);
+	/*
+	 * Sets the payload size of descriptor.
+	 * @size: desidered size of each descriptor
+	 */
+	void set_preferred_payload_size (Uint16 size);
 };
 
 #endif /*PCX_MD_CODEC_H_*/
