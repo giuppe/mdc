@@ -17,11 +17,12 @@
 #include <string>
 #include <vector>
 #include "../common/data_chunk.h"
+#include "../common/serializable.h"
 
 #ifndef ABSTRACTSTREAM_H_
 #define ABSTRACTSTREAM_H_
 
-class AbstractStream
+class AbstractStream : public Serializable
 {
 public:
 	virtual ~AbstractStream(){};

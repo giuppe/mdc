@@ -102,6 +102,15 @@ public:
 	 * @returns: true if operation is successful
 	 */
 	bool load_from_disk(const std::string& path);
+	
+	
+	DataChunk& serialize() const;
+	
+	
+	
+	void deserialize(const DataChunk&);
+	
+	
 };
 
 #endif /*TEXT_STREAM_H_*/

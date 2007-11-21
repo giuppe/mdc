@@ -39,13 +39,8 @@ bool PcxStream::load_from_disk(const std::string& path)
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
 		DataChunk dc;
 		if (dir->load_file(path, dc)) {
-			while (dc.get_lenght() > 0) {
-				Uint8 curr_char;
-				dc.extract_head(curr_char);
-				m_data.push_back((Sint8)curr_char);
-			}
+			deserialize(dc);
 			m_stream_name = dir->get_filename(path);
-			m_hash = dir->get_hash_md5(path);
 			return true;
 		}
 	}
@@ -60,15 +55,41 @@ bool PcxStream::save_to_disk(const std::string& path) const
 {
 	if (path.size()>0 && m_data.size()>0) {
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
-		DataChunk dc;
-		Uint8* buffer = new Uint8[m_data.size()];
-		for (Uint32 i=0; i<m_data.size(); i++)
-			buffer[i]= m_data[i];
-		dc.append(m_data.size(), buffer);
-		if (dir->save_file(path, dc)) return true;
+		
+		if (dir->save_file(path, this->serialize())) return true;
 	}
 	LOG_ERROR("Unable to write pcx stream to "<<path);
 	return false;
+}
+
+
+
+DataChunk& PcxStream::serialize() const
+{
+	DataChunk* dc;
+	Uint8* buffer = new Uint8[m_data.size()];
+	for (Uint32 i=0; i<m_data.size(); i++)
+		buffer[i]= m_data[i];
+	dc->append(m_data.size(), buffer);
+	return *dc;
+			
+}
+
+
+
+void PcxStream::deserialize(const DataChunk& datachunk)
+{
+	DataChunk dc;
+	dc+=datachunk;
+	while (dc.get_lenght() > 0) 
+	{
+		Uint8 curr_char;
+		dc.extract_head(curr_char);
+		m_data.push_back((Sint8)curr_char);
+	}
+	
+	m_hash = datachunk.compute_hash_md5();
+	
 }
 
 
