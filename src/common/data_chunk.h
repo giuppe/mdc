@@ -178,6 +178,8 @@ public:
 	
 	void erase();
 	
+	char* compute_hash_md5() const;
+	
 };
 
 #endif /*DATA_CHUNK_H_*/

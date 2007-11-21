@@ -125,7 +125,10 @@ std::string PosixDirectory::get_filename(const std::string& path) {
 	return path.substr(pos+1);
 }
 
-std::string PosixDirectory::get_hash_md5(const std::string& path) {
-	LOG_ERROR("This function is a stub - returns always md5 for <livio rulez>");
-	return std::string("3b3f9dabbc0cf273e51f04f84b383b1d");
+std::string PosixDirectory::get_hash_md5(const std::string& path) 
+{
+	DataChunk dc;
+	this->load_file(path, dc);
+	
+	return std::string(dc.compute_hash_md5());
 }
