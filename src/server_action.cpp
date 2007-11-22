@@ -20,8 +20,8 @@
 #include "common/data_chunk.h"
 #include "common/net_manager.h"
 #include "mdc_messages.h"
-#include "codecs/md_stream.h"
-#include "codecs/stream_repository.h"
+#include "codecs/mdc/md_stream.h"
+#include "app/stream_repository.h"
 
 ServerAction::ServerAction()
 {
