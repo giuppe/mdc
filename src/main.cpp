@@ -23,8 +23,7 @@
 using namespace std;
 
 void deinit_all();
-
-void stream_converter(AbstractConfiguration*, std::string, std::string, std::string);
+void stream_converter(AbstractConfiguration*, std::string, std::string, std::string, Uint32, Uint32);
 
 int main(int argc, char** argv) {
 	std::cout<<"\nMultiple Description Codec v0.1\n";
@@ -41,18 +40,18 @@ int main(int argc, char** argv) {
 	if (get_help) {
 		std::cout<<"Multiple Description Codec\n\n";
 		std::cout<<"Use: mdc [OPTION]\n";
-		cout<<"\t--input \t input filename.\n";
-		cout<<"\t--output \t output filename.\n";
-		cout<<"\t--code \t\t activate coding from input file to output MDC file.\n";
-		cout<<"\t--decode \t activate decoding from input MDC file to output file.\n";
-		cout<<"\t--codec \t select codec type to use for coding input file.\n";
-		cout<<"\t--flows \t number of output coded flows.\n";
-		cout<<"\t--payload \t preferred payload size of each descriptor.\n";
-		cout<<"\t--help \t\t show this help page.\n\n";
-		cout<<"Examples:\n";
-		cout<<"  mdc --input input_file.txt --codec text --code --output output_file.mdc.\n";
-		cout<<"  mdc --input input_file.mdc --codec text --decode --output output_file.txt.\n\n";
-		cout<<"---------------------------------------------------------------\n\n";
+		std::cout<<"\t--input \t input filename.\n";
+		std::cout<<"\t--output \t output filename.\n";
+		std::cout<<"\t--code \t\t activate coding from input file to output MDC file.\n";
+		std::cout<<"\t--decode \t activate decoding from input MDC file to output file.\n";
+		std::cout<<"\t--codec \t select codec type to use for coding input file.\n";
+		std::cout<<"\t--flows \t <OPTIONAL> number of output coded flows (from 1 to 64), DEFAULT 2.\n";
+		std::cout<<"\t--payload \t <OPTIONAL> preferred payload size of each descriptor (from 25 to 55000 for text), DEFAULT 1000.\n";
+		std::cout<<"\t--help \t\t show this help page.\n\n";
+		std::cout<<"Examples:\n";
+		std::cout<<"  mdc --input input_file.txt --codec text --code --output output_file.mdc.\n";
+		std::cout<<"  mdc --input input_file.mdc --codec text --decode --output output_file.txt.\n\n";
+		std::cout<<"---------------------------------------------------------------\n\n";
 		return 0;
 	}
 	bool call_convert1 = false;
@@ -61,32 +60,36 @@ int main(int argc, char** argv) {
 	config->get_bool("", "decode", call_convert2);
 	if (call_convert1 || call_convert2) {
 		std::string output_filename, input_filename, codec_name;
+		Uint32 flows_number = 0;
+		Uint32 payload_size = 0;
 		output_filename.resize(0);
 		input_filename.resize(0);
 		codec_name.resize(0);
 		config->get_string("", "output", output_filename);
 		config->get_string("", "input", input_filename);
 		config->get_string("", "codec", codec_name);
+		config->get_int("", "flows", flows_number);
+		config->get_int("", "payload", payload_size);
 		if ((input_filename=="true") || (input_filename=="false") || (input_filename=="")) {
-			cout << "Input file parameter is missing.\n\n";
+			std::cout<<"Input file parameter is missing.\n\n";
 			return 0;
 		}
 		else {
 			if ((codec_name=="true") || (codec_name=="false") || (codec_name=="")) {
-				cout << "Codec name parameter is missing.\n\n";
+				std::cout<<"Codec name parameter is missing.\n\n";
 				return 0;
 			}
 			else {
 				if ((output_filename=="true") || (output_filename=="false") || (output_filename=="")) {
-					cout << "Output file parameter is missing.\n\n";
+					std::cout<<"Output file parameter is missing.\n\n";
 					return 0;
 				}
-				else stream_converter(config, output_filename, input_filename, codec_name);
+				else stream_converter(config, output_filename, input_filename, codec_name, flows_number, payload_size);
 			}
 		}
 	}
 	else {
-		cout << "\nAction parameter is missing, daemon start.\n\n";
+		std::cout<<"\nAction parameter is missing, daemon start.\n\n";
 		Scheduler* sched = new Scheduler();
 		ServerAction* server = new ServerAction();
 		ClientTestAction* client = new ClientTestAction();
@@ -95,7 +98,7 @@ int main(int argc, char** argv) {
 		server->start();
 		client->start();
 		Uint32 times = 100;
-		while(--times != 0) {
+		while (--times != 0) {
 			sched->execute_all();
 			SDL_Delay(100);
 		}
@@ -113,38 +116,37 @@ void deinit_all() {
 	LogManager::instance()->deinit();
 }
 
-void stream_converter(AbstractConfiguration* config, std::string output_filename, std::string input_filename, std::string codec_name) {
+void stream_converter(AbstractConfiguration* config, std::string output_filename, std::string input_filename, std::string codec_name, Uint32 flows_number, Uint32 payload_size) {
 	bool is_coding = false;
 	bool is_decoding = false;
-	config->get_bool("","code", is_coding);
-	config->get_bool("","decode", is_decoding);
+	config->get_bool("", "code", is_coding);
+	config->get_bool("", "decode", is_decoding);
 	DEBUG_OUT("converting "<<input_filename<<" to "<<output_filename<<"\n");
 		DEBUG_OUT("\t using "<<codec_name<<" as codec");
 		CodecRegistry* codecReg = CodecRegistry::instance();
 		AbstractMDCodec* codec;
 		bool exists_codec = false;
 		exists_codec = codecReg->get_codec(codec_name, codec);
-		if(!exists_codec)
-		{
+		if (!exists_codec) {
 			DEBUG_OUT("Unable to find codec "<<codec_name);
 			exit(1);
 		}
 		AbstractStream* stream = StreamFactory::create_stream(codec_name);
 		codecReg->get_codec(codec_name, codec);
 		MDStream mdstream;
-	if(is_coding == true)
-	{
+	if (is_coding) {
 		stream->load_from_disk(input_filename);
+		if ((flows_number>0) && (flows_number<65))
+			codec->set_flows_number(flows_number);
+		if ((payload_size>1) && (payload_size<64000))
+			codec->set_preferred_payload_size(payload_size);
 		codec->code(stream, &mdstream);
 		mdstream.save_to_disk(output_filename);
-				
 	}
-	else if(is_decoding == true)
-	{
+	else if (is_decoding) {
 		mdstream.load_from_disk(input_filename);
 		codec->decode(&mdstream, stream);
 		stream->save_to_disk(output_filename);
-						
 	}
 	delete stream;
 }
