@@ -31,9 +31,7 @@ TextMDCodec::TextMDCodec() {
 	m_preferred_payload_size = 1000;
 }
 
-
-void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
-{
+void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 	Uint32 stream_size = stream->get_data_dim();
 	Uint32 flow_dimension = (stream_size/m_flows_number)+1;
 	Uint32 descriptors_number = (Uint32)ceil(((double)flow_dimension)/((double)m_preferred_payload_size));
@@ -65,8 +63,7 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
 	}
 }
 
-void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const 
-{
+void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const {
 	if (!md_stream->is_empty()) {
 		std::string name;
 		DataChunk* dc = new DataChunk();
@@ -88,23 +85,13 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 TextMDCodec::~TextMDCodec() {}
 
 void TextMDCodec::set_flows_number (Uint8 number) {
-	if ((number>0) || (number<65))
-	{
+	if ((number>0) && (number<65))
 		m_flows_number = number;
-	}
-	else
-	{
-		LOG_ERROR("Trying to set flows number to "<<number<<">64 (Max flows number for TextMDCodec)");
-	}
+	else LOG_ERROR("Trying to set flows number to "<<number<<">64 (Max flows number for TextMDCodec)");
 }
 
 void TextMDCodec::set_preferred_payload_size (Uint16 size) {
-	if ((size>25) || (size<55000))
-	{
+	if ((size>25) && (size<55000))
 		m_preferred_payload_size = size;
-	}
-	else
-	{
-		LOG_ERROR("Trying to set preferred payload to "<<size<<": for TextMDCodec should be in range [25,55000]");
-	}
+	else LOG_ERROR("Trying to set preferred payload to "<<size<<": for TextMDCodec should be in range [25,55000]");
 }
