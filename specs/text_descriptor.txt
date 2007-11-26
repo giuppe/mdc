@@ -48,3 +48,12 @@ The payload is extracted from the stream from an initial point called "offset" t
 point setted by the "offset" + "payload_size" parameter. Then, payload is added to the
 current descriptor. The "offset" parameter is used to monitorize this procedure.
 The stream contains a copy of text file contents.
+
+
+
+Payload should contain parts of the text; division is made out of this algorithm:
+Specifing flows_number, preferred_payload, and file_size,
+1) Compute flow_size as file_size/flows_number,
+2) compute descriptors_number, as flow_size/preferred_payload
+3) compute max_payload_size, as flow_size/descriptor_number
+4) append nth letter of the text to descriptor which flow_id=(n%flows_number) and desc_id=n%max_payload_size
