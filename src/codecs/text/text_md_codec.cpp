@@ -87,11 +87,15 @@ TextMDCodec::~TextMDCodec() {}
 void TextMDCodec::set_flows_number (Uint8 number) {
 	if ((number>0) && (number<65))
 		m_flows_number = number;
-	else LOG_ERROR("Trying to set flows number to "<<number<<">64 (Max flows number for TextMDCodec)");
+	else {
+		LOG_ERROR("Trying to set flows number to "<<number<<">64 (Max flows number for TextMDCodec)");
+	}
 }
 
 void TextMDCodec::set_preferred_payload_size (Uint16 size) {
 	if ((size>25) && (size<55000))
 		m_preferred_payload_size = size;
-	else LOG_ERROR("Trying to set preferred payload to "<<size<<": for TextMDCodec should be in range [25,55000]");
+	else {
+		LOG_ERROR("Trying to set preferred payload to "<<size<<": for TextMDCodec should be in range [25,55000]");
+	}
 }
