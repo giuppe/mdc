@@ -25,9 +25,9 @@
 
 TextStream::TextStream() {m_data.resize(0);}
 
-bool TextStream::load_from_disk(const std::string& path) 
-{
+bool TextStream::load_from_disk(const std::string& path) {
 	if (path.size() > 0) {
+		m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of("."));
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
 		DataChunk dc;
 		if (dir->load_file(path, dc)) {
@@ -38,9 +38,6 @@ bool TextStream::load_from_disk(const std::string& path)
 	return false;
 }
 
-
-
-
 bool TextStream::save_to_disk(const std::string& path) const
 {
 	if (path.size()>0 && m_data.size()>0) {
@@ -50,24 +47,17 @@ bool TextStream::save_to_disk(const std::string& path) const
 	return false;
 }
 
-
-
-
-DataChunk& TextStream::get_data(Uint64 offset, Uint64 size) const 
-{
+DataChunk& TextStream::get_data(Uint64 offset, Uint64 size) const {
 	DataChunk* d = new DataChunk();
-	Uint8* buffer = new Uint8[size];
-	for(Uint64 i=0; i<size; i++)
-	{
-		buffer[i]=m_data[offset+i];
+	if (size+offset < m_data.size()-1) {
+		Uint8* buffer = new Uint8[size];
+		for(Uint64 i=0; i<size; i++)
+			buffer[i]=m_data[offset+i];
+		d->append(size, buffer);
+		delete[] buffer;
 	}
-	d->append(size, buffer);
-	delete[] buffer;
 	return *d;
 }
-
-
-
 
 Uint32 TextStream::get_data_dim() const 
 {
