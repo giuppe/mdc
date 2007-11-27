@@ -50,8 +50,8 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 				TextCodecParameters* tcp = new TextCodecParameters();
 				descriptor->set_codec_parameter(tcp);
 				DataChunk payload;
-				for (Uint64 k=0; k<max_payload_size; k++)
-					payload += stream->get_data(offset+(max_payload_size*k), 1);
+				for (Uint64 k=0; k<m_flows_number*descriptors_number; k++)
+					payload += stream->get_data(offset+(m_flows_number*descriptors_number*k), 1);
 				offset++;
 				descriptor->set_payload(payload);
 				md_stream->set_descriptor(descriptor);
@@ -66,50 +66,34 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 		DataChunk* dc = new DataChunk();
 		std::vector<Uint8> taken_stream;
 		Uint64 offset = 0;
-		Uint8 last_valid_flow_number = 0;
-		Uint32 last_valid_sequence_number = 0;
 		Uint8 flows_number = md_stream->get_flows_number();
 		Uint32 sequences_number = md_stream->get_sequences_number();
 		for (Uint8 i=0; i<flows_number; i++)
 			for (Uint32 j=0; j<sequences_number; j++) {
 				Descriptor* descriptor = new Descriptor();
-				Uint32 descriptors_not_valid = 0;
+				Uint16 payload_size = 0;
 				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="text")) {
 					name = descriptor->get_file_name();
-					if (taken_stream.size() == 0) {
-						taken_stream.resize(flows_number*sequences_number*descriptor->get_payload_size());
-						for (Uint64 k=0; k<taken_stream.size(); k++)
-							taken_stream[k] = 0;
-					}
+					payload_size = descriptor->get_payload_size();
 					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) {
 						(*dc) += *(descriptor->get_payload());
-						Uint8* current_received_data = dc->get_data();
-						for (Uint64 k=0; k<descriptor->get_payload_size(); k++)
-							taken_stream[offset+(descriptor->get_payload_size()*k)] = current_received_data[k];
-						last_valid_sequence_number = j;
-						last_valid_flow_number = i;
-					}
-				}
-				else {
-					if ((last_valid_flow_number!=0) || (last_valid_sequence_number!=0)) {
-						for (Uint8 k=last_valid_flow_number; k<=i; k++) {
-							if (last_valid_sequence_number < j)
-								for (Uint32 m=last_valid_sequence_number; m<=j; m++)
-									descriptors_not_valid++;
-							else if (last_valid_sequence_number > j)
-								for (Uint32 m=j; m<=last_valid_sequence_number; m++)
-									descriptors_not_valid++;
+						taken_stream.resize(flows_number*sequences_number*payload_size);
+						Uint8 current_received_data;
+						for (Uint64 k=0; k<payload_size; k++) {
+							dc->extract_head(current_received_data);
+							taken_stream[offset+(payload_size*k)] = current_received_data;
 						}
-						descriptors_not_valid -= 2;
 					}
-					else offset++;
 				}
-				offset += descriptors_not_valid;
+				else
+					for (Uint32 k=0; k<payload_size; k++)
+						taken_stream[offset+(payload_size*k)] = 32;
+				offset++;
 			}
 		stream->set_stream_name(name);
 		stream->update_stream_hash();
 		DataChunk* taken_dc = new DataChunk();
-		Uint8* temp_container;
+		Uint8* temp_container = new Uint8[taken_stream.size()];
 		for (Uint64 i=0; i<taken_stream.size(); i++)
 			temp_container[i] = taken_stream[i];
 		taken_dc->append(taken_stream.size(), temp_container);
