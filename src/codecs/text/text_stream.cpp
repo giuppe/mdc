@@ -49,13 +49,11 @@ bool TextStream::save_to_disk(const std::string& path) const
 
 DataChunk& TextStream::get_data(Uint64 offset, Uint64 size) const {
 	DataChunk* d = new DataChunk();
-	if (size+offset < m_data.size()-1) {
-		Uint8* buffer = new Uint8[size];
-		for(Uint64 i=0; i<size; i++)
-			buffer[i]=m_data[offset+i];
-		d->append(size, buffer);
-		delete[] buffer;
-	}
+	Uint8* buffer = new Uint8[size];
+	for(Uint64 i=0; i<size; i++)
+		buffer[i]=m_data[offset+i];
+	d->append(size, buffer);
+	delete[] buffer;
 	return *d;
 }
 
@@ -81,20 +79,15 @@ std::string TextStream::get_stream_name() const
 	return m_stream_name;
 }
 
-
-
-DataChunk& TextStream::serialize() const
-{
-	DataChunk* dc;
+DataChunk& TextStream::serialize() const {
+	DataChunk* dc = new DataChunk();
 	Uint8* buffer = new Uint8[m_data.size()];
 	for (Uint32 i=0; i<m_data.size(); i++)
 		buffer[i]= m_data[i];
-	dc->append(m_data.size(), buffer);
-	return *dc;
-			
+	Uint32 size = m_data.size();
+	dc->append(size, buffer);
+	return *dc;			
 }
-
-
 
 void TextStream::deserialize(const DataChunk& datachunk)
 {

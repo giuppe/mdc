@@ -50,8 +50,9 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 				TextCodecParameters* tcp = new TextCodecParameters();
 				descriptor->set_codec_parameter(tcp);
 				DataChunk payload;
-				for (Uint64 k=0; k<m_flows_number*descriptors_number; k++)
-					payload += stream->get_data(offset+(m_flows_number*descriptors_number*k), 1);
+				for (Uint64 k=0; k<max_payload_size; k++)
+					if (offset+(m_flows_number*descriptors_number*k) < stream_size)
+						payload += stream->get_data(offset+(m_flows_number*descriptors_number*k), 1);
 				offset++;
 				descriptor->set_payload(payload);
 				md_stream->set_descriptor(descriptor);
@@ -68,6 +69,7 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 		Uint64 offset = 0;
 		Uint8 flows_number = md_stream->get_flows_number();
 		Uint32 sequences_number = md_stream->get_sequences_number();
+		Uint64 max_dimension = 0;
 		for (Uint8 i=0; i<flows_number; i++)
 			for (Uint32 j=0; j<sequences_number; j++) {
 				Descriptor* descriptor = new Descriptor();
@@ -77,26 +79,32 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 					payload_size = descriptor->get_payload_size();
 					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) {
 						(*dc) += *(descriptor->get_payload());
-						taken_stream.resize(flows_number*sequences_number*payload_size);
+						taken_stream.resize(flows_number*sequences_number*(payload_size+1));
 						Uint8 current_received_data;
 						for (Uint64 k=0; k<payload_size; k++) {
 							dc->extract_head(current_received_data);
-							taken_stream[offset+(payload_size*k)] = current_received_data;
+							taken_stream[offset+(flows_number*sequences_number*k)] = current_received_data;
+							if (offset+(flows_number*sequences_number*k) > max_dimension)
+								max_dimension = offset+(flows_number*sequences_number*k);
 						}
 					}
 				}
 				else
-					for (Uint32 k=0; k<payload_size; k++)
-						taken_stream[offset+(payload_size*k)] = 32;
+					for (Uint32 k=0; k<payload_size; k++) {
+						taken_stream[offset+(flows_number*sequences_number*k)] = 32;
+						if (offset+(flows_number*sequences_number*k) > max_dimension)
+							max_dimension = offset+(flows_number*sequences_number*k);
+					}
 				offset++;
 			}
 		stream->set_stream_name(name);
 		stream->update_stream_hash();
 		DataChunk* taken_dc = new DataChunk();
-		Uint8* temp_container = new Uint8[taken_stream.size()];
-		for (Uint64 i=0; i<taken_stream.size(); i++)
+		Uint32 size = taken_stream.size();
+		Uint8* temp_container = new Uint8[max_dimension+1];
+		for (Uint64 i=0; i<max_dimension+1; i++)
 			temp_container[i] = taken_stream[i];
-		taken_dc->append(taken_stream.size(), temp_container);
+		taken_dc->append(max_dimension+1, temp_container);
 		stream->set_data(*taken_dc);
 	}
 }
