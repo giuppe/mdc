@@ -73,7 +73,7 @@ public:
 		 * @param data object filled with received data.
 		 * @returns true if data received.
 		 */
-	bool receive_data(Uint32 source_socket_handle, DataChunk& data, Uint32 sender_address, Uint16 sender_port);
+	bool receive_data(Uint32 source_socket_handle, DataChunk& data, Uint32& sender_address, Uint16& sender_port);
 	
 	
 	Uint32 resolve(std::string hostname);

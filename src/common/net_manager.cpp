@@ -26,7 +26,7 @@
 Uint32 NetManager::create_UDP_listen_socket(const std::string& address, Uint16 port)
 {
 	IPaddress ip_address;
-	/*
+	
 	LOG_INFO("Resolving "<<address);
 	
 	Sint32 result = SDLNet_ResolveHost(&ip_address, address.c_str(), port);
@@ -34,9 +34,9 @@ Uint32 NetManager::create_UDP_listen_socket(const std::string& address, Uint16 p
 	{
 		LOG_ERROR("Cannot resolve: "<<address);
 	}
-	*/
-	ip_address.host = resolve(address);
-	ip_address.port = port;
+	
+	//ip_address.host = resolve(address);
+	//ip_address.port = port;
 	LOG_INFO("Creating UDP socket on port "<<port);
 	UDPsocket socket = SDLNet_UDP_Open(port);
 	
@@ -175,7 +175,7 @@ void NetManager::send_data(NetEndPoint destination,  const DataChunk& data)
 
 
 
-bool NetManager::receive_data(Uint32 source_socket_handle, DataChunk& data, Uint32 sender_address, Uint16 sender_port)
+bool NetManager::receive_data(Uint32 source_socket_handle, DataChunk& data, Uint32& sender_address, Uint16& sender_port)
 {
 	UDPpacket packet;
 	

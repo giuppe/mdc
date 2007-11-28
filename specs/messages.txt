@@ -1,0 +1,10 @@
+LIST
+n=(string)+";"
+(null)
+
+ALST
+{
+n=(string)+";"
+h=(string)+";"
+(null)
+}

@@ -42,6 +42,7 @@ client-manager should:
 -send LIST when user prefers
 -displaying results when receiving ALST
 --maintaining a "list of last searches"
+-update list of peers on APER
 
 
 receive-manager (called by site-manager):

@@ -2,7 +2,7 @@ PeerCollection (Collection of known peers)
 Only One per instance
 Used by:
 -SendingManager: reads all the list
--Others: add an ip:port to the list
+-ClientManager: add an ip:port to the list
 -Others: remove an ip:port to the list
 
 States:
@@ -10,7 +10,7 @@ States:
 
 
 StreamRepository (manage the access to the streams on disk)
-Only One per instance
+Only One per instance (singleton)
 Used by:
 SendingManager: search by parts of name, getting a list of stream names
 SendingManager: obtain a MDStream providing its hash
