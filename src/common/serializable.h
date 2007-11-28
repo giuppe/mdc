@@ -40,7 +40,7 @@ public:
 		 */
 	virtual void deserialize(const DataChunk&) = 0;
 	
-	//virtual ~Serializable() = 0;
+	virtual ~Serializable(){};
 
 };
 

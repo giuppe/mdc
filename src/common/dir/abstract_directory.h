@@ -34,7 +34,7 @@ public:
 	
 	virtual std::string get_hash_md5(const std::string& path) = 0;
 		
-	
+	virtual ~AbstractDirectory(){}
 };
 
 #endif /*ABSTRACT_DIRECTORY_H_*/
