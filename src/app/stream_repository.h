@@ -34,10 +34,8 @@ private:
 
 public:
 	
-	StreamRepository(std::string path);
+	void init(std::string path);
 
-	~StreamRepository();
-	
 	std::vector<MDStream*> find_by_name(std::string regexp);
 	
 	bool get_by_hash(std::string hash, MDStream* &stream);
@@ -45,8 +43,25 @@ public:
 	void refresh();
 	
 	bool add_stream(MDStream* stream);
+	
+	void deinit();
 
+	// begin Singleton stuff
 
+private:
+
+static StreamRepository* _instance;
+
+protected:
+
+StreamRepository():m_is_valid(false){};
+~StreamRepository(){deinit();}
+
+public:
+
+static StreamRepository* instance();
+
+// end Singleton stuff
 
 };
 

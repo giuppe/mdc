@@ -23,7 +23,7 @@
  * Loads all MDC streams found in path.
  * @param path path of mdc files
  */
-StreamRepository::StreamRepository(std::string path)
+void StreamRepository::init(std::string path)
 {
 	m_is_valid = false;
 	
@@ -78,7 +78,7 @@ std::vector<MDStream*> StreamRepository::find_by_name(std::string regexp)
 
 
 
-StreamRepository::~StreamRepository()
+void StreamRepository::deinit()
 {
 	std::map<std::string,MDStream*>::iterator iter;
 	for( iter = m_streams.begin(); iter != m_streams.end(); ++iter ) 
@@ -124,4 +124,15 @@ bool StreamRepository::add_stream(MDStream* stream)
 }
 
 
+
+StreamRepository* StreamRepository::_instance = 0;
+
+StreamRepository* StreamRepository::instance()
+{
+	if(_instance==0)
+	{
+		_instance=new StreamRepository();
+	}
+	return _instance;
+}
 
