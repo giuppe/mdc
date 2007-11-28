@@ -9,7 +9,7 @@
 
 SiteManager::SiteManager()
 {
-	m_listening_socket = NetManager::instance()->create_UDP_listen_socket("localhost", 5555);
+	m_listening_socket = NetManager::instance()->create_UDP_listen_socket("localhost", 5551);
 	LOG_INFO("Listening on port 5551 for control packets.");
 	
 	StreamRepository::instance()->init("/home/giuppe/repo_mdc");

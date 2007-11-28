@@ -31,7 +31,7 @@ void ClientTestAction::action()
 	msg.set_rows(peer_list);
 	
 	UDPMessage udp_msg;
-	udp_msg.set_destination(NetEndPoint(NetManager::instance()->resolve("127.0.0.1"), 5555));
+	udp_msg.set_destination(NetEndPoint(NetManager::instance()->resolve("127.0.0.1"), 5551));
 	udp_msg.set_payload(msg.serialize());
 
 	udp_msg.send();

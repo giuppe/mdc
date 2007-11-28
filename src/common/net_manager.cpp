@@ -128,6 +128,8 @@ void NetManager::send_data(NetEndPoint destination,  const DataChunk& data)
 {
 	//UDPsocket socket = get_socket(source_socket_handle);
 	
+	Uint32 dest_socket = NetManager::instance()->create_UDP_socket(destination.get_ip(), destination.get_port());
+	
 	LOG_INFO("Allocating "<<data.get_lenght()<<" bytes for UDP packet");
 	
 	UDPpacket* packet = SDLNet_AllocPacket(data.get_lenght());
@@ -149,10 +151,7 @@ void NetManager::send_data(NetEndPoint destination,  const DataChunk& data)
 
 		UDPsocket sd = SDLNet_UDP_Open(0);
 	   
-		IPaddress dest_address;
-		dest_address.host = destination.get_ip();
-		dest_address.port = destination.get_port();
-		packet->address = dest_address;
+		packet->address = m_addresses[dest_socket];
 		
 		LOG_INFO("Sending packet to "<< packet->address.host<<":"<<packet->address.port);
 		
