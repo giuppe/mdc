@@ -18,6 +18,7 @@
 #include <SDL/SDL_net.h>
 #include <string>
 #include <vector>
+#include "net_end_point.h"
 #include "data_chunk.h"
 
 #ifndef NET_MANAGER_H_
@@ -61,10 +62,10 @@ public:
 	
 	/**
 		 * Sends a DataChunk through a previously created socket.
-		 * @param destination_socket_handle an handle of the destination socket.
+		 * @param destination the endpoint of the destination.
 		 * @param data the DataChunk to send.
 		 */
-	void send_data(Uint32 destination_socket_handle, const DataChunk& data);
+	void send_data(NetEndPoint destination, const DataChunk& data);
 	
 	/**
 		 * Receive a DataChunk through a previously created listening socket.

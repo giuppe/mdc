@@ -124,7 +124,7 @@ UDPsocket NetManager::get_socket(Uint32 socket_handle)
 }
 
 
-void NetManager::send_data(Uint32 destination_socket_handle,  const DataChunk& data)
+void NetManager::send_data(NetEndPoint destination,  const DataChunk& data)
 {
 	//UDPsocket socket = get_socket(source_socket_handle);
 	
@@ -149,7 +149,10 @@ void NetManager::send_data(Uint32 destination_socket_handle,  const DataChunk& d
 
 		UDPsocket sd = SDLNet_UDP_Open(0);
 	   
-		packet->address = m_addresses[destination_socket_handle];
+		IPaddress dest_address;
+		dest_address.host = destination.get_ip();
+		dest_address.port = destination.get_port();
+		packet->address = dest_address;
 		
 		LOG_INFO("Sending packet to "<< packet->address.host<<":"<<packet->address.port);
 		
