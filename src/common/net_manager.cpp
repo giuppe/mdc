@@ -26,7 +26,7 @@
 Uint32 NetManager::create_UDP_listen_socket(const std::string& address, Uint16 port)
 {
 	IPaddress ip_address;
-	
+	/*
 	LOG_INFO("Resolving "<<address);
 	
 	Sint32 result = SDLNet_ResolveHost(&ip_address, address.c_str(), port);
@@ -34,7 +34,9 @@ Uint32 NetManager::create_UDP_listen_socket(const std::string& address, Uint16 p
 	{
 		LOG_ERROR("Cannot resolve: "<<address);
 	}
-	
+	*/
+	ip_address.host = resolve(address);
+	ip_address.port = port;
 	LOG_INFO("Creating UDP socket on port "<<port);
 	UDPsocket socket = SDLNet_UDP_Open(port);
 	
@@ -117,7 +119,7 @@ UDPsocket NetManager::get_socket(Uint32 socket_handle)
 		return m_sockets[socket_handle];
 	}
 	LOG_FATAL("Accessing uninitialized socket.")
-	assert(0);
+	exit(1);
 	return 0;
 }
 
@@ -205,6 +207,22 @@ bool NetManager::receive_data(Uint32 source_socket_handle, DataChunk& data, Uint
 }
 
 
+Uint32 NetManager::resolve(std::string hostname)
+{
+	IPaddress ip_address;
+		
+		LOG_INFO("Resolving "<<hostname);
+		
+		Sint32 result = SDLNet_ResolveHost(&ip_address, hostname.c_str(), 0);
+		
+		if(result!=0)
+		{
+			LOG_ERROR("Cannot resolve: "<<hostname);
+		}
+		
+		return ip_address.host;
+		
+}
 
 
 NetManager* NetManager::_instance = 0;

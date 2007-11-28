@@ -75,6 +75,9 @@ public:
 	bool receive_data(Uint32 source_socket_handle, DataChunk& data, Uint32 sender_address, Uint16 sender_port);
 	
 	
+	Uint32 resolve(std::string hostname);
+	
+	
 		// begin Singleton stuff
 
 private:
