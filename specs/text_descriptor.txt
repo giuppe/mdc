@@ -36,22 +36,24 @@ algorithm as a user independent parameter.
 Codec name is the name of codec: in this case it's "text".
 
 For text codec is not necessary the "codec parameter" and has been added with size to 0
-whitout any real codec parameter.
+without any real codec parameter.
 
 Payload size is the size of payload of a single descriptor and contains a value, for text
 implementation, between 25 and 55.000 bytes. This value represents the user preferred
 payload size. The algorithm can vary it if it's necessary for load balacing between
 descriptors and flows: the product between flows number and real descriptor payload must
-approximate as best as possible (it's a lower bound) text file size.
+approximate as best as possible text file size (it's a lower bound).
 
-The payload is extracted from the stream from an initial point called "offset" to a final
-point setted by the "offset" + "payload_size" parameter. Then, payload is added to the
-current descriptor. The "offset" parameter is used to monitorize this procedure.
+The payload is extracted from the stream from an initial point called "offset", characters
+are extracted from a round robin algorithm to fill up a payload ofapprossimativaly size
+"max_payload_size". Then, payload is added to the current descriptor. The "offset" parameter
+is used to monitorize this procedure.
+
 The stream contains a copy of text file contents.
 
 
 
-Payload should contain parts of the text; division is made out of this algorithm:
+Payload contains parts of the text; division is made out of this algorithm:
 Specifing flows_number, preferred_payload, and file_size,
 1) Compute flow_size as file_size/flows_number,
 2) compute descriptors_number, as flow_size/preferred_payload
