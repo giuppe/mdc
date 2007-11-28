@@ -100,7 +100,6 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 		stream->set_stream_name(name);
 		stream->update_stream_hash();
 		DataChunk* taken_dc = new DataChunk();
-		Uint32 size = taken_stream.size();
 		Uint8* temp_container = new Uint8[max_dimension+1];
 		for (Uint64 i=0; i<max_dimension+1; i++)
 			temp_container[i] = taken_stream[i];
