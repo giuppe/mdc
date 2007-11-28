@@ -18,6 +18,7 @@
 #include "client_test_action.h"
 #include "common/data_chunk.h"
 #include "common/net_manager.h"
+#include "common/udp_message.h"
 #include "mdc_messages.h"
 
 void ClientTestAction::action()
@@ -28,7 +29,12 @@ void ClientTestAction::action()
 	peer_list.push_back("192.168.0.4:4567");
 		
 	msg.set_rows(peer_list);
-	Uint32 dest_socket = NetManager::instance()->create_UDP_socket("localhost", 5555);
-	NetManager::instance()->send_data(dest_socket, msg.serialize());
+	
+	UDPMessage udp_msg;
+	udp_msg.set_destination(NetEndPoint(NetManager::instance()->resolve("127.0.0.1"), 5555));
+	udp_msg.set_payload(msg.serialize());
+
+	udp_msg.send();
+	
 	sleep(5000);
 }

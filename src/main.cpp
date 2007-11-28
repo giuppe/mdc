@@ -17,6 +17,7 @@
 #include "codecs/codec_registry.h"
 #include "codecs/mdc/md_stream.h"
 #include "codecs/stream_factory.h"
+#include "app/site_manager.h"
 #include "server_action.h"
 #include "client_test_action.h"
 
@@ -94,15 +95,19 @@ int main(int argc, char** argv) {
 		Scheduler* sched = new Scheduler();
 		ServerAction* server = new ServerAction();
 		ClientTestAction* client = new ClientTestAction();
+		//SiteManager* site_manager = new SiteManager();
+		//sched->add_action(site_manager);
 		sched->add_action(server);
 		sched->add_action(client);
+		//site_manager->start();
 		server->start();
 		client->start();
-		Uint32 times = 100;
+		Uint32 times = 10000;
 		while (--times != 0) {
 			sched->execute_all();
 			SDL_Delay(100);
 		}
+		//delete site_manager;
 		delete server;
 		delete client;
 		delete sched;

@@ -27,7 +27,7 @@ ServerAction::ServerAction()
 {
 	m_listening_socket = NetManager::instance()->create_UDP_listen_socket("localhost", 5555);
 	LOG_INFO("Server listening on port 5555");
-	m_stream_repository = new StreamRepository("/home/kumber/repo_mdc");
+
 }
 
 
@@ -75,8 +75,8 @@ void ServerAction::action()
 						
 			response.set_rows(rows);
 			
-			Uint32 dest_socket = NetManager::instance()->create_UDP_socket(sender_address, sender_port);
-			NetManager::instance()->send_data(dest_socket, response.serialize());
+		//	Uint32 dest_socket = NetManager::instance()->create_UDP_socket(sender_address, sender_port);
+		//	NetManager::instance()->send_data(dest_socket, response.serialize());
 			
 		}
 		if(strcmp(msg.get_type_string(), "APER")==0)
