@@ -35,6 +35,20 @@ public:
 		m_parameter = "";
 
 	}
+	
+	void set_name(const std::string name)
+	{
+		m_parameter = "n=";
+		m_parameter+= name;
+		m_parameter+= ";";
+	}
+	
+	std::string get_name() const
+	{
+		std::string result =  m_parameter.substr(2, m_parameter.find_first_of(';',2));
+		
+		return result;
+	}
 
 	
 };

@@ -18,6 +18,7 @@
 #include "mdc_message_vector.h"
 #include <string>
 #include <vector>
+#include <cassert>
 
 #ifndef MDC_MESSAGE_ALST_H_
 #define MDC_MESSAGE_ALST_H_
@@ -37,6 +38,36 @@ public:
 
 	}
 	
+	void append_entry(std::string name, std::string hash)
+	{
+		std::string entry = "n=";
+		entry += name;
+		entry += "&";
+		entry += "h=";
+		entry += hash;
+		m_rows.push_back(entry);
+	}
+	
+	std::string get_entry_name(Uint32 num_entry) const
+	{
+		if(num_entry>m_rows.size())
+		{
+			LOG_ERROR("Trying to get a parameter outside range.")
+			return "";
+		}
+		
+		std::string entry = m_rows[num_entry];
+		
+		assert(!"This function is a stub.");
+		return "";
+	}
+	
+	std::string get_entry_hash(Uint32 num_entry) const
+	{
+			
+			assert(!"This function is a stub.");
+			return "";
+	}
 	
 };
 

@@ -91,3 +91,12 @@ void MDCMessageVector::deserialize(const DataChunk& data)
 	}
 	
 }
+
+
+Uint32 MDCMessageVector::get_num_rows()
+{
+	return m_rows.size();
+}
+
+
+

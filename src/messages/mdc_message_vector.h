@@ -27,7 +27,7 @@
 
 class MDCMessageVector : public MDCMessage
 {
-private:
+protected:
 	
 	std::vector<std::string> m_rows;
 	
@@ -41,6 +41,8 @@ public:
 	std::vector<std::string> get_rows() const;
 	
 	void set_rows(const std::vector<std::string>& rows);
+	
+	Uint32 get_num_rows();
 	
 };
 
