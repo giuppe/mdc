@@ -30,3 +30,17 @@ void UDPMessage::send()
 		LOG_ERROR("Cannot send "<<m_payload.get_lenght()<<" byte to "<<m_destination.get_ip()<<":"<<m_destination.get_port()<<".");	
 	}
 }
+
+UDPMessage::UDPMessage()
+{
+	
+}
+
+
+void UDPMessage::set_payload(const DataChunk& data)
+{
+	m_payload.erase();
+	m_payload+=data;
+}	
+
+

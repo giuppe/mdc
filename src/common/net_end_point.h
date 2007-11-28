@@ -11,6 +11,9 @@ private:
 	Uint16 m_port;
 	
 public:
+	
+	NetEndPoint():m_ip(0),m_port(0){}
+	
 	NetEndPoint(Uint32 ip, Uint16 port):m_ip(ip), m_port(port){};
 	
 	Uint32 get_ip() const {return m_ip;}
