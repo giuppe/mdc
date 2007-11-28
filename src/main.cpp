@@ -39,17 +39,18 @@ int main(int argc, char** argv) {
 	config->get_bool("", "help", get_help);
 	if (get_help) {
 		std::cout<<"Multiple Description Codec\n\n";
-		std::cout<<"Use: mdc [OPTION]\n";
+		std::cout<<"Use: mdc <parameters>\n\n";
+		std::cout<<"\t<parameters> ::= <action> {<code> | <decode>} <input> <output> <codec> [flows] [payload]\n\n";
 		std::cout<<"\t--input \t input filename.\n";
 		std::cout<<"\t--output \t output filename.\n";
 		std::cout<<"\t--code \t\t activate coding from input file to output MDC file.\n";
 		std::cout<<"\t--decode \t activate decoding from input MDC file to output file.\n";
 		std::cout<<"\t--codec \t select codec type to use for coding input file.\n";
-		std::cout<<"\t--flows \t <OPTIONAL> number of output coded flows (from 1 to 64), DEFAULT 2.\n";
-		std::cout<<"\t--payload \t <OPTIONAL> preferred payload size of each descriptor (from 25 to 55000 for text), DEFAULT 1000.\n";
+		std::cout<<"\t--flows \t number of output coded flows (from 1 to 64), DEFAULT 2.\n";
+		std::cout<<"\t--payload \t preferred payload size of each descriptor (from 25 to 55000 bytes for text), DEFAULT 1000.\n";
 		std::cout<<"\t--help \t\t show this help page.\n\n";
 		std::cout<<"Examples:\n";
-		std::cout<<"  mdc --input input_file.txt --codec text --code --output output_file.mdc.\n";
+		std::cout<<"  mdc --input input_file.txt --codec text --code --flows 4 --payload 2000 --output output_file.mdc.\n";
 		std::cout<<"  mdc --input input_file.mdc --codec text --decode --output output_file.txt.\n\n";
 		std::cout<<"---------------------------------------------------------------\n\n";
 		return 0;
