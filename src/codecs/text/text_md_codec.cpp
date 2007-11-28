@@ -42,8 +42,6 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 		for (Uint32 j=0; j<descriptors_number; j++) {
 			if (stream_size-offset > 0) {
 				Descriptor* descriptor= new Descriptor();
-				descriptor->set_hash(stream->get_stream_hash());
-				descriptor->set_file_name(stream->get_stream_name()+".mdc");
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
 				descriptor->set_codec_name(std::string("text"));
@@ -63,7 +61,6 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 
 void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const {
 	if (!md_stream->is_empty()) {
-		std::string name;
 		DataChunk* dc = new DataChunk();
 		std::vector<Uint8> taken_stream;
 		Uint64 offset = 0;
@@ -75,7 +72,6 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 				Descriptor* descriptor = new Descriptor();
 				Uint16 payload_size = 0;
 				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="text")) {
-					name = descriptor->get_file_name();
 					payload_size = descriptor->get_payload_size();
 					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) {
 						(*dc) += *(descriptor->get_payload());
@@ -97,8 +93,6 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 					}
 				offset++;
 			}
-		stream->set_stream_name(name);
-		stream->update_stream_hash();
 		DataChunk* taken_dc = new DataChunk();
 		Uint8* temp_container = new Uint8[max_dimension+1];
 		for (Uint64 i=0; i<max_dimension+1; i++)

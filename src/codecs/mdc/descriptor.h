@@ -31,8 +31,6 @@ class Descriptor : public Serializable
 private:
 	Uint8 m_flow_id;
 	Uint32 m_sequence_number;
-	std::string m_file_name;
-	std::string m_hash;
 	std::string m_codec_name;
 	AbstractCodecParameters* m_codec_parameters;
 	DataChunk m_payload;
@@ -69,30 +67,6 @@ public:
 	 * @seq_num: sequence number
 	 */
 	void set_sequence_number(Uint32 seq_num);
-	
-	/*
-	 * Get file name.
-	 * @returns: file name
-	 */
-	std::string get_file_name() const;
-	
-	/*
-	 * Set file name.
-	 * @file_name: file name
-	 */
-	void set_file_name(const std::string& file_name);
-	
-	/*
-	 * Get hash.
-	 * @returns: hash code
-	 */
-	std::string get_hash() const;
-	
-	/*
-	 * Set hash.
-	 * @hash: hash code
-	 */
-	void set_hash(const std::string& hash);
 	
 	/*
 	 * Set codec name.

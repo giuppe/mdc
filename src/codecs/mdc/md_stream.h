@@ -34,7 +34,6 @@ private:
 	std::string m_hash;
 	bool m_is_empty;
 	bool m_is_inited;
-	//Uint32 m_valid_descriptors_number;
 public:
 	MDStream();
 	

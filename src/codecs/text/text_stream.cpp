@@ -89,34 +89,20 @@ DataChunk& TextStream::serialize() const {
 	return *dc;			
 }
 
-void TextStream::deserialize(const DataChunk& datachunk)
-{
+void TextStream::deserialize(const DataChunk& datachunk) {
 	DataChunk dc;
-	dc+=datachunk;
-	while (dc.get_lenght() > 0) 
-	{
+	dc += datachunk;
+	while (dc.get_lenght() > 0) {
 		Uint8 curr_char;
 		dc.extract_head(curr_char);
 		m_data.push_back((Sint8)curr_char);
 	}
-			//m_stream_name = dir->get_filename(path);
-			
-	m_hash = datachunk.compute_hash_md5();
-	
 }
 
-
-
-
-
-void TextStream::update_stream_hash() 
-{
+void TextStream::update_stream_hash() {
 	//FIXME: this should compute a real md5 function
 	m_hash = "livent rulez";
 }
-
-
-
 
 std::string TextStream::get_stream_hash() const 
 {

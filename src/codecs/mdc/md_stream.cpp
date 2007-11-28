@@ -16,7 +16,6 @@
 
 #include "md_stream.h"
 #include <vector>
-#include <cassert>
 #include "descriptor.h"
 #include "../../common/dir/abstract_directory.h"
 #include "../../common/dir/directory_factory.h"
@@ -61,8 +60,6 @@ void MDStream::set_descriptor(Descriptor* descriptor) {
 	Uint32 sequence = descriptor->get_sequence_number();
 	m_stream[flow][sequence] = descriptor;
 	m_valid_descriptor[flow][sequence] = true;
-	m_name = descriptor->get_file_name();
-	m_hash = descriptor->get_hash();
 }
 
 std::string MDStream::get_name() const {return m_name;}

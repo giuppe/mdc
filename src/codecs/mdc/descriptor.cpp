@@ -18,7 +18,6 @@
 #include "../../common/data_chunk.h"
 #include "../../messages/mdc_message.h"
 #include "../codec_parameters_factory.h"
-#include <cassert>
 #include <string>
 
 Descriptor::Descriptor() {}
@@ -26,10 +25,6 @@ Uint8 Descriptor::get_flow_id() const {return m_flow_id;}
 void Descriptor::set_flow_id(Uint8 id) {m_flow_id = id;}
 Uint32 Descriptor::get_sequence_number() const {return m_sequence_number;}
 void Descriptor::set_sequence_number(Uint32 seq_num) {m_sequence_number = seq_num;}
-std::string Descriptor::get_file_name() const {return m_file_name;}
-void Descriptor::set_file_name(const std::string& file_name) {m_file_name = file_name;}
-std::string Descriptor::get_hash() const {return m_hash;}
-void Descriptor::set_hash(const std::string& hash) {m_hash = hash;}
 void Descriptor::set_codec_name(const std::string& codec_name) {m_codec_name = codec_name;}
 std::string Descriptor::get_codec_name() const {return m_codec_name;}
 AbstractCodecParameters* Descriptor::get_codec_parameter() const {return m_codec_parameters;}
@@ -41,8 +36,6 @@ DataChunk& Descriptor::serialize() const {
 	MDCMessage msg;
 	msg.set_type_string("DESC");
 	(*result)+=msg.serialize();
-	result->append(m_hash.c_str());
-	result->append(m_file_name.c_str());
 	result->append(m_flow_id);
 	result->append(m_sequence_number);
 	result->append(m_codec_name.c_str());
@@ -60,18 +53,12 @@ void Descriptor::deserialize(const DataChunk& data) {
 	if (data.get_lenght() > 0) {
 		DataChunk* temp_dc = new DataChunk();
 		temp_dc->operator +=(data);
-		char* file_name;
-		char* file_hash;
 		char* codec_name;
 		DataChunk preamble;
 		temp_dc->extract_head(8, preamble);
 		MDCMessage msg;
 		msg.deserialize(preamble);
 		if (msg.get_type_string() == std::string("DESC")) {
-			temp_dc->extract_head(file_hash);
-			m_hash = file_hash;
-			temp_dc->extract_head(file_name);
-			m_file_name = file_name;
 			temp_dc->extract_head(m_flow_id);
 			temp_dc->extract_head(m_sequence_number);
 			temp_dc->extract_head(codec_name);

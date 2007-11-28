@@ -1,5 +1,5 @@
 /***************************************************************************
-           pcx_md_codec.cpp  - Menage PCX codec
+           pcx_md_codec.cpp  - Manage PCX codec
                              -------------------
     begin                : Oct 31, 2007
     copyright            : Ivan Coppa
@@ -13,8 +13,6 @@
  *   as published by the Free Software Foundation.                                  
  *                                                                                                                 
  ***************************************************************************/
-
-
 
 #include "pcx_md_codec.h"
 #include <string>
@@ -62,8 +60,6 @@ void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
 		for (Uint32 j=0; j<descriptors_number; j++) {
 			if (stream_size-offset > 0 || i<m_flows_number ) {
 				Descriptor* descriptor= new Descriptor();
-				descriptor->set_hash(stream->get_stream_hash());
-				descriptor->set_file_name(stream->get_stream_name()+".mdc");
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
 				descriptor->set_codec_name(std::string("pcx"));
@@ -154,30 +150,20 @@ void PcxMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const
 {
 	DEBUG_OUT("DECODE\n");
 	if (!md_stream->is_empty()) {
-		std::string name;
 		DataChunk* dc = new DataChunk();
 		for (Uint8 i=0; i<md_stream->get_flows_number(); i++)
 			for (Uint32 j=0; j<md_stream->get_sequences_number(); j++) {
 				Descriptor* descriptor = new Descriptor();
 				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="text")) {
-					name = descriptor->get_file_name();
 					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number()))
 						(*dc) += *(descriptor->get_payload());
 				}
 			}
-		stream->set_stream_name(name);
-		stream->update_stream_hash();
 		stream->set_data(*dc);
 	}
 }
 
-
-
-
 PcxMDCodec::~PcxMDCodec() {}
-
-
-
 
 void PcxMDCodec::set_flows_number (Uint8 number) 
 {

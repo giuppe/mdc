@@ -20,7 +20,6 @@
 #include "defs.h"
 #include <vector>
 #include "../../common/data_chunk.h"
-#include <cassert>
 #include "../../common/dir/abstract_directory.h"
 #include "../../common/dir/directory_factory.h"
 
@@ -75,25 +74,15 @@ DataChunk& PcxStream::serialize() const
 			
 }
 
-
-
-void PcxStream::deserialize(const DataChunk& datachunk)
-{
+void PcxStream::deserialize(const DataChunk& datachunk) {
 	DataChunk dc;
-	dc+=datachunk;
-	while (dc.get_lenght() > 0) 
-	{
+	dc += datachunk;
+	while (dc.get_lenght() > 0) {
 		Uint8 curr_char;
 		dc.extract_head(curr_char);
 		m_data.push_back((Sint8)curr_char);
 	}
-	
-	m_hash = datachunk.compute_hash_md5();
-	
 }
-
-
-
 
 DataChunk& PcxStream::get_data(Uint64 offset, Uint64 size) const
 {
