@@ -19,6 +19,8 @@
 #ifndef ACTION_H_
 #define ACTION_H_
 
+class Scheduler;
+
 /**
  * Represents an abstract Action to schedule for execution.
  * Inheriting classes must override the virtual function action().
@@ -27,23 +29,32 @@
  */
 class Action
 {
+	friend class Scheduler;
 protected:
 
 	bool m_suspended;
 	
 	Uint32 m_sleep_time;
+	
+	void pre_action(){}
+	
+	void post_action(){}
 
 public:
 	
 	/**
 	 * Generic Action constructor. Sets the Action as suspended.
 	 */
-	Action():m_suspended(true),m_sleep_time(0){};
+	Action(){init();}
+	
+	void init(){m_suspended=true;m_sleep_time=0;};
 	
 	/**
 	 * Represents the actual instructions to execute. It must be overridden by inheriting classes.
 	 */
 	virtual void action() = 0;
+	
+
 	
 	virtual ~Action(){};
 	

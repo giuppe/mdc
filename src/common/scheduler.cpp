@@ -54,7 +54,9 @@ void Scheduler::execute_all()
 		
 			if(action_to_sleep==0)
 			{
+				(*it)->pre_action();
 				(*it)->action();
+				(*it)->post_action();
 			}
 			else
 			{
