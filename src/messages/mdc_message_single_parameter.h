@@ -25,6 +25,11 @@ class MDCMessageSingleParameter : public MDCMessage
 {
 protected:
 	std::string m_parameter;
+	
+	std::string get_parameter_part(std::string left_part) const;
+	
+	void set_parameter_part(std::string left_part, std::string right_part);
+	
 public:
 	MDCMessageSingleParameter(){};
 	
