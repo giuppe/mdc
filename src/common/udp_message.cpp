@@ -22,6 +22,7 @@ void UDPMessage::send()
 {
 	if((m_destination.is_valid())&&(m_payload.get_lenght()>0))
 	{
+		LOG_INFO("Sending UDP packet to "<<m_destination.get_ip());
 		NetManager::instance()->send_data(m_destination, m_payload);
 	}
 	else
