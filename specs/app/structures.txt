@@ -23,10 +23,11 @@ States:
 
 
 DescriptorsToSendList (manage list of stuff to send)
-Only One per Sender
+Only One per Instance
 Used by:
 SendingManager: on SREQ, adds requested descriptors specifying destination ip, dest port, hash, flow id and sequence id
-Sender: extract requests one at a time
+SenderAction: extract requests one at a time
+SenderAction: checks if list is empty
 
 
 ReceiveFilterList (it's like a whitelist of permitted packets)

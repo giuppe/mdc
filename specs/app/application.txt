@@ -19,7 +19,7 @@ sending-manager (called by site-manager) should:
 
 
 
-sender (asynchronous) should:
+SenderAction (asynchronous) should:
 -iterate through a list of stuff to send, sending it
 --this list reports: ip and port of the receiver, stream hash, flow id and sequence id
 --then it extract the corresponding descriptor, serialize it and send to specified ip:port
