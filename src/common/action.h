@@ -31,14 +31,14 @@ protected:
 
 	bool m_suspended;
 	
-	Uint32 m_timeout;
+	Uint32 m_sleep_time;
 
 public:
 	
 	/**
 	 * Generic Action constructor. Sets the Action as suspended.
 	 */
-	Action():m_suspended(true),m_timeout(0){};
+	Action():m_suspended(true),m_sleep_time(0){};
 	
 	/**
 	 * Represents the actual instructions to execute. It must be overridden by inheriting classes.
@@ -67,13 +67,13 @@ public:
 	 * Stops the Action execution for at least msecs milliseconds.
 	 * @param msecs the milliseconds to stop.
 	 */
-	void sleep(Uint32 msecs){m_timeout=msecs;};
+	void sleep(Uint32 msecs){m_sleep_time=msecs;};
 	
 	/**
 	 * Tells the remaining sleep time.
 	 * @returns the remaining sleep time in milliseconds.
 	 */
-	Uint32 get_timeout(){return m_timeout;};
+	Uint32 get_sleep_time(){return m_sleep_time;};
 	
 };
 

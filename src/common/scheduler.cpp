@@ -50,7 +50,7 @@ void Scheduler::execute_all()
 		if(!((*it)->is_suspended()))
 		{
 			
-			action_to_sleep = (*it)->get_timeout();
+			action_to_sleep = (*it)->get_sleep_time();
 		
 			if(action_to_sleep==0)
 			{
