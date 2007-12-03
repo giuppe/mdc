@@ -130,9 +130,9 @@ void SendingManager::handle_SREQ(const NetEndPoint& sender, const MDCMessageSreq
 	
 	MDCMessageAsrq response;
 	response.set_hash(hash);
-	response.set_flow_id(flow_id)
-	response.set_sequence_begin(sequence_start);
-	response.set_sequence_end(sequence_end);
+	response.set_flow_id(flow_id);
+	response.set_sequence_begin(seq_start);
+	response.set_sequence_end(seq_end);
 	
 	UDPMessage udp_msg;
 	udp_msg.set_destination(destination_control);
