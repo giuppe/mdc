@@ -1,10 +1,24 @@
 LIST
-n=(string)+";"
+n=(string)+";" // name
 (null)
 
 ALST
 {
-n=(string)+";"
-h=(string)+";"
+n=(string)+";" // name
+h=(string)+";" // hash
 (null)
-}
+}+
+
+SREQ // used to request descriptors
+h=(string)+";"  // hash
+f=(string)+";"  // flow id
+sb=(string)+";" // sequence id begin
+se=(string)+";" // sequence id end
+(null)
+
+ASRQ // contains descriptors that the other peer has, and that it's going to send
+h=(string)+";" //hash
+f=(string)+";"  // flow id
+sb=(string)+";" // sequence id begin
+se=(string)+";" // sequence id end
+(null)

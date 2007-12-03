@@ -7,6 +7,9 @@
 void ReceiveManager::handle_ASRQ(const NetEndPoint& sender, const MDCMessageAsrq& msg)
 {
 	assert(!"This function is a stub");
+	
+	
+	
 #if 0
 
 	LOG_INFO("Requested name is "<<msg.get_name());
