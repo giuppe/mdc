@@ -35,7 +35,7 @@ public:
 	
 	std::string get_filename(const std::string& path);
 	
-	std::string get_hash_md5(const std::string& path);
+	//std::string get_hash_md5(const std::string& path);
 
 	
 };

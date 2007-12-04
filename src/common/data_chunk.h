@@ -178,7 +178,7 @@ public:
 	
 	void erase();
 	
-	char* compute_hash_md5() const;
+	const char* compute_hash_md5() const;
 	
 };
 

@@ -17,6 +17,7 @@
 #include "posix_directory.h"
 #include "../log/log_manager.h"
 #include "../data_chunk.h"
+
 #include <sys/types.h>
 #include <dirent.h>
 #include <cerrno>
@@ -123,12 +124,4 @@ bool PosixDirectory::save_file(const std::string& path, const DataChunk& data_to
 std::string PosixDirectory::get_filename(const std::string& path) {
 	std::string::size_type pos = path.find_last_of('/');
 	return path.substr(pos+1);
-}
-
-std::string PosixDirectory::get_hash_md5(const std::string& path) 
-{
-	DataChunk dc;
-	this->load_file(path, dc);
-	
-	return std::string(dc.compute_hash_md5());
 }

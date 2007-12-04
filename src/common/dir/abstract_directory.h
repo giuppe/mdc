@@ -15,6 +15,7 @@
  ***************************************************************************/
 
 #include <vector>
+#include "../hash/hash.h"
 
 #ifndef ABSTRACT_DIRECTORY_H_
 #define ABSTRACT_DIRECTORY_H_
@@ -32,7 +33,7 @@ public:
 	
 	virtual std::string get_filename(const std::string& path) = 0;
 	
-	virtual std::string get_hash_md5(const std::string& path) = 0;
+	std::string get_hash_md5(const std::string& path){return Hash::md5_from_file(path);}
 		
 	virtual ~AbstractDirectory(){}
 };

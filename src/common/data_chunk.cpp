@@ -18,6 +18,7 @@
 #include "data_chunk.h"
 #include <cstring>
 #include <SDL/SDL_net.h>
+#include "hash/hash.h"
 
 Uint8* DataChunk::get_data() const
 {
@@ -262,12 +263,10 @@ bool DataChunk::extract_head(Uint32 lenght, DataChunk &data)
 }
 
 
-char* DataChunk::compute_hash_md5() const
+const char* DataChunk::compute_hash_md5() const
 {
-	//FIXME: compute real md5
-#warning "Function do not compute real md5"
-	LOG_ERROR("this function return always the md5 for 'livio rulez'.");
-	return "3b3f9dabbc0cf273e51f04f84b383b1d";
+
+	return (Hash::md5_from_datachunk(*this)).c_str();
 }
 
 
