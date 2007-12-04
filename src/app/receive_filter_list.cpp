@@ -52,3 +52,20 @@ void ReceiveFilterList::set_timeout(Uint32 timeout)
 {
 	m_timeout = timeout;
 }
+
+
+
+ReceiveFilterList* ReceiveFilterList::_instance = 0;
+
+ReceiveFilterList* ReceiveFilterList::instance()
+{
+	if(_instance==0)
+	{
+		_instance=new ReceiveFilterList();
+	}
+	return _instance;
+}
+
+
+
+

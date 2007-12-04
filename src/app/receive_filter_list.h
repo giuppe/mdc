@@ -36,7 +36,6 @@ private:
 	Uint32 m_timeout;
 	
 public:
-	ReceiveFilterList(){}
 	
 	bool exists(Uint32 ip, std::string hash);
 	
@@ -45,7 +44,26 @@ public:
 	void remove_outdated();
 	
 	void set_timeout(Uint32 timeout);
-		
+	
+	void deinit(){}
+
+	// begin Singleton stuff
+
+private:
+
+static ReceiveFilterList* _instance;
+
+protected:
+
+	ReceiveFilterList(){};
+~ReceiveFilterList(){deinit();}
+
+public:
+
+static ReceiveFilterList* instance();
+
+// end Singleton stuff
+
 	
 };
 
