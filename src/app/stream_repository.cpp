@@ -41,7 +41,7 @@ void StreamRepository::init(std::string path)
 			curr_stream->load_from_disk(complete_path);
 			if(curr_stream->is_empty()==false)
 			{
-				m_streams.insert(make_pair(curr_stream->get_hash(), curr_stream));
+				m_streams.insert(make_pair(dir->get_hash_md5(complete_path), curr_stream));
 			}
 			else
 			{
