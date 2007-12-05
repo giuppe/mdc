@@ -1,3 +1,5 @@
+Messages - Version 0.1 - 04/12/2007
+
 LIST
 n=(string)+";" // name
 (null)
@@ -5,20 +7,31 @@ n=(string)+";" // name
 ALST
 {
 n=(string)+";" // name
-h=(string)+";" // hash
+h=(string)+";" // stream id
 (null)
 }+
 
 SREQ // used to request descriptors
-h=(string)+";"  // hash
+h=(string)+";"  // stream id
 f=(string)+";"  // flow id
 sb=(string)+";" // sequence id begin
 se=(string)+";" // sequence id end
 (null)
 
 ASRQ // contains descriptors that the other peer has, and that it's going to send
-h=(string)+";" //hash
+h=(string)+";" //stream id
 f=(string)+";"  // flow id
 sb=(string)+";" // sequence id begin
 se=(string)+";" // sequence id end
+(null)
+
+
+SINF
+h=(string)+";"	// stream id
+(null)
+
+ASNF
+h=(string)+";" // stream id
+fn=(string)+";" // flows number
+dn=(string)+";" // descriptors number
 (null)
