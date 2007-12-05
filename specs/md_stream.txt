@@ -1,3 +1,4 @@
+??			stream_id (null terminated)
 1 byte	  flows number
 4 byte	  max sequences number
 {
