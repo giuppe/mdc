@@ -116,7 +116,7 @@ bool StreamRepository::add_stream(MDStream* stream)
 		return false;
 	}
 	
-	std::string hash = stream->get_hash();
+	std::string hash = stream->get_stream_id();
 	m_streams.insert(make_pair(hash, stream));
 	
 	return true;

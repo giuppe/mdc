@@ -33,7 +33,7 @@ ServerAction::ServerAction()
 
 void ServerAction::action()
 {
-
+#if 0
 	DataChunk received;
 	
 	Uint32 sender_address;
@@ -92,6 +92,6 @@ void ServerAction::action()
 
 
 	}
-
+#endif
 }
 

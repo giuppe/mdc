@@ -8,8 +8,12 @@
 
 class Receiver : public Action
 {
+	
+private:
+	Uint32 m_listening_socket;
+	
 public:
-	Receiver(){}
+	Receiver();
 	void action();
 };
 

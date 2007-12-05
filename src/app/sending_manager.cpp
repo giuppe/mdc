@@ -19,7 +19,7 @@ void SendingManager::handle_LIST(const NetEndPoint& sender, const MDCMessageList
 
 	for(Uint32 i=0; i<stream_list.size(); i++)
 	{
-		response.append_entry(stream_list[i]->get_name(),stream_list[i]->get_hash());
+		response.append_entry(stream_list[i]->get_name(),stream_list[i]->get_stream_id());
 
 	}
 
