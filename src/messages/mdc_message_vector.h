@@ -42,7 +42,12 @@ public:
 	
 	void set_rows(const std::vector<std::string>& rows);
 	
-	Uint32 get_num_rows();
+	Uint32 get_num_rows() const;
+	
+protected:
+	std::string get_parameter_part(Uint32 index, std::string left_part) const;
+		
+	void set_parameter_part(Uint32 index, std::string left_part, std::string right_part);
 	
 };
 

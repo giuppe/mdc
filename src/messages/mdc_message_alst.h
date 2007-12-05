@@ -56,17 +56,20 @@ public:
 			return "";
 		}
 		
-		std::string entry = m_rows[num_entry];
+		std::string entry = get_parameter_part(num_entry, "n");
 		
-		assert(!"This function is a stub.");
-		return "";
+		return entry;
 	}
 	
 	std::string get_entry_hash(Uint32 num_entry) const
 	{
-			
-			assert(!"This function is a stub.");
+		if(num_entry>m_rows.size())
+		{
+			LOG_ERROR("Trying to get a parameter outside range.")
 			return "";
+		}	
+			
+		return get_parameter_part(num_entry, "h");
 	}
 	
 };

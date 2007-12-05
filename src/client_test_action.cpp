@@ -16,25 +16,98 @@
 
 #include "defs.h"
 #include "client_test_action.h"
-#include "common/data_chunk.h"
-#include "common/net_manager.h"
-#include "common/udp_message.h"
-#include "mdc_messages.h"
+#include "app/client_manager.h"
+
+enum{ASK_LIST, ASK_INFO, ASK_FILE, STOP};
+
+void ClientTestAction::init()
+{
+	m_state= ASK_LIST;
+	m_my_server=NetEndPoint("192.168.0.30", 5551);
+}
 
 void ClientTestAction::action()
 {
-	MDCMessageAper msg;
-	std::vector<std::string> peer_list;
-	peer_list.push_back("192.168.0.1:4567");
-	peer_list.push_back("192.168.0.4:4567");
+	switch(m_state)
+	{
+	case ASK_LIST:
+		ask_list();
+		break;
+	case ASK_INFO:
+		ask_info();
 		
-	msg.set_rows(peer_list);
-	
-	UDPMessage udp_msg;
-	udp_msg.set_destination(NetEndPoint(NetManager::instance()->resolve("127.0.0.1"), 5551));
-	udp_msg.set_payload(msg.serialize());
-
-	udp_msg.send();
-	
+		break;
+		
+	case ASK_FILE:
+		ask_file();
+		break;
+	default:
+		break;
+	}
 	sleep(5000);
+	
+}
+
+void ClientTestAction::ask_list()
+{
+	std::string name("la_giara");
+	
+	
+	ClientManager* cl_man = ClientManager::instance();
+	cl_man->search(m_my_server, name);
+	
+	m_state = ASK_INFO;
+	
+}
+
+void ClientTestAction::ask_info()
+{
+	ClientManager* cl_man = ClientManager::instance();
+	std::vector<SearchEntry> results = cl_man->get_last_search();
+	if(results.size()>0)
+	{
+	for(Uint32 i=0; i<results.size(); i++)
+	{
+		LOG_INFO("Found stream "<<results[i].get_name());
+	}
+	LOG_INFO("Selecting stream with stream_id="<<results[0].get_stream_id());
+	
+	m_selected_file_stream_id = results[0].get_stream_id();
+	
+	cl_man->request_stream_info(m_my_server, m_selected_file_stream_id);
+	m_state = ASK_FILE;
+	}
+	else
+	{
+		LOG_INFO("No results found.");
+		m_state = ASK_LIST;
+	}
+	
+}
+
+void ClientTestAction::ask_file()
+{
+	ClientManager* cl_man = ClientManager::instance();
+	MDStreamInfo info = cl_man->get_last_stream_info();
+	if(info.stream_id==m_selected_file_stream_id)
+	{
+
+		LOG_INFO("Stream "<<info.stream_id<<" has "<<info.flows_number<<" flows and "<<info.descriptors_number<<" descriptors");
+
+		for(Uint32 i=0; i<info.flows_number; i++)
+		{
+
+
+			LOG_INFO("Downloading flow "<<i);
+
+			cl_man->request_stream(m_my_server, m_selected_file_stream_id, i, 0, info.descriptors_number-1);
+		}
+		m_state = STOP;
+	}
+	else
+	{
+		LOG_INFO("No stream with id "<<m_selected_file_stream_id<<"found.");
+		m_state = ASK_LIST;
+	}
+
 }

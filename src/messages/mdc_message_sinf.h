@@ -35,7 +35,16 @@ public:
 		m_parameter = "";
 
 	}
-
+	void set_stream_id(const std::string stream_id)
+		{
+			set_parameter_part(std::string("h"), stream_id);
+		}
+		
+		std::string get_stream_id() const
+		{
+			
+			return get_parameter_part(std::string("h"));
+		}
 	
 };
 

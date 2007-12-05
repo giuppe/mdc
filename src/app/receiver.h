@@ -11,7 +11,9 @@ class Receiver : public Action
 	
 private:
 	Uint32 m_listening_socket;
-	
+	void pre_action(){}
+		
+		void post_action(){}
 public:
 	Receiver();
 	void action();

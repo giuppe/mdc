@@ -7,20 +7,20 @@
 class NetEndPoint
 {
 private:
-	Uint32 m_ip;
+	std::string m_ip;
 	Uint16 m_port;
 	
 public:
 	
-	NetEndPoint():m_ip(0),m_port(0){}
+	NetEndPoint():m_ip(""),m_port(0){}
 	
-	NetEndPoint(Uint32 ip, Uint16 port):m_ip(ip), m_port(port){};
+	NetEndPoint(std::string ip, Uint16 port):m_ip(ip), m_port(port){};
 	
-	Uint32 get_ip() const {return m_ip;}
+	std::string get_ip() const {return m_ip;}
 	
 	Uint16 get_port() const {return m_port;}
 	
-	bool is_valid() const {return (m_ip!=0)&&(m_port!=0);}
+	bool is_valid() const {return (m_ip!="")&&(m_port!=0);}
 	
 };
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <cassert>
 
-bool ReceiveFilterList::exists(Uint32 ip, std::string hash)
+bool ReceiveFilterList::exists(std::string ip, std::string hash)
 {
 	std::map<ReceiveEntry, Uint64>::iterator iter= m_list.find(ReceiveEntry(ip, hash));
 
@@ -18,7 +18,7 @@ bool ReceiveFilterList::exists(Uint32 ip, std::string hash)
 
 
 
-void ReceiveFilterList::add(Uint32 ip, std::string hash)
+void ReceiveFilterList::add(std::string ip, std::string hash)
 {
 	Uint64 now = (Uint64) time(NULL);
 	m_list.insert(std::make_pair(ReceiveEntry(ip, hash), now));

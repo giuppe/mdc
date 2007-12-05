@@ -14,11 +14,14 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include "defs.h"
-#include "common/action.h"
+
 
 #ifndef CLIENT_TEST_ACTION_H_
 #define CLIENT_TEST_ACTION_H_
+
+#include "defs.h"
+#include "common/action.h"
+#include "common/net_manager.h"
 
 /**
  * Client Test Class.
@@ -27,13 +30,26 @@
 class ClientTestAction: public Action
 {
 private:
+	Uint32 m_state;
 	
+	std::string m_selected_file_stream_id;
 	
+	NetEndPoint m_my_server;
+	void pre_action(){}
+		
+		void post_action(){}
 public:
 	
-	ClientTestAction(){};
+	ClientTestAction(){init();};
+	
+	void init();
 	
 	void action();
+	
+private:
+	void ask_list();
+	void ask_info();
+	void ask_file();
 };
 
 

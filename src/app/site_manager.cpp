@@ -6,13 +6,18 @@
 #include "../common/net_manager.h"
 #include "stream_repository.h"
 #include "../common/net_end_point.h"
+#include "app_configuration.h"
 
 SiteManager::SiteManager()
 {
-	m_listening_socket = NetManager::instance()->create_UDP_listen_socket("localhost", 5551);
-	LOG_INFO("Listening on port 5551 for control packets.");
+	Uint16 control_port = AppConfiguration::instance()->get_control_port();
+	m_listening_socket = NetManager::instance()->create_UDP_listen_socket("localhost", control_port);
+	LOG_INFO("Listening on port "<<control_port<<" for control packets.");
 	
-	StreamRepository::instance()->init("/home/giuppe/repo_mdc");
+	std::string repository_path = AppConfiguration::instance()->get_repository_path();
+	LOG_INFO("Using "<<repository_path<<" as repository");
+	StreamRepository::instance()->init(repository_path);
+	
 	
 }
 
@@ -22,11 +27,10 @@ void SiteManager::action()
 {
 	DataChunk received;
 
-	Uint32 sender_address;
 
-	Uint16 sender_port;
+	NetEndPoint sender;
 
-	if(NetManager::instance()->receive_data(m_listening_socket, received, sender_address, sender_port))
+	if(NetManager::instance()->receive_data(m_listening_socket, received, sender))
 	{
 
 		MDCMessage msg;
@@ -38,26 +42,26 @@ void SiteManager::action()
 			MDCMessageList msg_list;
 			msg_list.deserialize(received);
 
-			m_sending_manager.handle_LIST(NetEndPoint(sender_address, sender_port), msg_list);
+			m_sending_manager.handle_LIST(sender, msg_list);
 			
 		}
 		else if(strcmp(msg.get_type_string(), "PEER")==0)
 		{
 			MDCMessagePeer msg_peer;
 			msg_peer.deserialize(received);
-			m_sending_manager.handle_PEER(NetEndPoint(sender_address, sender_port), msg_peer);
+			m_sending_manager.handle_PEER(sender, msg_peer);
 		}
 		else if(strcmp(msg.get_type_string(), "SINF")==0)
 		{
 			MDCMessageSinf msg_sinf;
 			msg_sinf.deserialize(received);
-			m_sending_manager.handle_SINF(NetEndPoint(sender_address, sender_port), msg_sinf);
+			m_sending_manager.handle_SINF(sender, msg_sinf);
 		}
 		else if(strcmp(msg.get_type_string(), "SREQ")==0)
 		{
 			MDCMessageSreq msg_sreq;
 			msg_sreq.deserialize(received);
-			m_sending_manager.handle_SREQ(NetEndPoint(sender_address, sender_port), msg_sreq);
+			m_sending_manager.handle_SREQ(sender, msg_sreq);
 		}
 		else if(strcmp(msg.get_type_string(), "APER")==0)
 		{
@@ -69,19 +73,19 @@ void SiteManager::action()
 		{
 			MDCMessageAsrq msg_asrq;
 			msg_asrq.deserialize(received);
-			m_receive_manager.handle_ASRQ(NetEndPoint(sender_address, sender_port), msg_asrq);
+			m_receive_manager.handle_ASRQ(sender, msg_asrq);
 		}
 		else if(strcmp(msg.get_type_string(), "ASNF")==0)
 		{
 			MDCMessageAsnf msg_asnf;
 			msg_asnf.deserialize(received);
-			m_client_manager.handle_ASNF(NetEndPoint(sender_address, sender_port), msg_asnf);
+			m_sending_manager.handle_ASNF(sender, msg_asnf);
 		}
 		else if(strcmp(msg.get_type_string(), "ALST")==0)
 		{
 			MDCMessageAlst msg_alst;
 			msg_alst.deserialize(received);
-			m_client_manager.handle_ALST(NetEndPoint(sender_address, sender_port), msg_alst);
+			m_sending_manager.handle_ALST(sender, msg_alst);
 		}
 		else if(strcmp(msg.get_type_string(), "KALV")==0)
 		{

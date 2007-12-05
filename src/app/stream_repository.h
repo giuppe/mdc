@@ -14,21 +14,29 @@
  *                                                                                                                 
  ***************************************************************************/
 
+
+
+#ifndef STREAM_REPOSITORY_H_
+#define STREAM_REPOSITORY_H_
+
 #include "defs.h"
 #include "../codecs/mdc/md_stream.h"
 #include <map>
 #include <string>
 
+struct RepositoryEntry
+{
+	std::string name;
+	MDStream* stream;
+};
 
-#ifndef STREAM_REPOSITORY_H_
-#define STREAM_REPOSITORY_H_
 
 class StreamRepository 
 {
 	
 private:
 
-	std::map<std::string, MDStream*> m_streams;
+	std::map<std::string, RepositoryEntry> m_streams;
 	
 	bool m_is_valid;
 
@@ -38,11 +46,13 @@ public:
 
 	std::vector<MDStream*> find_by_name(std::string regexp);
 	
-	bool get_by_hash(std::string hash, MDStream* &stream);
+	bool get_by_stream_id(std::string stream_id, MDStream* &stream);
 	
 	void refresh();
 	
-	bool add_stream(MDStream* stream);
+	bool add_stream(RepositoryEntry entry);
+	
+	std::string get_name_by_id(std::string stream_id);
 	
 	void deinit();
 

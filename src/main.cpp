@@ -94,34 +94,54 @@ int main(int argc, char** argv) {
 			}
 		}
 	}
-	else {
-		std::cout<<"\nAction parameter is missing, daemon start.\n\n";
+	else 
+	{
+		
 		Scheduler* sched = new Scheduler();
-		ServerAction* server = new ServerAction();
+
 		ClientTestAction* client = new ClientTestAction();
 		SiteManager* site_manager = new SiteManager();
 		Receiver* receiver = new Receiver();
 		SenderAction* sender_action = new SenderAction();
-		sender_action->set_maximum_time(500);
+		sender_action->set_maximum_time(1500);
 		sched->add_action(sender_action);
 		sched->add_action(site_manager);
 		sched->add_action(receiver);
-		sched->add_action(server);
+
 		sched->add_action(client);
 		site_manager->start();
 		sender_action->start();
 		receiver->start();
-		//server->start();
-		//client->start();
+		
+		bool start_daemon=false;
+		config->get_bool("", "daemon", start_daemon);
+		if(start_daemon)
+		{
+			DEBUG_OUT("Starting daemon mode");
+			while (1)
+			{
+				sched->execute_all();
+				SDL_Delay(100);
+			}
+			
+		}
+		else
+		{
+			client->start();
 		Uint32 times = 10000;
-		while (--times != 0) {
-			sched->execute_all();
-			SDL_Delay(100);
+			while (--times != 0) 
+			{
+					sched->execute_all();
+					SDL_Delay(10);
+			}
+			
 		}
 		delete site_manager;
-		delete server;
+		delete receiver;
 		delete client;
+		delete sender_action;
 		delete sched;
+		
 	}
 	delete config;
 	return 0;

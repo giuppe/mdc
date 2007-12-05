@@ -35,6 +35,48 @@ public:
 		m_parameter = "";
 
 	}
+	
+	void set_stream_id(const std::string stream_id)
+	{
+		set_parameter_part(std::string("h"), stream_id);
+	}
+	
+	std::string get_stream_id() const
+	{
+		
+		return get_parameter_part(std::string("h"));
+	}
+	
+	void set_flows_number(const Uint8 flows_number)
+	{
+		char* buffer = new char[255];
+		sprintf(buffer, "%d", flows_number);
+		
+			
+		set_parameter_part(std::string("fn"), std::string(buffer));
+		delete [] buffer;
+	}
+	
+	Uint8 get_flows_number() const
+	{
+		
+		return (Uint8) atoi(get_parameter_part(std::string("fn")).c_str());
+	}
+	
+	void set_descriptors_number(const Uint32 descriptors_number)
+	{
+		char* buffer = new char[255];
+		sprintf(buffer, "%d", descriptors_number);
+		set_parameter_part(std::string("dn"), std::string(buffer));
+		delete [] buffer;
+	}
+	
+	Uint32 get_descriptors_number() const
+	{
+		
+		return (Uint32) atoi(get_parameter_part(std::string("dn")).c_str());
+	}
+	
 
 	
 };

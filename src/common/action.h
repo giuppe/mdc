@@ -36,9 +36,9 @@ protected:
 	
 	Uint32 m_sleep_time;
 	
-	void pre_action(){}
+	virtual void pre_action() = 0;
 	
-	void post_action(){}
+	virtual void post_action()=0;
 
 public:
 	

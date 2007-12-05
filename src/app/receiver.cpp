@@ -5,12 +5,14 @@
 #include "../common/net_manager.h"
 #include "../mdc_messages.h"
 #include "../codecs/mdc/descriptor.h"
+#include "app_configuration.h"
 #include <cassert>
 
 Receiver::Receiver()
 {
-	m_listening_socket = NetManager::instance()->create_UDP_listen_socket("localhost", 5552);
-	LOG_INFO("Listening on port 5552 for data packets.");
+	Uint16 data_port = AppConfiguration::instance()->get_data_port();
+		m_listening_socket = NetManager::instance()->create_UDP_listen_socket("localhost", data_port);
+		LOG_INFO("Listening on port "<<data_port<<" for data packets.");
 
 	
 }
@@ -24,13 +26,13 @@ void Receiver::action()
 
 	DataChunk received;
 
-	Uint32 sender_address;
 
-	Uint16 sender_port;
+	
+	NetEndPoint sender;
 
 	//-listen on port 5552
 
-	if(NetManager::instance()->receive_data(m_listening_socket, received, sender_address, sender_port))
+	if(NetManager::instance()->receive_data(m_listening_socket, received, sender))
 	{
 
 		MDCMessage msg;
@@ -45,11 +47,11 @@ void Receiver::action()
 			
 			//-filter every descriptor with the help of a list, filled with result of ASRQs
 			
-			if(filter_list->exists(sender_address, curr_desc->get_stream_id()))
+			if(filter_list->exists(sender.get_ip(), curr_desc->get_stream_id()))
 			{
 				//--if the new descriptor fits on these constraints, write it to disk
 				MDStream* curr_stream;
-				if(repo->get_by_hash(curr_desc->get_stream_id(), curr_stream))
+				if(repo->get_by_stream_id(curr_desc->get_stream_id(), curr_stream))
 				{
 					curr_stream->set_descriptor(curr_desc);
 				}

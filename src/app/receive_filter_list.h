@@ -9,12 +9,12 @@
 
 class ReceiveEntry
 {
-	Uint32 m_ip;
+	std::string m_ip;
 	std::string m_hash;
 		
 public:
 	
-	ReceiveEntry(Uint32 ip, std::string hash):m_ip(ip),m_hash(hash){}
+	ReceiveEntry(std::string ip, std::string hash):m_ip(ip),m_hash(hash){}
 	
 	bool operator==(const ReceiveEntry& r) const
 	{
@@ -37,9 +37,9 @@ private:
 	
 public:
 	
-	bool exists(Uint32 ip, std::string hash);
+	bool exists(std::string ip, std::string hash);
 	
-	void add(Uint32 ip, std::string hash);
+	void add(std::string ip, std::string hash);
 	
 	void remove_outdated();
 	

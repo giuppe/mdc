@@ -41,7 +41,7 @@ private:
 	std::vector<std::vector<Descriptor*> > m_stream;
 	std::vector<std::vector<bool> > m_valid_descriptor;
 	void set_descriptor(Uint8 flow, Uint32 sequence, Descriptor* descriptor);
-	std::string m_name;
+	//std::string m_name;
 	std::string m_stream_id;
 	bool m_is_empty;
 	bool m_is_inited;
@@ -90,7 +90,7 @@ public:
 	 * Gets a stream name.
 	 * @returns: stream name
 	 */
-	std::string get_name() const;
+	//std::string get_name() const;
 	
 	/*
 	 * Gets a stream name.

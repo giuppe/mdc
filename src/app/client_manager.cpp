@@ -1,98 +1,81 @@
 
 #include "defs.h"
 #include "client_manager.h"
+#include "../mdc_messages.h"
+#include "../common/udp_message.h"
 
 
-void ClientManager::handle_ALST(const NetEndPoint& sender, const MDCMessageAlst& msg)
+
+
+
+void ClientManager::search(NetEndPoint peer, std::string stream_name) const
 {
-	assert(!"This function is a stub");
-#if 0
 
-	LOG_INFO("Requested name is "<<msg.get_name());
-	std::vector<MDStream*> stream_list;
-
-	stream_list = StreamRepository::instance()->find_by_name(msg.get_name());
-
-	MDCMessageAlst response;
-
-	for(Uint32 i=0; i<stream_list.size(); i++)
-	{
-		response.append_entry(stream_list[i]->get_name(),stream_list[i]->get_hash());
-
-	}
-
-
+	MDCMessageList msg;
+	msg.set_name(stream_name);
 	UDPMessage udp_msg;
-
-
-	udp_msg.set_destination(NetEndPoint(sender.get_ip(), 5551));
-
-	udp_msg.set_payload(response.serialize());
-
+	udp_msg.set_destination(peer);
+	udp_msg.set_payload(msg.serialize());
 	udp_msg.send();
-
-#endif
-}
-
-void ClientManager::handle_APER(const NetEndPoint& sender, const MDCMessageAper& msg)
-{
-	assert(!"This function is a stub");
-#if 0
-
-	LOG_INFO("Requested name is "<<msg.get_name());
-	std::vector<MDStream*> stream_list;
-
-	stream_list = StreamRepository::instance()->find_by_name(msg.get_name());
-
-	MDCMessageAlst response;
-
-	for(Uint32 i=0; i<stream_list.size(); i++)
-	{
-		response.append_entry(stream_list[i]->get_name(),stream_list[i]->get_hash());
-
-	}
-
-
-	UDPMessage udp_msg;
-
-
-	udp_msg.set_destination(NetEndPoint(sender.get_ip(), 5551));
-
-	udp_msg.set_payload(response.serialize());
-
-	udp_msg.send();
-
-#endif
+	
 }
 
 
-void ClientManager::handle_ASNF(const NetEndPoint& sender, const MDCMessageAsnf& msg)
+void ClientManager::request_stream_info(NetEndPoint peer, std::string stream_id) const
 {
-	assert(!"This function is a stub");
-#if 0
-
-	LOG_INFO("Requested name is "<<msg.get_name());
-	std::vector<MDStream*> stream_list;
-
-	stream_list = StreamRepository::instance()->find_by_name(msg.get_name());
-
-	MDCMessageAlst response;
-
-	for(Uint32 i=0; i<stream_list.size(); i++)
-	{
-		response.append_entry(stream_list[i]->get_name(),stream_list[i]->get_hash());
-
-	}
-
-
+	MDCMessageSinf msg;
+	msg.set_stream_id(stream_id);
 	UDPMessage udp_msg;
-
-
-	udp_msg.set_destination(NetEndPoint(sender.get_ip(), 5551));
-
-	udp_msg.set_payload(response.serialize());
-
+	udp_msg.set_destination(peer);
+	udp_msg.set_payload(msg.serialize());
 	udp_msg.send();
-
-#endif
 }
+
+void ClientManager::request_stream(NetEndPoint peer, std::string stream_id, Uint8 flow_id, Uint32 sequence_begin, Uint32 sequence_end) const
+{
+	MDCMessageSreq msg;
+	msg.set_stream_id(stream_id);
+	msg.set_flow_id(flow_id);
+	msg.set_sequence_begin(sequence_begin);
+	msg.set_sequence_end(sequence_end);
+	UDPMessage udp_msg;
+	udp_msg.set_destination(peer);
+	udp_msg.set_payload(msg.serialize());
+	udp_msg.send();
+}
+
+
+MDStreamInfo ClientManager::get_last_stream_info() const
+{
+	return m_last_stream_info;
+}
+
+std::vector<SearchEntry> ClientManager::get_last_search() const
+{
+	return m_last_search;
+}
+
+void ClientManager::set_last_search(const std::vector<SearchEntry>& last_search)
+{
+	m_last_search = last_search;
+}
+
+void ClientManager::set_last_stream_info(MDStreamInfo stream_info)
+{
+	m_last_stream_info = stream_info;
+}
+
+
+ClientManager* ClientManager::_instance = 0;
+
+ClientManager* ClientManager::instance()
+{
+	if(_instance==0)
+	{
+		_instance=new ClientManager();
+	}
+	return _instance;
+}
+
+
+

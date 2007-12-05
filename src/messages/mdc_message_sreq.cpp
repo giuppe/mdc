@@ -4,12 +4,12 @@
 #include <cstring>
 #include <cstdlib>
 
-void MDCMessageSreq::set_hash(std::string hash)
+void MDCMessageSreq::set_stream_id(std::string stream_id)
 {
-	set_parameter_part("h", hash);
+	set_parameter_part("h", stream_id);
 }
 	
-std::string MDCMessageSreq::get_hash() const
+std::string MDCMessageSreq::get_stream_id() const
 {
 	return get_parameter_part("h");
 }

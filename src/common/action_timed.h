@@ -23,7 +23,7 @@ public:
 	
 	void pre_action(){m_start_time = SDL_GetTicks();}
 	
-	bool is_elapsed_maximum_time(){return (m_start_time+m_maximum_time>SDL_GetTicks());}
+	bool is_elapsed_maximum_time(){if(m_start_time+m_maximum_time>SDL_GetTicks()){LOG_INFO("Time elapsed, sleeping action"); return true;}return false;}
 	
 	void post_action(){m_start_time = 0;}
 };

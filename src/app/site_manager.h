@@ -6,7 +6,7 @@
 
 #include "defs.h"
 #include "../common/action.h"
-#include "sending_manager.h"
+#include "control_manager.h"
 #include "receive_manager.h"
 #include "client_manager.h"
 
@@ -15,11 +15,13 @@ class SiteManager : public Action
 private:
 	Uint32 m_listening_socket;
 	
-	SendingManager m_sending_manager;
+	ControlManager m_sending_manager;
 	
 	ReceiveManager m_receive_manager;
+
+	void pre_action(){}
 	
-	ClientManager m_client_manager;
+	void post_action(){}
 	
 public:
 	SiteManager();

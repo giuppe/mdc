@@ -27,7 +27,7 @@ Uint32 NetManager::create_UDP_listen_socket(const std::string& address, Uint16 p
 {
 	IPaddress ip_address;
 	
-	LOG_INFO("Resolving "<<address);
+	//LOG_INFO("Resolving "<<address);
 	
 	Sint32 result = SDLNet_ResolveHost(&ip_address, address.c_str(), port);
 	if(result !=0)
@@ -37,7 +37,7 @@ Uint32 NetManager::create_UDP_listen_socket(const std::string& address, Uint16 p
 	
 	//ip_address.host = resolve(address);
 	//ip_address.port = port;
-	LOG_INFO("Creating UDP socket on port "<<port);
+	LOG_INFO("Creating UDP listening socket on port "<<port);
 	UDPsocket socket = SDLNet_UDP_Open(port);
 	
 	SDLNet_UDP_Bind(socket, -1, &ip_address);
@@ -55,7 +55,7 @@ Uint32 NetManager::create_UDP_socket(const std::string& address, Uint16 port)
 {
 	IPaddress ip_address;
 	
-	LOG_INFO("Resolving "<<address);
+	//LOG_INFO("Resolving "<<address);
 	
 	Sint32 result = SDLNet_ResolveHost(&ip_address, address.c_str(), port);
 	if(result !=0)
@@ -75,7 +75,7 @@ Uint32 NetManager::create_UDP_socket(Uint32 address, Uint16 port)
 	ip_address.host = address;
 	ip_address.port = port;
 	
-	LOG_INFO("Creating UDP socket on port "<<port);
+	//LOG_INFO("Creating UDP socket on port "<<port);
 		UDPsocket socket = SDLNet_UDP_Open(port);
 		
 		Uint32 socket_id = m_sockets.size();
@@ -130,7 +130,7 @@ void NetManager::send_data(NetEndPoint destination,  const DataChunk& data)
 	
 	Uint32 dest_socket = NetManager::instance()->create_UDP_socket(destination.get_ip(), destination.get_port());
 	
-	LOG_INFO("Allocating "<<data.get_lenght()<<" bytes for UDP packet");
+	//LOG_INFO("Allocating "<<data.get_lenght()<<" bytes for UDP packet");
 	
 	UDPpacket* packet = SDLNet_AllocPacket(data.get_lenght());
 	
@@ -147,13 +147,13 @@ void NetManager::send_data(NetEndPoint destination,  const DataChunk& data)
 		
 		packet->len = data.get_lenght();
 		
-		LOG_INFO("Opening generic UDP socket");
+		//LOG_INFO("Opening generic UDP socket");
 
 		UDPsocket sd = SDLNet_UDP_Open(0);
 	   
 		packet->address = m_addresses[dest_socket];
 		
-		LOG_INFO("Sending packet to "<< packet->address.host<<":"<<packet->address.port);
+		LOG_INFO("Sending packet to "<< SDLNet_ResolveIP(&packet->address)<<":"<<packet->address.port);
 		
 		if(SDLNet_UDP_Send(sd, -1, packet)==0)
 		{
@@ -163,7 +163,7 @@ void NetManager::send_data(NetEndPoint destination,  const DataChunk& data)
 		{
 			LOG_INFO("Packet sent.");
 		}
-		
+	
 		
 	    // SDLNet_FreePacket this packet when finished with it
 		SDLNet_FreePacket(packet);
@@ -174,9 +174,13 @@ void NetManager::send_data(NetEndPoint destination,  const DataChunk& data)
 
 
 
-bool NetManager::receive_data(Uint32 source_socket_handle, DataChunk& data, Uint32& sender_address, Uint16& sender_port)
+bool NetManager::receive_data(Uint32 source_socket_handle, DataChunk& data, NetEndPoint& sender)
 {
 	UDPpacket packet;
+	
+
+	Uint16 sender_port;
+	std::string sender_host;
 	
 	//FIXME: we assume that MTU is 1500
 	packet.data = new Uint8[1500];
@@ -195,10 +199,11 @@ bool NetManager::receive_data(Uint32 source_socket_handle, DataChunk& data, Uint
 			return false;
 			break;
 		case 1:
-			LOG_INFO("Received packet from "<<packet.address.host);
+			LOG_INFO("Received packet from "<<SDLNet_ResolveIP(&packet.address));
 			data.set_content(packet.data, packet.len);
-			sender_address = packet.address.host;
+			
 			sender_port = packet.address.port;
+			sender = NetEndPoint(std::string(SDLNet_ResolveIP(&(packet.address))), sender_port);
 			return true;
 		default:
 			LOG_FATAL("SDLNet error: "<<SDLNet_GetError());
@@ -213,7 +218,7 @@ Uint32 NetManager::resolve(std::string hostname)
 {
 	IPaddress ip_address;
 		
-		LOG_INFO("Resolving "<<hostname);
+	//	LOG_INFO("Resolving "<<hostname);
 		
 		Sint32 result = SDLNet_ResolveHost(&ip_address, hostname.c_str(), 0);
 		

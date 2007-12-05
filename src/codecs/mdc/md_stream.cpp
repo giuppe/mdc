@@ -64,7 +64,9 @@ void MDStream::set_descriptor(Descriptor* descriptor) {
 	m_valid_descriptor[flow][sequence] = true;
 }
 
-std::string MDStream::get_name() const {return m_name;}
+//std::string MDStream::get_name() const {return m_name;}
+
+
 std::string MDStream::get_stream_id() const {return m_stream_id;}
 
 MDStream::~MDStream() {
@@ -84,9 +86,10 @@ bool MDStream::load_from_disk(const std::string& path) {
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
 	if (dir->load_file(path, data)) {
 		deserialize(data);
-		LOG_INFO("Loaded MD Stream "<<m_name<<" from "<<path.c_str());
+		LOG_INFO("Loaded MD Stream from "<<path.c_str());
 		return true;
 	}
+	LOG_ERROR("Cannot load MD stream from "<<path);
 	return false;
 }
 
@@ -95,9 +98,10 @@ bool MDStream::save_to_disk(const std::string& path) {
 	data += serialize();
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
 	if (dir->save_file(path, data)) {
-		LOG_INFO("Saved MD Stream "<<m_name<<" in "<<path.c_str());
+		LOG_INFO("Saved MD Stream in "<<path.c_str());
 		return true;
 	}
+	LOG_ERROR("Cannot save MD stream to "<<path);
 	return false;
 }
 
