@@ -10,6 +10,7 @@
 #include "common/net_manager.h"
 #include "common/data_chunk.h"
 #include "common/config/commandline_configuration.h"
+#include "app/app_configuration.h"
 #include <cstdlib>
 #include "defs.h"
 #include <SDL/SDL.h>
@@ -37,6 +38,7 @@ int main(int argc, char** argv) {
 	SDL_Delay(1000);
 	CodecRegistry* codecReg = CodecRegistry::instance();
 	codecReg->init();
+	AppConfiguration::instance()->init();
 	AbstractConfiguration* config = new CommandlineConfiguration(argc, argv);
 	bool get_help = false;
 	config->get_bool("", "help", get_help);
@@ -126,6 +128,7 @@ int main(int argc, char** argv) {
 }
 
 void deinit_all() {
+	AppConfiguration::instance()->deinit();
 	CodecRegistry::instance()->deinit();
 	NetManager::instance()->deinit();
 	LogManager::instance()->deinit();

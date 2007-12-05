@@ -1,0 +1,7 @@
+<network>
+    <control_port>5551</control_port>
+    <data_port>5552</data_port>
+</network>
+<repository>
+    <path>./shared</path>
+</repository>
