@@ -156,3 +156,15 @@ bool MDStream::is_empty() const {return m_is_empty;}
 bool MDStream::is_valid(Uint8 flow, Uint32 sequence) const {
 	return (m_valid_descriptor[flow][sequence]);
 }
+
+
+MDStreamInfo MDStream::get_info()
+{
+	MDStreamInfo info;
+	info.stream_id = get_stream_id();
+	info.flows_number = get_flows_number();
+	info.descriptors_number = get_sequences_number();
+	
+	return info;
+}
+

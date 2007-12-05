@@ -27,6 +27,14 @@
 
 class Descriptor;
 
+struct MDStreamInfo
+{
+	std::string stream_id;
+	Uint8 flows_number;
+	Uint32 descriptors_number;
+};
+
+
 class MDStream : public Serializable
 {
 private:
@@ -111,6 +119,8 @@ public:
 	Uint8 get_flows_number() const;
 	
 	bool is_valid(Uint8 flow, Uint32 sequence) const;
+	
+	MDStreamInfo get_info();
 	
 	/*
 	 * Gets the valid descriptors number
