@@ -28,11 +28,12 @@ AbstractStream* StreamFactory::create_stream(std::string codec_name)
 	{
 		return new TextStream();
 	}
+#ifdef MDC_PCX_IS_WORKING
 	else if(codec_name=="pcx")
 	{
 		return new PcxStream();
 	}
-
+#endif
 	LOG_FATAL_STATIC("Unable to manage stream of type: "<<codec_name);
 	exit(1);
 }

@@ -52,8 +52,9 @@ void CodecRegistry::init()
 {
 
 	this->register_codec(std::string("text"), new TextMDCodec());
+#ifdef MDC_PCX_IS_WORKING
 	this->register_codec(std::string("pcx"), new PcxMDCodec());
-		
+#endif
 }
 
 void CodecRegistry::deinit()
