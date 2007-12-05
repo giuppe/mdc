@@ -14,16 +14,19 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include <SDL/SDL.h>
+
+
+#ifndef MDSTREAM_H_
+#define MDSTREAM_H_
+
+#include "defs.h"
 #include <string>
 #include <vector>
 #include "../../common/serializable.h"
 #include "../../common/data_chunk.h"
 
-#ifndef MDSTREAM_H_
-#define MDSTREAM_H_
-
 class Descriptor;
+
 class MDStream : public Serializable
 {
 private:
@@ -31,7 +34,7 @@ private:
 	std::vector<std::vector<bool> > m_valid_descriptor;
 	void set_descriptor(Uint8 flow, Uint32 sequence, Descriptor* descriptor);
 	std::string m_name;
-	std::string m_hash;
+	std::string m_stream_id;
 	bool m_is_empty;
 	bool m_is_inited;
 public:
@@ -42,9 +45,9 @@ public:
 	 * @n_flows: flows number in wich the file must be divided;
 	 * @sequence_size: size of each sequence
 	 */
-	void init(Uint8 n_flows, Uint32 sequence_size);
+	void init(std::string stream_id, Uint8 n_flows, Uint32 sequence_size);
 	
-	MDStream(Uint8 n_flows, Uint32 sequence_size);
+	MDStream(std::string stream_id, Uint8 n_flows, Uint32 sequence_size);
 	~MDStream();
 	
 	/*
@@ -85,7 +88,7 @@ public:
 	 * Gets a stream name.
 	 * @returns: stream hash
 	 */	
-	std::string get_hash() const;
+	std::string get_stream_id() const;
 	
 	/*
 	 * Verifies if a stream is empty.

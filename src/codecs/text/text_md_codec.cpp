@@ -36,12 +36,13 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 	Uint32 flow_dimension = (stream_size/m_flows_number)+1;
 	Uint32 descriptors_number = (Uint32)ceil(((double)flow_dimension)/((double)m_preferred_payload_size));
 	Uint16 max_payload_size = (flow_dimension/descriptors_number)+1;
-	md_stream->init(m_flows_number, descriptors_number);
+	md_stream->init(stream->compute_hash_md5(), m_flows_number, descriptors_number);
 	Uint64 offset = 0;
 	for (Uint8 i=0; i<m_flows_number; i++) {
 		for (Uint32 j=0; j<descriptors_number; j++) {
 			if (stream_size-offset > 0) {
 				Descriptor* descriptor= new Descriptor();
+				descriptor->set_stream_id(md_stream->get_stream_id());
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
 				descriptor->set_codec_name(std::string("text"));

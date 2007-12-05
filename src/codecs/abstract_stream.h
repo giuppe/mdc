@@ -66,12 +66,9 @@ public:
 	 * Get stream hash.
 	 * @returns: hash string
 	 */
-	virtual std::string get_stream_hash() const = 0;
+	virtual std::string compute_hash_md5() const = 0;
 	
-	/*
-	 * Update hash based on file content.
-	 */
-	virtual void update_stream_hash() = 0;
+
 	
 	/*
 	 * Insert data to the current stream.

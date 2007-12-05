@@ -22,11 +22,13 @@
 
 MDStream::MDStream():m_is_empty(true),m_is_inited(false) {}
 
-MDStream::MDStream(Uint8 n_flows, Uint32 sequence_size):m_is_empty(true),m_is_inited(false) {
-	init(n_flows, sequence_size);
+MDStream::MDStream(std::string stream_id, Uint8 n_flows, Uint32 sequence_size):m_is_empty(true),m_is_inited(false) {
+	init(stream_id, n_flows, sequence_size);
 }
 
-void MDStream::init(Uint8 n_flows, Uint32 sequence_size) {
+void MDStream::init(std::string stream_id, Uint8 n_flows, Uint32 sequence_size) 
+{
+	m_stream_id = stream_id;
 	m_stream.resize(n_flows);
 	for(Uint32 i=0; i<n_flows; i++)
 		m_stream[i].resize(sequence_size);
@@ -63,7 +65,7 @@ void MDStream::set_descriptor(Descriptor* descriptor) {
 }
 
 std::string MDStream::get_name() const {return m_name;}
-std::string MDStream::get_hash() const {return m_hash;}
+std::string MDStream::get_stream_id() const {return m_stream_id;}
 
 MDStream::~MDStream() {
 	if ((m_is_inited) && (!m_is_empty)) {
@@ -104,6 +106,7 @@ DataChunk& MDStream::serialize() const {
 	DataChunk temp;
 	Uint8 flows_number = m_stream.size();
 	Uint32 sequence_size = m_stream[0].size();
+	result->append(m_stream_id.c_str());
 	result->append(flows_number);
 	result->append(sequence_size);
 	for (Uint8 flow=0; flow<flows_number; flow++)
@@ -125,11 +128,14 @@ void MDStream::deserialize(const DataChunk& data) {
 	if (data.get_lenght() > 0) {
 		DataChunk* temp_dc = new DataChunk();
 		temp_dc->operator +=(data);
+		char* stream_id;
+		temp_dc->extract_head(stream_id);
+
 		Uint8 flows_number;
 		temp_dc->extract_head(flows_number);
 		Uint32 sequences_number;
 		temp_dc->extract_head(sequences_number);
-		init(flows_number, sequences_number);
+		init(stream_id, flows_number, sequences_number);
 		while(temp_dc->get_lenght()>0)
 		{
 			Uint16 descriptor_size;

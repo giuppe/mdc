@@ -71,12 +71,8 @@ public:
 	 * Get stream hash.
 	 * @returns: hash code calculated on stream content
 	 */
-	std::string get_stream_hash() const;
+	std::string compute_hash_md5() const;
 
-	/*
-	 * Update stream hash.
-	 */
-	void update_stream_hash();
 
 	/*
 	 * Saves a stream to disk.

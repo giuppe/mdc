@@ -29,6 +29,7 @@
 class Descriptor : public Serializable
 {
 private:
+	std::string m_complete_stream_md5_hash;
 	Uint8 m_flow_id;
 	Uint32 m_sequence_number;
 	std::string m_codec_name;
@@ -121,6 +122,12 @@ public:
 	 * It is the opposite of serialize();
 	 */
 	void deserialize(const DataChunk& data);
+	
+	std::string get_stream_id() const;
+	
+	void set_stream_id(std::string stream_id);
+	
+	
 };
 
 #endif /*DESCRIPTOR_H_*/

@@ -22,6 +22,7 @@
 #include <cassert>
 #include "../../common/dir/abstract_directory.h"
 #include "../../common/dir/directory_factory.h"
+#include "../../common/hash/hash.h"
 
 TextStream::TextStream() {m_data.resize(0);}
 
@@ -99,14 +100,10 @@ void TextStream::deserialize(const DataChunk& datachunk) {
 	}
 }
 
-void TextStream::update_stream_hash() {
-	//FIXME: this should compute a real md5 function
-	m_hash = "livent rulez";
-}
 
-std::string TextStream::get_stream_hash() const 
+std::string TextStream::compute_hash_md5() const 
 {
-	return m_hash;
+	return Hash::md5_from_datachunk(this->serialize());
 }
 
 

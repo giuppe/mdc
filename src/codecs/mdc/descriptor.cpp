@@ -31,11 +31,15 @@ AbstractCodecParameters* Descriptor::get_codec_parameter() const {return m_codec
 void Descriptor::set_codec_parameter(AbstractCodecParameters* acp) {m_codec_parameters = acp;}
 Descriptor::~Descriptor() {delete m_codec_parameters;}
 
+
+
+
 DataChunk& Descriptor::serialize() const {
 	DataChunk* result = new DataChunk();
 	MDCMessage msg;
 	msg.set_type_string("DESC");
 	(*result)+=msg.serialize();
+	result->append(m_complete_stream_md5_hash.c_str());
 	result->append(m_flow_id);
 	result->append(m_sequence_number);
 	result->append(m_codec_name.c_str());
@@ -49,16 +53,22 @@ DataChunk& Descriptor::serialize() const {
 	return (*result);
 }
 
+
+
+
 void Descriptor::deserialize(const DataChunk& data) {
 	if (data.get_lenght() > 0) {
 		DataChunk* temp_dc = new DataChunk();
 		temp_dc->operator +=(data);
+		char* hash;
 		char* codec_name;
 		DataChunk preamble;
 		temp_dc->extract_head(8, preamble);
 		MDCMessage msg;
 		msg.deserialize(preamble);
 		if (msg.get_type_string() == std::string("DESC")) {
+			temp_dc->extract_head(hash);
+			m_complete_stream_md5_hash = hash;
 			temp_dc->extract_head(m_flow_id);
 			temp_dc->extract_head(m_sequence_number);
 			temp_dc->extract_head(codec_name);
@@ -77,13 +87,22 @@ void Descriptor::deserialize(const DataChunk& data) {
 	}
 }
 
+
+
+
 Uint16 Descriptor::get_payload_size() const {return m_payload.get_lenght();}
+
+
+
 
 void Descriptor::set_payload(DataChunk& payload)
 {
 	m_payload.erase();
 	m_payload+=payload;
 }
+
+
+
 
 DataChunk* Descriptor::get_payload() const
 {
@@ -92,4 +111,24 @@ DataChunk* Descriptor::get_payload() const
 	return payload;
 }
 
-Uint32 Descriptor::get_codec_parameters_size() const {return m_codec_parameters->get_size();}
+
+
+
+Uint32 Descriptor::get_codec_parameters_size() const 
+{
+	return m_codec_parameters->get_size();
+}
+
+
+
+
+
+std::string Descriptor::get_stream_id() const
+{
+	return m_complete_stream_md5_hash;
+}
+
+void Descriptor::set_stream_id(std::string stream_id)
+{
+	m_complete_stream_md5_hash = stream_id;
+}
