@@ -21,6 +21,7 @@
 #include "server_action.h"
 #include "client_test_action.h"
 #include "app/sender_action.h"
+#include "app/receiver.h"
 
 using namespace std;
 
@@ -97,14 +98,17 @@ int main(int argc, char** argv) {
 		ServerAction* server = new ServerAction();
 		ClientTestAction* client = new ClientTestAction();
 		SiteManager* site_manager = new SiteManager();
+		Receiver* receiver = new Receiver();
 		SenderAction* sender_action = new SenderAction();
 		sender_action->set_maximum_time(500);
 		sched->add_action(sender_action);
 		sched->add_action(site_manager);
+		sched->add_action(receiver);
 		sched->add_action(server);
 		sched->add_action(client);
 		site_manager->start();
 		sender_action->start();
+		receiver->start();
 		//server->start();
 		//client->start();
 		Uint32 times = 10000;
