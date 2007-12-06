@@ -9,7 +9,7 @@
 
 SenderAction::SenderAction()
 {
-	
+	ActionTimed::init();
 }
 
 

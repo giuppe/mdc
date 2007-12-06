@@ -23,9 +23,9 @@ public:
 	
 	void pre_action(){m_start_time = SDL_GetTicks();}
 	
-	bool is_elapsed_maximum_time(){if(m_start_time+m_maximum_time>SDL_GetTicks()){LOG_INFO("Time elapsed, sleeping action"); return true;}return false;}
+	bool is_elapsed_maximum_time(){if(m_start_time+m_maximum_time<SDL_GetTicks()){return true;}return false;}
 	
-	void post_action(){m_start_time = 0;}
+	void post_action(){/*LOG_INFO("start time was: "<<m_start_time<<"; end time is "<<SDL_GetTicks());*/m_start_time = 0;}
 };
 
 #endif /*ACTION_TIMED_H_*/

@@ -132,7 +132,7 @@ int main(int argc, char** argv) {
 			while (--times != 0) 
 			{
 					sched->execute_all();
-					SDL_Delay(10);
+					SDL_Delay(100);
 			}
 			
 		}
