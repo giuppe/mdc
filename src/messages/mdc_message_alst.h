@@ -38,13 +38,17 @@ public:
 
 	}
 	
+	Uint32 get_num_entries() const {return get_num_rows();}
+	
 	void append_entry(std::string name, std::string hash)
 	{
+		
 		std::string entry = "n=";
 		entry += name;
-		entry += "&";
+		entry += ";&";
 		entry += "h=";
 		entry += hash;
+		entry += ";";
 		m_rows.push_back(entry);
 	}
 	

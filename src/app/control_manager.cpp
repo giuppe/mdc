@@ -3,6 +3,7 @@
 #include "control_manager.h"
 #include "../common/net_manager.h"
 #include "stream_repository.h"
+#include "stream_info_cache_manager.h"
 #include "../common/udp_message.h"
 #include "descriptors_send_list.h"
 #include "client_manager.h"
@@ -149,7 +150,7 @@ void ControlManager::handle_SREQ(const NetEndPoint& sender, const MDCMessageSreq
 
 void ControlManager::handle_ALST(const NetEndPoint& sender, const MDCMessageAlst& msg)
 {
-	Uint32 entries_num = msg.get_num_rows();
+	Uint32 entries_num = msg.get_num_entries();
 
 
 	
@@ -164,6 +165,9 @@ void ControlManager::handle_ALST(const NetEndPoint& sender, const MDCMessageAlst
 		{
 			m_last_search[i].set_name(msg.get_entry_name(i));
 			m_last_search[i].set_stream_id(msg.get_entry_hash(i));
+			
+			StreamInfoCacheManager::instance()->add_name(msg.get_entry_hash(i), msg.get_entry_name(i));
+			
 		}
 		ClientManager::instance()->set_last_search(m_last_search);
 	}
@@ -210,6 +214,8 @@ void ControlManager::handle_ASNF(const NetEndPoint& sender, const MDCMessageAsnf
 	m_last_stream_info.flows_number = msg.get_flows_number();
 	m_last_stream_info.descriptors_number = msg.get_descriptors_number();
 	ClientManager::instance()->set_last_stream_info(m_last_stream_info);
+	
+	StreamInfoCacheManager::instance()->add_info(msg.get_stream_id(), m_last_stream_info);
 	
 }
 

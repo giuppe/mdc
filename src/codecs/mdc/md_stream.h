@@ -32,6 +32,7 @@ struct MDStreamInfo
 	std::string stream_id;
 	Uint8 flows_number;
 	Uint32 descriptors_number;
+	MDStreamInfo():stream_id(""),flows_number(0), descriptors_number(0){}
 };
 
 

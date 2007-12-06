@@ -100,6 +100,7 @@ int main(int argc, char** argv) {
 		Scheduler* sched = new Scheduler();
 
 		ClientTestAction* client = new ClientTestAction();
+		client->init("192.168.0.30", "");
 		SiteManager* site_manager = new SiteManager();
 		Receiver* receiver = new Receiver();
 		SenderAction* sender_action = new SenderAction();
@@ -128,8 +129,7 @@ int main(int argc, char** argv) {
 		else
 		{
 			client->start();
-		Uint32 times = 10000;
-			while (--times != 0) 
+			while (!client->is_action_exited()) 
 			{
 					sched->execute_all();
 					SDL_Delay(100);
@@ -148,6 +148,7 @@ int main(int argc, char** argv) {
 }
 
 void deinit_all() {
+	
 	AppConfiguration::instance()->deinit();
 	CodecRegistry::instance()->deinit();
 	NetManager::instance()->deinit();

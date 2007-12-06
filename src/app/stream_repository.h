@@ -39,6 +39,8 @@ private:
 	std::map<std::string, RepositoryEntry> m_streams;
 	
 	bool m_is_valid;
+	
+	std::string m_path;
 
 public:
 	
@@ -53,6 +55,8 @@ public:
 	bool add_stream(RepositoryEntry entry);
 	
 	std::string get_name_by_id(std::string stream_id);
+	
+	void create_stream(std::string name, std::string stream_id, Uint8 flows, Uint32 sequences);
 	
 	void deinit();
 

@@ -32,19 +32,28 @@ class ClientTestAction: public Action
 private:
 	Uint32 m_state;
 	
+	bool m_exited;
+	
 	std::string m_selected_file_stream_id;
 	
-	NetEndPoint m_my_server;
+	NetEndPoint m_my_server1;
+	
+	NetEndPoint m_my_server2;
+	
 	void pre_action(){}
 		
 		void post_action(){}
+		
+	void exit_action(){m_exited=true;}
 public:
 	
-	ClientTestAction(){init();};
+	ClientTestAction(){};
 	
-	void init();
+	void init(std::string server1, std::string server2);
 	
 	void action();
+	
+	bool is_action_exited(){return m_exited;}
 	
 private:
 	void ask_list();

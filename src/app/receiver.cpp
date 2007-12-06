@@ -45,6 +45,7 @@ void Receiver::action()
 			Descriptor* curr_desc = new Descriptor();
 			curr_desc->deserialize(received);
 			
+			LOG_INFO("Descriptor ("<<curr_desc->get_flow_id()<<", "<<curr_desc->get_sequence_number()<<") for stream id "<<curr_desc->get_stream_id());
 			//-filter every descriptor with the help of a list, filled with result of ASRQs
 			
 			if(filter_list->exists(sender.get_ip(), curr_desc->get_stream_id()))
@@ -57,7 +58,8 @@ void Receiver::action()
 				}
 				else
 				{
-					LOG_ERROR("Unable to find stream "<<curr_desc->get_stream_id()<<" in repository.");
+					LOG_WARN("Unable to find stream "<<curr_desc->get_stream_id()<<" in repository.");
+		
 				}
 			}
 			else

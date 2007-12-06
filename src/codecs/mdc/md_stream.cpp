@@ -114,7 +114,9 @@ DataChunk& MDStream::serialize() const {
 	result->append(flows_number);
 	result->append(sequence_size);
 	for (Uint8 flow=0; flow<flows_number; flow++)
+	{
 		for (Uint32 sequence=0; sequence<sequence_size; sequence++)
+		{
 			if (m_valid_descriptor[flow][sequence]==true)
 			{
 				//LOG_INFO("Writing descriptor ("<<flow<<", "<<sequence<<")");
@@ -125,6 +127,12 @@ DataChunk& MDStream::serialize() const {
 				result->append(descriptor_size);
 				result->operator+=(temp);
 			}
+			else
+			{
+				LOG_WARN("non-valid descriptor ("<<flow<<", "<<sequence<<"), not serializing");
+			}
+		}
+	}
 	return *result;
 }
 

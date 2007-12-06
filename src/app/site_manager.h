@@ -28,6 +28,9 @@ public:
 	
 	
 	void action();
+	
+	~SiteManager();
+	
 };
 
 #endif /*SITE_MANAGER_H_*/

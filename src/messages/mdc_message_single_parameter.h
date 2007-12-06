@@ -30,6 +30,10 @@ protected:
 	
 	void set_parameter_part(std::string left_part, std::string right_part);
 	
+	const char* get_parameter() const;
+	
+	void set_parameter(const char* parameter);
+	
 public:
 	MDCMessageSingleParameter(){};
 	
@@ -37,9 +41,7 @@ public:
 	
 	void deserialize(const DataChunk&);
 	
-	const char* get_parameter() const;
-	
-	void set_parameter(const char* parameter);
+
 	
 };
 

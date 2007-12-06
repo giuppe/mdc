@@ -38,6 +38,7 @@ void SenderAction::action()
 			if(chosen_stream->get_descriptor(desc_id.flow_id, desc_id.sequence_id, chosen_descriptor))
 			{
 				LOG_INFO("Got Descriptor");
+				SDL_Delay(100);
 				UDPMessage msg;
 				msg.set_destination(destination);
 				msg.set_payload(chosen_descriptor->serialize());

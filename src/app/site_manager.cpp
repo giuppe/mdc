@@ -21,7 +21,10 @@ SiteManager::SiteManager()
 	
 }
 
-
+SiteManager::~SiteManager()
+{
+	StreamRepository::instance()->deinit();
+}
 
 void SiteManager::action()
 {

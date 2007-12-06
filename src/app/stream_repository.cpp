@@ -27,6 +27,8 @@ void StreamRepository::init(std::string path)
 {
 	m_is_valid = false;
 	
+	m_path = path;
+	
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
 	LOG_INFO("Initializing repository in "<<path);
 	std::vector<std::string> files = dir->get_file_names(path);
@@ -95,6 +97,10 @@ void StreamRepository::deinit()
 	std::map<std::string,RepositoryEntry>::iterator iter;
 	for( iter = m_streams.begin(); iter != m_streams.end(); ++iter ) 
 	{
+		std::string complete_path = m_path;
+		complete_path+="/";
+		complete_path+=iter->second.name;
+		iter->second.stream->save_to_disk(complete_path);
 		delete iter->second.stream;
 	}
 }
@@ -142,6 +148,15 @@ std::string StreamRepository::get_name_by_id(std::string stream_id)
 	return m_streams[stream_id].name;
 }
 
+
+void StreamRepository::create_stream(std::string name, std::string stream_id, Uint8 flows, Uint32 sequences)
+{
+	MDStream* new_stream = new MDStream(stream_id, flows, sequences);
+	RepositoryEntry new_entry;
+	new_entry.name=name;
+	new_entry.stream = new_stream;
+	m_streams.insert(make_pair(stream_id, new_entry));
+}
 
 
 StreamRepository* StreamRepository::_instance = 0;
