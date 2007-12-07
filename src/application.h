@@ -4,10 +4,12 @@
 
 #include "defs.h"
 #include <string>
-#include "common/config/abstract_configuration.h"
+#include "app_cli_configuration.h"
 
 class Application
 {
+private:
+	AppCliConfiguration* m_cli_config;
 public:
 	
 	Application(){}
@@ -18,9 +20,14 @@ public:
 	
 	void deinit_all();
 	
-	void stream_converter(AbstractConfiguration*, std::string, std::string, std::string, Uint32, Uint32);
+	void stream_converter(std::string, std::string, std::string, Uint32, Uint32);
 
 
+private:
+    void print_usage();
+    void init_all();
+    void start_scheduler();
+    void start_coder();
 };
 
 #endif /*APPLICATION_H_*/
