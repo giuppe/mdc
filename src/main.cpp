@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
 	if (get_help) {
 		std::cout<<"Multiple Description Codec\n\n";
 		std::cout<<"Use: mdc <parameters>\n\n";
-		std::cout<<"\t<parameters> ::= <action> {<code> | <decode>} <input> <output> <codec> [flows] [payload]\n\n";
+		std::cout<<"\t<parameters> ::= <action> {<code> | <decode>} <input> <output> <codec> [flows] [payload] [daemon]\n\n";
 		std::cout<<"\t--input \t input filename.\n";
 		std::cout<<"\t--output \t output filename.\n";
 		std::cout<<"\t--code \t\t activate coding from input file to output MDC file.\n";
@@ -53,6 +53,7 @@ int main(int argc, char** argv) {
 		std::cout<<"\t--codec \t select codec type to use for coding input file.\n";
 		std::cout<<"\t--flows \t number of output coded flows (from 1 to 64), DEFAULT 2.\n";
 		std::cout<<"\t--payload \t preferred payload size of each descriptor (from 25 to 55000 bytes for text), DEFAULT 1000.\n";
+		std::cout<<"\t--daemon \t starts daemon.\n";
 		std::cout<<"\t--help \t\t show this help page.\n\n";
 		std::cout<<"Examples:\n";
 		std::cout<<"  mdc --input input_file.txt --codec text --code --flows 4 --payload 2000 --output output_file.mdc.\n";

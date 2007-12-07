@@ -19,9 +19,8 @@ dimension	description
 ??			payload
 
 First 8 byte are fixed and does not varying during the coding procedure.
-Stream hash is an hash extracted from the stream's file name. In this implementation it's
-statically setted to "livent rulez". Subsequently, there is the real file name anding in
-".mdc".
+Stream hash is an hash extracted from the stream's file name. Subsequently, there is the
+real file name ending ".mdc".
 
 Flow id is an identifier of a single flow in a MDC text stream. Is strongly reccomended to 
 set this value to a base 2 multiple between 2 and 64 value. But is also possible to set this
@@ -58,4 +57,3 @@ Specifing flows_number, preferred_payload, and file_size,
 2) compute descriptors_number, as flow_size/preferred_payload
 3) compute max_payload_size, as flow_size/descriptor_number
 4) append nth letter of the text to descriptor which flow_id=(n%flows_number) and desc_id=n%max_payload_size
-
