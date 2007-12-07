@@ -22,7 +22,7 @@
 #include <vector>
 
 
-CommandlineConfiguration::CommandlineConfiguration(Sint32 argc, char* argv[])
+void CommandlineConfiguration::init(Sint32 argc, char* argv[])
 {
 	std::vector<std::string> arguments;
 	

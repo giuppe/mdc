@@ -30,31 +30,17 @@
  */
 class CommandlineConfiguration : public AbstractConfiguration
 {
-	private:
+	protected:
 		std::map< std::string, std::string> m_arguments;
 		
 		void parse_arguments(const std::vector<std::string>& arguments);
-		
-	public:
-		/**
-		 * Constructor for CommandlineConfiguration.
-		 * @param argc thenumber of command line arguments.
-		 * @param argv arguments as array of c-strings
-		 */ 
-		CommandlineConfiguration(Sint32 argc, char* argv[]);
-		
+	
 		bool get_string(const std::string& section_name, const std::string& object_name, std::string& value) const;
 		
 		bool get_int(const std::string& section_name, const std::string& object_name, Uint32& value) const;
 	
 		bool get_bool(const std::string& section_name, const std::string& object_name, bool& value) const;
-	
-	//	bool get_double(const std::string& object_name, double& value) const;
-		/**
-		 * This function does nothing, as command line arguments are read-only.
-		 */
-		void save(){};
-		
+
 		void remove_object(const std::string& section_name, const std::string& object_name){};
 		
 		void remove_section(const std::string& section_name){};
@@ -64,6 +50,28 @@ class CommandlineConfiguration : public AbstractConfiguration
 		void set_int(const std::string& section_name, const std::string& object_name, const Uint32& value){};
 	
 		void set_bool(const std::string& section_name, const std::string& object_name, const bool& value){};
+
+		
+	public:
+		/**
+		 * Constructor for CommandlineConfiguration.
+		 */ 
+		CommandlineConfiguration(){};
+		
+		/**
+			 * Initializer for CommandlineConfiguration.
+			 * @param argc thenumber of command line arguments.
+			 * @param argv arguments as array of c-strings
+			 */ 
+		void init(Sint32 argc, char* argv[]);
+		
+	
+	//	bool get_double(const std::string& object_name, double& value) const;
+		/**
+		 * This function does nothing, as command line arguments are read-only.
+		 */
+		void save(){};
+		
 	
 	//	void set_double(const std::string& object_name, const double& value){};
 		
