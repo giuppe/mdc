@@ -1,0 +1,58 @@
+The MDC mpeg codec function take a stream containing the text file and an empty md_stream
+that must be filled with flows and descriptors. The code() function cycles on flows and
+sequences numbers and, if the stream not be at end of file, create a new empty descriptor.
+Now fills up the descriptor with corrects value as follows: 
+
+Byte		Content
+dimension	description
+
+---------	-----------
+
+3 bytes  	"MDC"
+1 byte		version
+4 bytes		"DESC"
+1 byte		flow_id
+4 bytes		sequence_number
+??			codec name (null terminated)
+4 bytes		codec parameters size
+2 bytes		payload size
+??			payload
+
+First 8 byte are fixed and does not varying during the coding procedure.
+Stream hash is an hash extracted from the stream's file name. Subsequently, there is the
+real file name ending ".mdc".
+
+Flow id is an identifier of a single flow in a MDC text stream. Is strongly reccomended to 
+set this value to a base 2 multiple between 2 and 64 value. But is also possible to set this
+value at any integer value from 1 to 64 flows. Coded file will contain the exact flows
+number indicated.
+
+Sequence number is a value that takes count of single descriptors, but it's used by
+algorithm as a user independent parameter.
+
+Codec name is the name of codec: in this case it's "mpeg".
+
+For this implementation of mpeg codec is not necessary the "codec parameter" and has been
+added with size to 0 without any real codec parameter.
+
+Payload size is the size of payload of a single descriptor and contains a value, for text
+implementation, between 1000 and 55.000 bytes. This value represents the user preferred
+payload size. The algorithm can vary it if it's necessary for load balacing between
+descriptors and flows: the product between flows number and real descriptor payload must
+approximate as best as possible text file size (it's a lower bound).
+
+The payload is extracted from the stream from an initial point called "offset", bytes
+are extracted from a round robin algorithm to fill up a payload ofapprossimativaly size
+"max_payload_size". Then, payload is added to the current descriptor. The "offset" parameter
+is used to monitorize this procedure.
+
+The stream contains a copy of mpeg file contents.
+
+
+Payload contains parts of the mpeg stream; division is made out of this algorithm:
+Specifing flows_number, preferred_payload, and file_size,
+1) Compute flow_size as file_size/flows_number,
+2) compute descriptors_number, as flow_size/preferred_payload
+3) compute max_payload_size, as flow_size/descriptor_number
+4) append nth byte of the mpeg stream to descriptor which flow_id=(n%flows_number) and
+desc_id=n%max_payload_size
