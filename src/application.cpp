@@ -21,21 +21,21 @@
 
 void Application::print_usage()
 {
-	std::cout << "Multiple Description Codec\n\n";
-	std::cout << "Use: mdc <parameters>\n\n";
-	std::cout << "\t<parameters> ::= <action> {<code> | <decode>} <input> <output> <codec> [flows] [payload]\n\n";
-	std::cout << "\t--input \t input filename.\n";
-	std::cout << "\t--output \t output filename.\n";
-	std::cout << "\t--code \t\t activate coding from input file to output MDC file.\n";
-	std::cout << "\t--decode \t activate decoding from input MDC file to output file.\n";
-	std::cout << "\t--codec \t select codec type to use for coding input file.\n";
-	std::cout << "\t--flows \t number of output coded flows (from 1 to 64), DEFAULT 2.\n";
-	std::cout << "\t--payload \t preferred payload size of each descriptor (from 25 to 55000 bytes for text), DEFAULT 1000.\n";
-	std::cout << "\t--help \t\t show this help page.\n\n";
-	std::cout << "Examples:\n";
-	std::cout << "  mdc --input input_file.txt --codec text --code --flows 4 --payload 2000 --output output_file.mdc.\n";
-	std::cout << "  mdc --input input_file.mdc --codec text --decode --output output_file.txt.\n\n";
-	std::cout << "---------------------------------------------------------------\n\n";
+	cout << "Multiple Description Codec\n\n";
+	cout << "Use: mdc <parameters>\n\n";
+	cout << "\t<parameters> ::= <action> {<code> | <decode>} <input> <output> <codec> [flows] [payload]\n\n";
+	cout << "\t--input \t input filename.\n";
+	cout << "\t--output \t output filename.\n";
+	cout << "\t--code \t\t activate coding from input file to output MDC file.\n";
+	cout << "\t--decode \t activate decoding from input MDC file to output file.\n";
+	cout << "\t--codec \t select codec type to use for coding input file.\n";
+	cout << "\t--flows \t number of output coded flows (from 1 to 64), DEFAULT 2.\n";
+	cout << "\t--payload \t preferred payload size of each descriptor (from 25 to 55000 bytes for text), DEFAULT 1000.\n";
+	cout << "\t--help \t\t show this help page.\n\n";
+	cout << "Examples:\n";
+	cout << "  mdc --input input_file.txt --codec text --code --flows 4 --payload 2000 --output output_file.mdc.\n";
+	cout << "  mdc --input input_file.mdc --codec text --decode --output output_file.txt.\n\n";
+	cout << "---------------------------------------------------------------\n\n";
 }
 
 
@@ -52,7 +52,7 @@ void Application::init_all()
 
 int Application::main(int argc, char** argv) 
 {
-	std::cout<<"\nMultiple Description Codec v0.1\n";
+	cout<<"\nMultiple Description Codec v0.1\n";
 
 	init_all();
 	m_cli_config = new AppCliConfiguration();
@@ -80,24 +80,24 @@ int Application::main(int argc, char** argv)
 
 void Application::start_coder()
 {
-	std::string output_filename = m_cli_config->get_output_file();
-	std::string input_filename = m_cli_config->get_input_file();
-	std::string codec_name = m_cli_config->get_codec();
+	string output_filename = m_cli_config->get_output_file();
+	string input_filename = m_cli_config->get_input_file();
+	string codec_name = m_cli_config->get_codec();
 	Uint32 flows_number = m_cli_config->get_flows_number();
 	Uint32 payload_size = m_cli_config->get_payload_size();
 	
 	if (input_filename=="") {
-		std::cout<<"Input file parameter is missing.\n\n";
+		cout<<"Input file parameter is missing.\n\n";
 		return;
 	}
 	else {
 		if (codec_name=="") {
-			std::cout<<"Codec name parameter is missing.\n\n";
+			cout<<"Codec name parameter is missing.\n\n";
 			return;
 		}
 		else {
 			if (output_filename=="") {
-				std::cout<<"Output file parameter is missing.\n\n";
+				cout<<"Output file parameter is missing.\n\n";
 				return;
 			}
 			else stream_converter(output_filename, input_filename, codec_name, flows_number, payload_size);
@@ -159,7 +159,7 @@ void Application::deinit_all() {
 	LogManager::instance()->deinit();
 }
 
-void Application::stream_converter(std::string output_filename, std::string input_filename, std::string codec_name, Uint32 flows_number, Uint32 payload_size) {
+void Application::stream_converter(string output_filename, string input_filename, string codec_name, Uint32 flows_number, Uint32 payload_size) {
 	bool is_coding = m_cli_config->get_is_coding();
 	bool is_decoding = m_cli_config->get_is_decoding();
 	

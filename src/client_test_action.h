@@ -34,7 +34,7 @@ private:
 	
 	bool m_exited;
 	
-	std::string m_selected_file_stream_id;
+	string m_selected_file_stream_id;
 	
 	NetEndPoint m_my_server1;
 	
@@ -49,7 +49,7 @@ public:
 	
 	ClientTestAction(){};
 	
-	void init(std::string server1, std::string server2);
+	void init(string server1, string server2);
 	
 	void action();
 	

@@ -20,11 +20,11 @@ public:
 	
 	bool get_is_decoding();
 	
-	std::string get_input_file();
+	string get_input_file();
 	
-	std::string get_output_file();
+	string get_output_file();
 	
-	std::string get_codec();
+	string get_codec();
 	
 	Uint32 get_flows_number();
 	

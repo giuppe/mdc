@@ -10,6 +10,10 @@
 #include "common/log/log_manager.h"
 
 #ifdef NOT_HAVING_SDL_H_
+
+typedef Uint64 unsigned long;
+typedef Sint64 long;
+
 typedef Uint32 unsigned int;
 typedef Sint32 int;
 
@@ -22,8 +26,20 @@ typedef Uint8 unsigned char;
 typedef Sint8 char;
 #endif
 
-#include <iostream>
+#if USING_USTL
 
+#include <ustl.h>
+using namespace ustd;
+
+#else
+#include <iostream>
+#include <vector>
+#include <map>
+#include <list>
+
+using namespace std;
+
+#endif
 
 
 #endif /*DEFS_H_*/

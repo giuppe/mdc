@@ -20,7 +20,7 @@ public:
 	
 	void deinit_all();
 	
-	void stream_converter(std::string, std::string, std::string, Uint32, Uint32);
+	void stream_converter(string, string, string, Uint32, Uint32);
 
 
 private:

@@ -20,7 +20,7 @@
 
 enum{ASK_LIST, ASK_INFO, ASK_FILE, STOP_AND_WAIT, EXIT};
 
-void ClientTestAction::init(std::string server1, std::string server2)
+void ClientTestAction::init(string server1, string server2)
 {
 	m_state= ASK_LIST;
 	m_exited = false;
@@ -60,7 +60,7 @@ void ClientTestAction::action()
 
 void ClientTestAction::ask_list()
 {
-	std::string name("aml");
+	string name("aml");
 
 
 	ClientManager* cl_man = ClientManager::instance();
@@ -73,7 +73,7 @@ void ClientTestAction::ask_list()
 void ClientTestAction::ask_info()
 {
 	ClientManager* cl_man = ClientManager::instance();
-	std::vector<SearchEntry> results = cl_man->get_last_search();
+	vector<SearchEntry> results = cl_man->get_last_search();
 	if(results.size()>0)
 	{
 		for(Uint32 i=0; i<results.size(); i++)
