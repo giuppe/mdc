@@ -28,7 +28,7 @@
 MpegMDCodec::MpegMDCodec() {
 	m_seq_counter.push_back(0);
 	m_flows_number = 2;
-	m_preferred_payload_size = 50000;
+	m_preferred_payload_size = 1000;
 }
 
 void MpegMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
@@ -45,14 +45,18 @@ void MpegMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 				descriptor->set_stream_id(md_stream->get_stream_id());
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
-				descriptor->set_codec_name(std::string("text"));
+				descriptor->set_codec_name(std::string("mpeg"));
 				MpegCodecParameters* tcp = new MpegCodecParameters();
 				descriptor->set_codec_parameter(tcp);
 				DataChunk payload;
-				for (Uint64 k=0; k<max_payload_size; k++)
-					if (offset+(m_flows_number*descriptors_number*k) < stream_size)
-						payload += stream->get_data(offset+(m_flows_number*descriptors_number*k), 1);
-				offset++;
+				if (offset+max_payload_size < stream_size) {
+					payload += stream->get_data(offset, max_payload_size+1);
+					offset += (max_payload_size+1)*m_flows_number;
+				}
+				else {
+					offset -= max_payload_size+1;
+					payload += stream->get_data(stream_size-offset, stream_size-offset);
+				}
 				descriptor->set_payload(payload);
 				md_stream->set_descriptor(descriptor);
 			}
@@ -64,55 +68,42 @@ void MpegMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 	if (!md_stream->is_empty()) {
 		DataChunk* dc = new DataChunk();
 		std::vector<Uint8> taken_stream;
-		Uint64 offset = 0;
 		Uint8 flows_number = md_stream->get_flows_number();
 		Uint32 sequences_number = md_stream->get_sequences_number();
 		Uint64 max_dimension = 0;
-		for (Uint8 i=0; i<flows_number; i++)
-		{
-			for (Uint32 j=0; j<sequences_number; j++) 
-			{
+		for (Uint8 i=0; i<flows_number; i++) {
+			Uint64 offset = 0;
+			for (Uint32 j=0; j<sequences_number; j++) {
 				Descriptor* descriptor = new Descriptor();
 				Uint16 payload_size = 0;
-				
-				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="text")) 
-				{
+				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="mpeg")) {
 					payload_size = descriptor->get_payload_size();
-					
-					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) 
-					{
+					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) {
 						(*dc) += *(descriptor->get_payload());
 						taken_stream.resize(flows_number*sequences_number*(payload_size+1));
-						Uint8 current_received_data;
-						for (Uint64 k=0; k<payload_size; k++) 
-						{
-							dc->extract_head(current_received_data);
-							taken_stream[offset+(flows_number*sequences_number*k)] = current_received_data;
-							if (offset+(flows_number*sequences_number*k) > max_dimension)
-							{
-								max_dimension = offset+(flows_number*sequences_number*k);
-							}
+						Uint8* current_received_data;
+						dc->extract_head(payload_size, current_received_data);
+						for (Uint16 k=0; k<payload_size; k++) {
+							taken_stream[k+offset] = current_received_data[k];
+							if (k+offset > max_dimension)
+								max_dimension = k+offset;
 						}
 					}
 				}
-				else
-				{
-					for (Uint32 k=0; k<payload_size; k++) 
-					{
-						taken_stream[offset+(flows_number*sequences_number*k)] = 0;
-						if (offset+(flows_number*sequences_number*k) > max_dimension)
-							max_dimension = offset+(flows_number*sequences_number*k);
+				else {
+					for (Uint32 k=0; k<payload_size; k++) {
+						taken_stream[k+offset] = 0;
+						if (k+offset > max_dimension)
+							max_dimension = k+offset;
 					}
 				}
-				offset++;
+				offset += payload_size*m_flows_number;
 			}
 		}
 		DataChunk* taken_dc = new DataChunk();
 		Uint8* temp_container = new Uint8[max_dimension+1];
 		for (Uint64 i=0; i<max_dimension+1; i++)
-		{
 			temp_container[i] = taken_stream[i];
-		}
 		taken_dc->append(max_dimension+1, temp_container);
 		stream->set_data(*taken_dc);
 	}

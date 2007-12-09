@@ -20,6 +20,7 @@
 #include "pcx/pcx_stream.h"
 #include <string>
 #include "stream_factory.h"
+#include "mpeg/mpeg_stream.h"
 
 AbstractStream* StreamFactory::create_stream(std::string codec_name)
 {
@@ -28,6 +29,7 @@ AbstractStream* StreamFactory::create_stream(std::string codec_name)
 	{
 		return new TextStream();
 	}
+	if (codec_name == "mpeg") return new MpegStream();
 #ifdef MDC_PCX_IS_WORKING
 	else if(codec_name=="pcx")
 	{
