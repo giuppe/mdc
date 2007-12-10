@@ -24,8 +24,8 @@
 #include <cassert>
 #include <string>
 
-std::vector<std::string> PosixDirectory::get_file_names(std::string path) {
-	std::vector<std::string> result;
+vector<string> PosixDirectory::get_file_names(string path) {
+	vector<string> result;
 	DIR* directory;
 	struct dirent* directory_entry;
 	if ((directory = opendir(path.c_str())) == NULL) {
@@ -48,7 +48,7 @@ std::vector<std::string> PosixDirectory::get_file_names(std::string path) {
 	return result;
 }
 
-bool PosixDirectory::load_file(const std::string& path, DataChunk& loaded_data) {
+bool PosixDirectory::load_file(const string& path, DataChunk& loaded_data) {
 	loaded_data.erase();
 	FILE *m_f;
 
@@ -88,7 +88,7 @@ bool PosixDirectory::load_file(const std::string& path, DataChunk& loaded_data) 
 	return false;
 }
 
-bool PosixDirectory::save_file(const std::string& path, const DataChunk& data_to_save) {
+bool PosixDirectory::save_file(const string& path, const DataChunk& data_to_save) {
 	//FIXME: always overwrite to output file
 	DataChunk dc;
 	dc += data_to_save;
@@ -121,7 +121,7 @@ bool PosixDirectory::save_file(const std::string& path, const DataChunk& data_to
 	return false;
 }
 
-std::string PosixDirectory::get_filename(const std::string& path) {
-	std::string::size_type pos = path.find_last_of('/');
+string PosixDirectory::get_filename(const string& path) {
+	string::size_type pos = path.find_last_of('/');
 	return path.substr(pos+1);
 }

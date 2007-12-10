@@ -27,9 +27,9 @@
 class MpegStream : public AbstractStream
 {
 private:
-	std::vector<Uint8> m_data;
-	std::string m_stream_name;
-	std::string m_hash;
+	vector<Uint8> m_data;
+	string m_stream_name;
+	string m_hash;
 public:	
 	MpegStream();
 
@@ -58,19 +58,19 @@ public:
 	 * Set stream name.
 	 * @name: stream name
 	 */
-	void set_stream_name(std::string& name);
+	void set_stream_name(string& name);
 
 	/*
 	 * Get stream name.
 	 * @returns: stream name
 	 */
-	std::string get_stream_name() const;
+	string get_stream_name() const;
 
 	/*
 	 * Get stream hash.
 	 * @returns: hash code calculated on stream content
 	 */
-	std::string compute_hash_md5() const;
+	string compute_hash_md5() const;
 
 
 	/*
@@ -78,7 +78,7 @@ public:
 	 * @path: filesystem path of file to save;
 	 * @returns: true if operation is successful
 	 */
-	bool save_to_disk(const std::string& path) const;
+	bool save_to_disk(const string& path) const;
 
 	/*
 	 * Insert data to the current stream.
@@ -96,7 +96,7 @@ public:
 	 * @path: filesystem path of file to load;
 	 * @returns: true if operation is successful
 	 */
-	bool load_from_disk(const std::string& path);
+	bool load_from_disk(const string& path);
 	
 	
 	DataChunk& serialize() const;

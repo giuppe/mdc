@@ -28,7 +28,7 @@ class Scheduler
 {
 protected:
 
-	std::list<Action*> m_actions;
+	list<Action*> m_actions;
 	
 private:
 	Uint32 m_last_tick;

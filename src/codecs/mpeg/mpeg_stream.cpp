@@ -26,7 +26,7 @@
 
 MpegStream::MpegStream() {m_data.resize(0);}
 
-bool MpegStream::load_from_disk(const std::string& path) {
+bool MpegStream::load_from_disk(const string& path) {
 	if (path.size() > 0) {
 		m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of("."));
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
@@ -39,7 +39,7 @@ bool MpegStream::load_from_disk(const std::string& path) {
 	return false;
 }
 
-bool MpegStream::save_to_disk(const std::string& path) const
+bool MpegStream::save_to_disk(const string& path) const
 {
 	if (path.size()>0 && m_data.size()>0) {
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
@@ -66,7 +66,7 @@ Uint32 MpegStream::get_data_dim() const
 
 
 
-void MpegStream::set_stream_name(std::string& name) 
+void MpegStream::set_stream_name(string& name) 
 {
 	if (name.size() > 0)
 		m_stream_name = name;
@@ -75,7 +75,7 @@ void MpegStream::set_stream_name(std::string& name)
 
 
 
-std::string MpegStream::get_stream_name() const 
+string MpegStream::get_stream_name() const 
 {
 	return m_stream_name;
 }
@@ -101,7 +101,7 @@ void MpegStream::deserialize(const DataChunk& datachunk) {
 }
 
 
-std::string MpegStream::compute_hash_md5() const 
+string MpegStream::compute_hash_md5() const 
 {
 	return Hash::md5_from_datachunk(this->serialize());
 }

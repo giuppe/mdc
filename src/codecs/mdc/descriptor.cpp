@@ -25,8 +25,8 @@ Uint8 Descriptor::get_flow_id() const {return m_flow_id;}
 void Descriptor::set_flow_id(Uint8 id) {m_flow_id = id;}
 Uint32 Descriptor::get_sequence_number() const {return m_sequence_number;}
 void Descriptor::set_sequence_number(Uint32 seq_num) {m_sequence_number = seq_num;}
-void Descriptor::set_codec_name(const std::string& codec_name) {m_codec_name = codec_name;}
-std::string Descriptor::get_codec_name() const {return m_codec_name;}
+void Descriptor::set_codec_name(const string& codec_name) {m_codec_name = codec_name;}
+string Descriptor::get_codec_name() const {return m_codec_name;}
 AbstractCodecParameters* Descriptor::get_codec_parameter() const {return m_codec_parameters;}
 void Descriptor::set_codec_parameter(AbstractCodecParameters* acp) {m_codec_parameters = acp;}
 Descriptor::~Descriptor() {delete m_codec_parameters;}
@@ -66,7 +66,7 @@ void Descriptor::deserialize(const DataChunk& data) {
 		temp_dc->extract_head(8, preamble);
 		MDCMessage msg;
 		msg.deserialize(preamble);
-		if (msg.get_type_string() == std::string("DESC")) {
+		if (msg.get_type_string() == string("DESC")) {
 			temp_dc->extract_head(hash);
 			m_complete_stream_md5_hash = hash;
 			temp_dc->extract_head(m_flow_id);
@@ -123,12 +123,12 @@ Uint32 Descriptor::get_codec_parameters_size() const
 
 
 
-std::string Descriptor::get_stream_id() const
+string Descriptor::get_stream_id() const
 {
 	return m_complete_stream_md5_hash;
 }
 
-void Descriptor::set_stream_id(std::string stream_id)
+void Descriptor::set_stream_id(string stream_id)
 {
 	m_complete_stream_md5_hash = stream_id;
 }

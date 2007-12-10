@@ -31,7 +31,7 @@ PcxStream::PcxStream()
 
 
 
-bool PcxStream::load_from_disk(const std::string& path)
+bool PcxStream::load_from_disk(const string& path)
 {
 	LOG_INFO("Open File\n");
 	if (path.size() > 0) {
@@ -50,7 +50,7 @@ bool PcxStream::load_from_disk(const std::string& path)
 
 
 
-bool PcxStream::save_to_disk(const std::string& path) const
+bool PcxStream::save_to_disk(const string& path) const
 {
 	if (path.size()>0 && m_data.size()>0) {
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
@@ -109,7 +109,7 @@ Uint32 PcxStream::get_data_dim() const
 
 
 
-void PcxStream::set_stream_name(std::string& name)
+void PcxStream::set_stream_name(string& name)
 {
 	if (name.size() > 0)
 		m_stream_name = name;
@@ -118,7 +118,7 @@ void PcxStream::set_stream_name(std::string& name)
 
 
 
-std::string PcxStream::get_stream_name() const 
+string PcxStream::get_stream_name() const 
 {
 	return m_stream_name;
 }
@@ -134,7 +134,7 @@ void PcxStream::update_stream_hash()
 
 
 
-std::string PcxStream::get_stream_hash() const 
+string PcxStream::get_stream_hash() const 
 {
 	return m_hash;
 }

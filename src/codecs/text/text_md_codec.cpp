@@ -45,7 +45,7 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 				descriptor->set_stream_id(md_stream->get_stream_id());
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
-				descriptor->set_codec_name(std::string("text"));
+				descriptor->set_codec_name(string("text"));
 				TextCodecParameters* tcp = new TextCodecParameters();
 				descriptor->set_codec_parameter(tcp);
 				DataChunk payload;
@@ -63,7 +63,7 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const {
 	if (!md_stream->is_empty()) {
 		DataChunk* dc = new DataChunk();
-		std::vector<Uint8> taken_stream;
+		vector<Uint8> taken_stream;
 		Uint64 offset = 0;
 		Uint8 flows_number = md_stream->get_flows_number();
 		Uint32 sequences_number = md_stream->get_sequences_number();

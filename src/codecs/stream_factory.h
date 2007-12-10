@@ -24,7 +24,7 @@
 class StreamFactory
 {
 public:
-	static AbstractStream* create_stream(std::string codec_name);
+	static AbstractStream* create_stream(string codec_name);
 };
 
 #endif /*STREAM_FACTORY_H_*/

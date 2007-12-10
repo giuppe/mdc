@@ -24,14 +24,14 @@
 #include "mpeg/mpeg_md_codec.h"
 
 
-void CodecRegistry::register_codec(const std::string& name, AbstractMDCodec* codec)
+void CodecRegistry::register_codec(const string& name, AbstractMDCodec* codec)
 {
 	LOG_INFO("Registering codec: "<<name);
 	m_codecs[name]= codec;
 }
 
 
-bool CodecRegistry::get_codec(const std::string& name, AbstractMDCodec*& codec) const
+bool CodecRegistry::get_codec(const string& name, AbstractMDCodec*& codec) const
 {
 	if(m_codecs.count(name)==0)
 	{
@@ -40,7 +40,7 @@ bool CodecRegistry::get_codec(const std::string& name, AbstractMDCodec*& codec) 
 	}
 
 	
-	std::map<std::string, AbstractMDCodec*>::const_iterator it;
+	map<string, AbstractMDCodec*>::const_iterator it;
 	
 	it = m_codecs.find(name);
 	
@@ -50,16 +50,16 @@ bool CodecRegistry::get_codec(const std::string& name, AbstractMDCodec*& codec) 
 }
 
 void CodecRegistry::init() {
-	this->register_codec(std::string("text"), new TextMDCodec());
-	register_codec(std::string("mpeg"), new MpegMDCodec());
+	this->register_codec(string("text"), new TextMDCodec());
+	register_codec(string("mpeg"), new MpegMDCodec());
 #ifdef MDC_PCX_IS_WORKING
-	this->register_codec(std::string("pcx"), new PcxMDCodec());
+	this->register_codec(string("pcx"), new PcxMDCodec());
 #endif
 }
 
 void CodecRegistry::deinit()
 {
-	std::map<std::string, AbstractMDCodec*>::const_iterator it;
+	map<string, AbstractMDCodec*>::const_iterator it;
 	for ( it=m_codecs.begin() ; it != m_codecs.end(); it++ )
 	{
 		delete it->second;

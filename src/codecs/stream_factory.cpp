@@ -22,7 +22,7 @@
 #include "stream_factory.h"
 #include "mpeg/mpeg_stream.h"
 
-AbstractStream* StreamFactory::create_stream(std::string codec_name)
+AbstractStream* StreamFactory::create_stream(string codec_name)
 {
 	LOG_INFO_STATIC("Creating stream of type: "<<codec_name);
 	if(codec_name=="text")

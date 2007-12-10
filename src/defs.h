@@ -6,6 +6,24 @@
 
 #define LOG_LEVEL 3
 
+#if USING_USTL
+
+#include <ustl.h>
+using namespace ustd;
+
+#else
+#include <iostream>
+#include <vector>
+#include <map>
+#include <list>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+#endif
+
+
 #include <SDL/SDL.h>
 #include "common/log/log_manager.h"
 
@@ -26,20 +44,7 @@ typedef Uint8 unsigned char;
 typedef Sint8 char;
 #endif
 
-#if USING_USTL
 
-#include <ustl.h>
-using namespace ustd;
-
-#else
-#include <iostream>
-#include <vector>
-#include <map>
-#include <list>
-
-using namespace std;
-
-#endif
 
 
 #endif /*DEFS_H_*/

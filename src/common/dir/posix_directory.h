@@ -27,15 +27,15 @@
 class PosixDirectory : public AbstractDirectory
 {
 public:
-	std::vector<std::string> get_file_names(std::string path);
+	vector<string> get_file_names(string path);
 	
-	bool load_file(const std::string& path, DataChunk& loaded_data);
+	bool load_file(const string& path, DataChunk& loaded_data);
 
-	bool save_file(const std::string& path, const DataChunk& data_to_save);
+	bool save_file(const string& path, const DataChunk& data_to_save);
 	
-	std::string get_filename(const std::string& path);
+	string get_filename(const string& path);
 	
-	//std::string get_hash_md5(const std::string& path);
+	//string get_hash_md5(const string& path);
 
 	
 };

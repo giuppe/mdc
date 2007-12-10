@@ -7,16 +7,16 @@
 class NetEndPoint
 {
 private:
-	std::string m_ip;
+	string m_ip;
 	Uint16 m_port;
 	
 public:
 	
 	NetEndPoint():m_ip(""),m_port(0){}
 	
-	NetEndPoint(std::string ip, Uint16 port):m_ip(ip), m_port(port){};
+	NetEndPoint(string ip, Uint16 port):m_ip(ip), m_port(port){};
 	
-	std::string get_ip() const {return m_ip;}
+	string get_ip() const {return m_ip;}
 	
 	Uint16 get_port() const {return m_port;}
 	

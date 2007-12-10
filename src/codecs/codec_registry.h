@@ -27,14 +27,14 @@
 class CodecRegistry
 {
 private:
-	std::map<std::string, AbstractMDCodec*> m_codecs;
+	map<string, AbstractMDCodec*> m_codecs;
 	
 	
 public:
 	
-	void register_codec(const std::string& name, AbstractMDCodec* codec);
+	void register_codec(const string& name, AbstractMDCodec* codec);
 	
-	bool get_codec(const std::string& name, AbstractMDCodec*& codec) const;
+	bool get_codec(const string& name, AbstractMDCodec*& codec) const;
 
 	void init();
 	

@@ -62,7 +62,7 @@ void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
 				Descriptor* descriptor= new Descriptor();
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
-				descriptor->set_codec_name(std::string("pcx"));
+				descriptor->set_codec_name(string("pcx"));
 				descriptor->set_codec_parameter(pcp);
 				Uint16 payload_size;
 				if (stream_size-offset-1 < max_payload_size)

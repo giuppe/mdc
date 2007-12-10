@@ -25,8 +25,8 @@
 
 class PcxMDCodec : public AbstractMDCodec{
 private:
-	std::vector<Uint8> m_flows_id;
-	std::vector<Uint32> m_seq_counter;
+	vector<Uint8> m_flows_id;
+	vector<Uint32> m_seq_counter;
 
 public:
 	/*

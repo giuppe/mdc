@@ -22,11 +22,11 @@
 
 MDStream::MDStream():m_is_empty(true),m_is_inited(false) {}
 
-MDStream::MDStream(std::string stream_id, Uint8 n_flows, Uint32 sequence_size):m_is_empty(true),m_is_inited(false) {
+MDStream::MDStream(string stream_id, Uint8 n_flows, Uint32 sequence_size):m_is_empty(true),m_is_inited(false) {
 	init(stream_id, n_flows, sequence_size);
 }
 
-void MDStream::init(std::string stream_id, Uint8 n_flows, Uint32 sequence_size) 
+void MDStream::init(string stream_id, Uint8 n_flows, Uint32 sequence_size) 
 {
 	m_stream_id = stream_id;
 	m_stream.resize(n_flows);
@@ -64,10 +64,10 @@ void MDStream::set_descriptor(Descriptor* descriptor) {
 	m_valid_descriptor[flow][sequence] = true;
 }
 
-//std::string MDStream::get_name() const {return m_name;}
+//string MDStream::get_name() const {return m_name;}
 
 
-std::string MDStream::get_stream_id() const {return m_stream_id;}
+string MDStream::get_stream_id() const {return m_stream_id;}
 
 MDStream::~MDStream() {
 	if ((m_is_inited) && (!m_is_empty)) {
@@ -81,7 +81,7 @@ MDStream::~MDStream() {
 	}
 }
 
-bool MDStream::load_from_disk(const std::string& path) {
+bool MDStream::load_from_disk(const string& path) {
 	DataChunk data;
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
 	if (dir->load_file(path, data)) {
@@ -93,7 +93,7 @@ bool MDStream::load_from_disk(const std::string& path) {
 	return false;
 }
 
-bool MDStream::save_to_disk(const std::string& path) {
+bool MDStream::save_to_disk(const string& path) {
 	DataChunk data;
 	data += serialize();
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();

@@ -29,10 +29,10 @@
 class Descriptor : public Serializable
 {
 private:
-	std::string m_complete_stream_md5_hash;
+	string m_complete_stream_md5_hash;
 	Uint8 m_flow_id;
 	Uint32 m_sequence_number;
-	std::string m_codec_name;
+	string m_codec_name;
 	AbstractCodecParameters* m_codec_parameters;
 	DataChunk m_payload;
 public:
@@ -73,13 +73,13 @@ public:
 	 * Set codec name.
 	 * @codec_name: codec name
 	 */
-	void set_codec_name(const std::string& codec_name);
+	void set_codec_name(const string& codec_name);
 	
 	/*
 	 * Get codec name.
 	 * @returns: codec name
 	 */
-	std::string get_codec_name() const;
+	string get_codec_name() const;
 	
 	/*
 	 * Get codec parameters.
@@ -123,9 +123,9 @@ public:
 	 */
 	void deserialize(const DataChunk& data);
 	
-	std::string get_stream_id() const;
+	string get_stream_id() const;
 	
-	void set_stream_id(std::string stream_id);
+	void set_stream_id(string stream_id);
 	
 	
 };

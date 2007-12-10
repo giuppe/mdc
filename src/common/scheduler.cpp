@@ -38,7 +38,7 @@ void Scheduler::add_action(Action* action)
 
 void Scheduler::execute_all()
 {
-	std::list<Action*>::iterator it;
+	list<Action*>::iterator it;
 	
 	Uint32 tick_diff;
 	Uint32 action_to_sleep;

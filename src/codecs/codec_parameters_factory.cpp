@@ -4,7 +4,7 @@
 #include "pcx/pcx_codec_parameters.h"
 #include "mpeg/mpeg_codec_parameters.h"
 
-AbstractCodecParameters* CodecParametersFactory::create_codec_parameters(std::string codec_name) {
+AbstractCodecParameters* CodecParametersFactory::create_codec_parameters(string codec_name) {
 	if(codec_name=="text")
 	{
 		return new TextCodecParameters();

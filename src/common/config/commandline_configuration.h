@@ -31,25 +31,25 @@
 class CommandlineConfiguration : public AbstractConfiguration
 {
 	protected:
-		std::map< std::string, std::string> m_arguments;
+		map< string, string> m_arguments;
 		
-		void parse_arguments(const std::vector<std::string>& arguments);
+		void parse_arguments(const vector<string>& arguments);
 	
-		bool get_string(const std::string& section_name, const std::string& object_name, std::string& value) const;
+		bool get_string(const string& section_name, const string& object_name, string& value) const;
 		
-		bool get_int(const std::string& section_name, const std::string& object_name, Uint32& value) const;
+		bool get_int(const string& section_name, const string& object_name, Uint32& value) const;
 	
-		bool get_bool(const std::string& section_name, const std::string& object_name, bool& value) const;
+		bool get_bool(const string& section_name, const string& object_name, bool& value) const;
 
-		void remove_object(const std::string& section_name, const std::string& object_name){};
+		void remove_object(const string& section_name, const string& object_name){};
 		
-		void remove_section(const std::string& section_name){};
+		void remove_section(const string& section_name){};
 	
-		void set_string(const std::string& section_name, const std::string& object_name, const std::string& value){};
+		void set_string(const string& section_name, const string& object_name, const string& value){};
 	
-		void set_int(const std::string& section_name, const std::string& object_name, const Uint32& value){};
+		void set_int(const string& section_name, const string& object_name, const Uint32& value){};
 	
-		void set_bool(const std::string& section_name, const std::string& object_name, const bool& value){};
+		void set_bool(const string& section_name, const string& object_name, const bool& value){};
 
 		
 	public:
@@ -66,14 +66,14 @@ class CommandlineConfiguration : public AbstractConfiguration
 		void init(Sint32 argc, char* argv[]);
 		
 	
-	//	bool get_double(const std::string& object_name, double& value) const;
+	//	bool get_double(const string& object_name, double& value) const;
 		/**
 		 * This function does nothing, as command line arguments are read-only.
 		 */
 		void save(){};
 		
 	
-	//	void set_double(const std::string& object_name, const double& value){};
+	//	void set_double(const string& object_name, const double& value){};
 		
 };
 

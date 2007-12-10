@@ -32,14 +32,14 @@ public:
 	 * @path: filesystem path of file to load
 	 * @returns: true if operation is successful
 	 */
-	virtual bool load_from_disk(const std::string& path) = 0;
+	virtual bool load_from_disk(const string& path) = 0;
 	
 	/*
 	 * Saves a stream to disk.
 	 * @path: filesystem path of file to save;
 	 * @returns: true if operation is successful
 	 */
-	virtual bool save_to_disk(const std::string& path) const = 0;
+	virtual bool save_to_disk(const string& path) const = 0;
 	
 	
 	/*
@@ -52,7 +52,7 @@ public:
 	 * Set stream name.
 	 * @name: name to be set
 	 */
-	virtual void set_stream_name(std::string& name) = 0;
+	virtual void set_stream_name(string& name) = 0;
 	
 	/*
 	 * Get stream name.
@@ -60,13 +60,13 @@ public:
 	 * @final_position: read to this final position
 	 * @returns: name
 	 */
-	virtual std::string get_stream_name() const = 0;
+	virtual string get_stream_name() const = 0;
 	
 	/*
 	 * Get stream hash.
 	 * @returns: hash string
 	 */
-	virtual std::string compute_hash_md5() const = 0;
+	virtual string compute_hash_md5() const = 0;
 	
 
 	

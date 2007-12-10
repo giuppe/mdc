@@ -27,9 +27,9 @@
 class PcxStream : public AbstractStream
 {
 private:
-	std::vector<char> m_data;
-	std::string m_stream_name;
-	std::string m_hash;
+	vector<char> m_data;
+	string m_stream_name;
+	string m_hash;
 public:	
 	PcxStream();
 
@@ -58,19 +58,19 @@ public:
 	 * Set stream name.
 	 * @name: stream name
 	 */
-	void set_stream_name(std::string& name);
+	void set_stream_name(string& name);
 
 	/*
 	 * Get stream name.
 	 * @returns: stream name
 	 */
-	std::string get_stream_name() const;
+	string get_stream_name() const;
 
 	/*
 	 * Get stream hash.
 	 * @returns: hash code calculated on stream content
 	 */
-	std::string get_stream_hash() const;
+	string get_stream_hash() const;
 
 	/*
 	 * Update stream hash.
@@ -82,7 +82,7 @@ public:
 	 * @path: filesystem path of file to save;
 	 * @returns: true if operation is successful
 	 */
-	bool save_to_disk(const std::string& path) const;
+	bool save_to_disk(const string& path) const;
 
 	/*
 	 * Insert data to the current stream.
@@ -101,7 +101,7 @@ public:
 	 * @path: filesystem path of file to load;
 	 * @returns: true if operation is successful
 	 */
-	bool load_from_disk(const std::string& path);
+	bool load_from_disk(const string& path);
 	
 	
 	

@@ -29,7 +29,7 @@ class Descriptor;
 
 struct MDStreamInfo
 {
-	std::string stream_id;
+	string stream_id;
 	Uint8 flows_number;
 	Uint32 descriptors_number;
 	MDStreamInfo():stream_id(""),flows_number(0), descriptors_number(0){}
@@ -39,11 +39,11 @@ struct MDStreamInfo
 class MDStream : public Serializable
 {
 private:
-	std::vector<std::vector<Descriptor*> > m_stream;
-	std::vector<std::vector<bool> > m_valid_descriptor;
+	vector<vector<Descriptor*> > m_stream;
+	vector<vector<bool> > m_valid_descriptor;
 	void set_descriptor(Uint8 flow, Uint32 sequence, Descriptor* descriptor);
-	//std::string m_name;
-	std::string m_stream_id;
+	//string m_name;
+	string m_stream_id;
 	bool m_is_empty;
 	bool m_is_inited;
 public:
@@ -54,9 +54,9 @@ public:
 	 * @n_flows: flows number in wich the file must be divided;
 	 * @sequence_size: size of each sequence
 	 */
-	void init(std::string stream_id, Uint8 n_flows, Uint32 sequence_size);
+	void init(string stream_id, Uint8 n_flows, Uint32 sequence_size);
 	
-	MDStream(std::string stream_id, Uint8 n_flows, Uint32 sequence_size);
+	MDStream(string stream_id, Uint8 n_flows, Uint32 sequence_size);
 	~MDStream();
 	
 	/*
@@ -78,26 +78,26 @@ public:
 	 * @path: filesystem path of file to load;
 	 * @returns: true if operation is successful
 	 */
-	bool load_from_disk(const std::string& path);
+	bool load_from_disk(const string& path);
 	
 	/*
 	 * Saves a stream to disk.
 	 * @path: filesystem path of file to save;
 	 * @returns: true if operation is successful
 	 */
-	bool save_to_disk(const std::string& path);
+	bool save_to_disk(const string& path);
 	
 	/*
 	 * Gets a stream name.
 	 * @returns: stream name
 	 */
-	//std::string get_name() const;
+	//string get_name() const;
 	
 	/*
 	 * Gets a stream name.
 	 * @returns: stream hash
 	 */	
-	std::string get_stream_id() const;
+	string get_stream_id() const;
 	
 	/*
 	 * Verifies if a stream is empty.

@@ -23,7 +23,7 @@
 #include "net_manager.h"
 
 
-Uint32 NetManager::create_UDP_listen_socket(const std::string& address, Uint16 port)
+Uint32 NetManager::create_UDP_listen_socket(const string& address, Uint16 port)
 {
 	IPaddress ip_address;
 	
@@ -51,7 +51,7 @@ Uint32 NetManager::create_UDP_listen_socket(const std::string& address, Uint16 p
 	return socket_id;
 }
 
-Uint32 NetManager::create_UDP_socket(const std::string& address, Uint16 port)
+Uint32 NetManager::create_UDP_socket(const string& address, Uint16 port)
 {
 	IPaddress ip_address;
 	
@@ -180,7 +180,7 @@ bool NetManager::receive_data(Uint32 source_socket_handle, DataChunk& data, NetE
 	
 
 	Uint16 sender_port;
-	std::string sender_host;
+	string sender_host;
 	
 	//FIXME: we assume that MTU is 1500
 	packet.data = new Uint8[1500];
@@ -203,7 +203,7 @@ bool NetManager::receive_data(Uint32 source_socket_handle, DataChunk& data, NetE
 			data.set_content(packet.data, packet.len);
 			
 			sender_port = packet.address.port;
-			sender = NetEndPoint(std::string(SDLNet_ResolveIP(&(packet.address))), sender_port);
+			sender = NetEndPoint(string(SDLNet_ResolveIP(&(packet.address))), sender_port);
 			return true;
 		default:
 			LOG_FATAL("SDLNet error: "<<SDLNet_GetError());
@@ -214,7 +214,7 @@ bool NetManager::receive_data(Uint32 source_socket_handle, DataChunk& data, NetE
 }
 
 
-Uint32 NetManager::resolve(std::string hostname)
+Uint32 NetManager::resolve(string hostname)
 {
 	IPaddress ip_address;
 		

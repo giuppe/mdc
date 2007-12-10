@@ -23,7 +23,7 @@
 class CodecParametersFactory
 {
 public:
-	static AbstractCodecParameters* create_codec_parameters(std::string codec_name);
+	static AbstractCodecParameters* create_codec_parameters(string codec_name);
 
 };
 #endif /*CODEC_PARAMETERS_FACTORY_H_*/

@@ -30,9 +30,9 @@
 class NetManager
 {
 private:
-	std::vector<UDPsocket> m_sockets;
+	vector<UDPsocket> m_sockets;
 	
-	std::vector<IPaddress> m_addresses;
+	vector<IPaddress> m_addresses;
 	
 	UDPsocket get_socket(Uint32 socket_handle);
 	
@@ -47,7 +47,7 @@ public:
 	 * @param port the local listening port
 	 * @returns handle to the listening socket.
 	 */
-	Uint32 create_UDP_listen_socket(const std::string& address, Uint16 port);
+	Uint32 create_UDP_listen_socket(const string& address, Uint16 port);
 	
 	/**
 		 * Creates an UDP generic Socket (e.g. for data sending), and returns an handle to it.
@@ -55,7 +55,7 @@ public:
 		 * @param port the local listening port
 		 * @returns handle to the listening socket.
 		 */
-	Uint32 create_UDP_socket(const std::string& address, Uint16 port);
+	Uint32 create_UDP_socket(const string& address, Uint16 port);
 	
 	
 	Uint32 create_UDP_socket(Uint32 address, Uint16 port);
@@ -76,7 +76,7 @@ public:
 	bool receive_data(Uint32 source_socket_handle, DataChunk& data, NetEndPoint& sender);
 	
 	
-	Uint32 resolve(std::string hostname);
+	Uint32 resolve(string hostname);
 	
 	
 		// begin Singleton stuff

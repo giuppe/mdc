@@ -23,7 +23,7 @@
 
 
 
-bool XMLConfiguration::get_value(const std::string& section, const std::string& object, std::string& value) const
+bool XMLConfiguration::get_value(const string& section, const string& object, string& value) const
 {
 	if(m_initialized == true)
 	{
@@ -54,7 +54,7 @@ bool XMLConfiguration::get_value(const std::string& section, const std::string& 
 
 
 
-XMLConfiguration::XMLConfiguration(const std::string& file_path, bool create_if_missing)
+XMLConfiguration::XMLConfiguration(const string& file_path, bool create_if_missing)
 {
 	m_document = new TiXmlDocument();
 	
@@ -87,7 +87,7 @@ XMLConfiguration::~XMLConfiguration()
 
 
 
-bool XMLConfiguration::get_string(const std::string& section_name, const std::string& object_name, std::string& value) const
+bool XMLConfiguration::get_string(const string& section_name, const string& object_name, string& value) const
 {
 	
 	return get_value(section_name, object_name, value);
@@ -95,9 +95,9 @@ bool XMLConfiguration::get_string(const std::string& section_name, const std::st
 
 
 
-bool XMLConfiguration::get_int(const std::string& section_name, const std::string& object_name, Uint32& value) const
+bool XMLConfiguration::get_int(const string& section_name, const string& object_name, Uint32& value) const
 {
-	std::string value_string;
+	string value_string;
 	bool result = get_value(section_name, object_name, value_string);
 	if(result==true)
 	{
@@ -108,9 +108,9 @@ bool XMLConfiguration::get_int(const std::string& section_name, const std::strin
 
 
 	
-bool XMLConfiguration::get_bool(const std::string& section_name, const std::string& object_name, bool& value) const
+bool XMLConfiguration::get_bool(const string& section_name, const string& object_name, bool& value) const
 {
-	std::string value_string;
+	string value_string;
 	bool result = get_value(section_name, object_name, value_string);
 	
 	if(result == true)
@@ -139,7 +139,7 @@ void XMLConfiguration::save()
 
 
 	
-void XMLConfiguration::set_string(const std::string& section_name, const std::string& object_name, const std::string& value)
+void XMLConfiguration::set_string(const string& section_name, const string& object_name, const string& value)
 {
 	this->set_value(section_name, object_name, value);
 }
@@ -147,19 +147,19 @@ void XMLConfiguration::set_string(const std::string& section_name, const std::st
 
 
 
-void XMLConfiguration::set_int(const std::string& section_name, const std::string& object_name, const Uint32& value)
+void XMLConfiguration::set_int(const string& section_name, const string& object_name, const Uint32& value)
 {
 	char string_value[255];
 	sprintf(string_value, "%d", value);
-	this->set_value(section_name, object_name, std::string(string_value));
+	this->set_value(section_name, object_name, string(string_value));
 }
 
 
 	
 	
-void XMLConfiguration::set_bool(const std::string& section_name, const std::string& object_name, const bool& value)
+void XMLConfiguration::set_bool(const string& section_name, const string& object_name, const bool& value)
 {
-	std::string string_value = "false";
+	string string_value = "false";
 	if(value == true)
 	{
 		string_value = "true";
@@ -168,7 +168,7 @@ void XMLConfiguration::set_bool(const std::string& section_name, const std::stri
 }
 	
 
-void XMLConfiguration::set_value(const std::string& section, const std::string& object, const std::string& value)
+void XMLConfiguration::set_value(const string& section, const string& object, const string& value)
 {
 	bool section_found = false;
 	bool object_found = false;
@@ -182,7 +182,7 @@ void XMLConfiguration::set_value(const std::string& section, const std::string& 
 		
 		while((!section_found) && ( child = m_document->IterateChildren( child ) ))
 		{
-			if(std::string(child->Value())==section)
+			if(string(child->Value())==section)
 			{
 				section_found = true;
 			}
@@ -201,7 +201,7 @@ void XMLConfiguration::set_value(const std::string& section, const std::string& 
 		
 		while((!object_found) &&( nephew = child->IterateChildren( nephew ) ))
 		{
-			if(std::string(nephew->Value())==object)
+			if(string(nephew->Value())==object)
 			{
 				object_found = true;
 			}
@@ -223,7 +223,7 @@ void XMLConfiguration::set_value(const std::string& section, const std::string& 
 }
 
 
-void XMLConfiguration::remove_object(const std::string& section_name, const std::string& object_name)
+void XMLConfiguration::remove_object(const string& section_name, const string& object_name)
 {
 	bool section_found = false;
 	bool object_found = false;
@@ -237,7 +237,7 @@ void XMLConfiguration::remove_object(const std::string& section_name, const std:
 		
 		while((!section_found) && ( child = m_document->IterateChildren( child ) ))
 		{
-			if(std::string(child->Value())==section_name)
+			if(string(child->Value())==section_name)
 			{
 				section_found = true;
 			}
@@ -254,7 +254,7 @@ void XMLConfiguration::remove_object(const std::string& section_name, const std:
 		
 		while((!object_found) && ( nephew = child->IterateChildren( nephew ) ))
 		{
-			if(std::string(nephew->Value())==object_name)
+			if(string(nephew->Value())==object_name)
 			{
 				object_found = true;
 			}
@@ -269,7 +269,7 @@ void XMLConfiguration::remove_object(const std::string& section_name, const std:
 	child->RemoveChild(nephew);
 }
 
-void XMLConfiguration::remove_section(const std::string& section_name)
+void XMLConfiguration::remove_section(const string& section_name)
 {
 	bool section_found = false;
 
@@ -281,7 +281,7 @@ void XMLConfiguration::remove_section(const std::string& section_name)
 		
 		while((!section_found) && ( child = m_document->IterateChildren( child ) ))
 		{
-			if(std::string(child->Value())==section_name)
+			if(string(child->Value())==section_name)
 			{
 				section_found = true;
 			}

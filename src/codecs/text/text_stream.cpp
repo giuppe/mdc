@@ -26,7 +26,7 @@
 
 TextStream::TextStream() {m_data.resize(0);}
 
-bool TextStream::load_from_disk(const std::string& path) {
+bool TextStream::load_from_disk(const string& path) {
 	if (path.size() > 0) {
 		m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of("."));
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
@@ -39,7 +39,7 @@ bool TextStream::load_from_disk(const std::string& path) {
 	return false;
 }
 
-bool TextStream::save_to_disk(const std::string& path) const
+bool TextStream::save_to_disk(const string& path) const
 {
 	if (path.size()>0 && m_data.size()>0) {
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
@@ -66,7 +66,7 @@ Uint32 TextStream::get_data_dim() const
 
 
 
-void TextStream::set_stream_name(std::string& name) 
+void TextStream::set_stream_name(string& name) 
 {
 	if (name.size() > 0)
 		m_stream_name = name;
@@ -75,7 +75,7 @@ void TextStream::set_stream_name(std::string& name)
 
 
 
-std::string TextStream::get_stream_name() const 
+string TextStream::get_stream_name() const 
 {
 	return m_stream_name;
 }
@@ -101,7 +101,7 @@ void TextStream::deserialize(const DataChunk& datachunk) {
 }
 
 
-std::string TextStream::compute_hash_md5() const 
+string TextStream::compute_hash_md5() const 
 {
 	return Hash::md5_from_datachunk(this->serialize());
 }
