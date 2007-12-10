@@ -1,7 +1,7 @@
 /* 
  * hashlib++ - a simple hash library for C++
  * 
- * Copyright (c) 2007 Benjamin Grüdelbach
+ * Copyright (c) 2007 Benjamin Grï¿½delbach
  * 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -36,11 +36,7 @@
  */  
 
 //---------------------------------------------------------------------- 
-//STL includes
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <sstream>
+
 
 //---------------------------------------------------------------------- 
 //hashlib++ includes
@@ -55,7 +51,7 @@
  *
  *  @return 	the hash as std::string
  */  
-std::string md5wrapper::hashIt(void)
+string md5wrapper::hashIt(void)
 {
 	//create the hash
 	unsigned char buff[16] = "";	
@@ -73,13 +69,13 @@ std::string md5wrapper::hashIt(void)
  *  @param 	data The hash-data to covert into HEX
  *  @return	the converted data as std::string
  */  
-std::string md5wrapper::convToString(unsigned char *bytes)
+string md5wrapper::convToString(unsigned char *bytes)
 {
 	/*
 	 * using a ostringstream to convert the hash in a
 	 * hex string
 	 */
-	std::ostringstream os;
+	ostringstream os;
 	for(int i=0; i<16; ++i)
 	{
 		/*
@@ -95,7 +91,7 @@ std::string md5wrapper::convToString(unsigned char *bytes)
 		/*
 		 * conv to hex
 		 */
-		os << std::hex << static_cast<unsigned int>(bytes[i]);
+		os << hex << static_cast<unsigned int>(bytes[i]);
 	}
 
 	/*

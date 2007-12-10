@@ -1,7 +1,7 @@
 /* 
  * hashlib++ - a simple hash library for C++
  * 
- * Copyright (c) 2007 Benjamin Grüdelbach
+ * Copyright (c) 2007 Benjamin Grï¿½delbach
  * 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@
  *
  *  @return 	a hash as std::string
  */  
-std::string sha256wrapper::hashIt(void)
+string sha256wrapper::hashIt(void)
 {
 	uint8_t buff[SHA256_DIGEST_STRING_LENGTH];
 	sha256->SHA256_End(&context,(char*)buff);
@@ -60,14 +60,14 @@ std::string sha256wrapper::hashIt(void)
  *  @param 	data The hash-data to covert into HEX
  *  @return	the converted data as std::string
  */  
-std::string sha256wrapper::convToString(unsigned char *data)
+string sha256wrapper::convToString(unsigned char *data)
 {
 	/*
 	 * we can just copy data to a string, because 
 	 * the transforming to hash is already done
 	 * within the sha256 implementation
 	 */
-	return std::string((const char*)data);
+	return string((const char*)data);
 }
 
 /**

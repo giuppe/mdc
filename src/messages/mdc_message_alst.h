@@ -40,10 +40,10 @@ public:
 	
 	Uint32 get_num_entries() const {return get_num_rows();}
 	
-	void append_entry(std::string name, std::string hash)
+	void append_entry(string name, string hash)
 	{
 		
-		std::string entry = "n=";
+		string entry = "n=";
 		entry += name;
 		entry += ";&";
 		entry += "h=";
@@ -52,7 +52,7 @@ public:
 		m_rows.push_back(entry);
 	}
 	
-	std::string get_entry_name(Uint32 num_entry) const
+	string get_entry_name(Uint32 num_entry) const
 	{
 		if(num_entry>m_rows.size())
 		{
@@ -60,12 +60,12 @@ public:
 			return "";
 		}
 		
-		std::string entry = get_parameter_part(num_entry, "n");
+		string entry = get_parameter_part(num_entry, "n");
 		
 		return entry;
 	}
 	
-	std::string get_entry_hash(Uint32 num_entry) const
+	string get_entry_hash(Uint32 num_entry) const
 	{
 		if(num_entry>m_rows.size())
 		{

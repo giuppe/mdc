@@ -29,7 +29,7 @@ class MDCMessageVector : public MDCMessage
 {
 protected:
 	
-	std::vector<std::string> m_rows;
+	vector<string> m_rows;
 	
 public:
 	MDCMessageVector(){};
@@ -48,13 +48,13 @@ protected:
 	
 	Uint32 get_num_rows() const;
 	
-	std::vector<std::string> get_rows() const;
+	vector<string> get_rows() const;
 	
-	void set_rows(const std::vector<std::string>& rows);
+	void set_rows(const vector<string>& rows);
 	
-	std::string get_parameter_part(Uint32 index, std::string left_part) const;
+	string get_parameter_part(Uint32 index, string left_part) const;
 		
-	void set_parameter_part(Uint32 index, std::string left_part, std::string right_part);
+	void set_parameter_part(Uint32 index, string left_part, string right_part);
 	
 };
 

@@ -23,7 +23,7 @@
  * Loads all MDC streams found in path.
  * @param path path of mdc files
  */
-void StreamRepository::init(std::string path)
+void StreamRepository::init(string path)
 {
 	m_is_valid = false;
 	
@@ -31,17 +31,17 @@ void StreamRepository::init(std::string path)
 	
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
 	LOG_INFO("Initializing repository in "<<path);
-	std::vector<std::string> files = dir->get_file_names(path);
+	vector<string> files = dir->get_file_names(path);
 	
 	for(Uint32 i = 0; i<files.size(); i++)
 	{
 		LOG_INFO("Found file "<<files[i]);
-		std::string::size_type found = files[i].find(".mdc");
+		string::size_type found = files[i].find(".mdc");
 		
-		if(found != std::string::npos)
+		if(found != string::npos)
 		{
 			MDStream* curr_stream = new MDStream();
-			std::string complete_path = path;
+			string complete_path = path;
 			complete_path+="/";
 			complete_path+=files[i];
 			curr_stream->load_from_disk(complete_path);
@@ -66,20 +66,20 @@ void StreamRepository::init(std::string path)
 
 
 
-std::vector<MDStream*> StreamRepository::find_by_name(std::string regexp)
+vector<MDStream*> StreamRepository::find_by_name(string regexp)
 {
-	std::vector<MDStream*> results;
+	vector<MDStream*> results;
 	
-	std::string curr_stream_name;
+	string curr_stream_name;
 	LOG_INFO("Searching in repository for "<<regexp);
-	std::map<std::string,RepositoryEntry>::iterator iter;
+	map<string,RepositoryEntry>::iterator iter;
 	for( iter = m_streams.begin(); iter != m_streams.end(); ++iter ) 
 	{
 		
 		curr_stream_name = iter->second.name;
 		LOG_INFO("Comparing "<<curr_stream_name);
-		std::string::size_type found = curr_stream_name.find(regexp);
-		if(found != std::string::npos)
+		string::size_type found = curr_stream_name.find(regexp);
+		if(found != string::npos)
 		{
 			LOG_INFO("Found "<<curr_stream_name);
 			results.push_back(iter->second.stream);
@@ -94,10 +94,10 @@ std::vector<MDStream*> StreamRepository::find_by_name(std::string regexp)
 
 void StreamRepository::deinit()
 {
-	std::map<std::string,RepositoryEntry>::iterator iter;
+	map<string,RepositoryEntry>::iterator iter;
 	for( iter = m_streams.begin(); iter != m_streams.end(); ++iter ) 
 	{
-		std::string complete_path = m_path;
+		string complete_path = m_path;
 		complete_path+="/";
 		complete_path+=iter->second.name;
 		iter->second.stream->save_to_disk(complete_path);
@@ -107,7 +107,7 @@ void StreamRepository::deinit()
 
 
 
-bool StreamRepository::get_by_stream_id(std::string stream_id, MDStream* &stream)
+bool StreamRepository::get_by_stream_id(string stream_id, MDStream* &stream)
 {
 	if(m_streams.count(stream_id)==1)
 	{
@@ -134,7 +134,7 @@ bool StreamRepository::add_stream(RepositoryEntry entry)
 		return false;
 	}
 	
-	std::string hash = entry.stream->get_stream_id();
+	string hash = entry.stream->get_stream_id();
 	m_streams.insert(make_pair(hash, entry));
 	LOG_INFO("Adding stream with id "<<hash<<", name "<<entry.name);
 	
@@ -143,13 +143,13 @@ bool StreamRepository::add_stream(RepositoryEntry entry)
 }
 
 
-std::string StreamRepository::get_name_by_id(std::string stream_id)
+string StreamRepository::get_name_by_id(string stream_id)
 {
 	return m_streams[stream_id].name;
 }
 
 
-void StreamRepository::create_stream(std::string name, std::string stream_id, Uint8 flows, Uint32 sequences)
+void StreamRepository::create_stream(string name, string stream_id, Uint8 flows, Uint32 sequences)
 {
 	MDStream* new_stream = new MDStream(stream_id, flows, sequences);
 	RepositoryEntry new_entry;

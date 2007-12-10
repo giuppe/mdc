@@ -36,9 +36,9 @@ public:
 
 	}
 	
-	void set_stream_id(std::string stream_id);
+	void set_stream_id(string stream_id);
 	
-	std::string get_stream_id() const;
+	string get_stream_id() const;
 	
 	void set_flow_id(Uint8 flow_id);
 	

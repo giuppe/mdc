@@ -8,7 +8,7 @@
 
 
 
-void ClientManager::search(NetEndPoint peer, std::string stream_name) const
+void ClientManager::search(NetEndPoint peer, string stream_name) const
 {
 
 	MDCMessageList msg;
@@ -21,7 +21,7 @@ void ClientManager::search(NetEndPoint peer, std::string stream_name) const
 }
 
 
-void ClientManager::request_stream_info(NetEndPoint peer, std::string stream_id) const
+void ClientManager::request_stream_info(NetEndPoint peer, string stream_id) const
 {
 	MDCMessageSinf msg;
 	msg.set_stream_id(stream_id);
@@ -31,7 +31,7 @@ void ClientManager::request_stream_info(NetEndPoint peer, std::string stream_id)
 	udp_msg.send();
 }
 
-void ClientManager::request_stream(NetEndPoint peer, std::string stream_id, Uint8 flow_id, Uint32 sequence_begin, Uint32 sequence_end) const
+void ClientManager::request_stream(NetEndPoint peer, string stream_id, Uint8 flow_id, Uint32 sequence_begin, Uint32 sequence_end) const
 {
 	MDCMessageSreq msg;
 	msg.set_stream_id(stream_id);
@@ -50,12 +50,12 @@ MDStreamInfo ClientManager::get_last_stream_info() const
 	return m_last_stream_info;
 }
 
-std::vector<SearchEntry> ClientManager::get_last_search() const
+vector<SearchEntry> ClientManager::get_last_search() const
 {
 	return m_last_search;
 }
 
-void ClientManager::set_last_search(const std::vector<SearchEntry>& last_search)
+void ClientManager::set_last_search(const vector<SearchEntry>& last_search)
 {
 	m_last_search = last_search;
 }

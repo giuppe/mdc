@@ -13,21 +13,21 @@ private:
 
 	struct NameInfoEntry
 	{
-		std::string name; 
+		string name; 
 		MDStreamInfo info; 
 		NameInfoEntry(){}
 	};
-	std::map<std::string, NameInfoEntry> m_stream_names;
+	map<string, NameInfoEntry> m_stream_names;
 	
 public:
 	
-	std::string get_name(std::string stream_id);
+	string get_name(string stream_id);
 	
-	void add_name(std::string stream_id, std::string name);
+	void add_name(string stream_id, string name);
 
-	MDStreamInfo get_info(std::string stream_id);
+	MDStreamInfo get_info(string stream_id);
 	
-	void add_info(std::string stream_id, MDStreamInfo info);
+	void add_info(string stream_id, MDStreamInfo info);
 
 	
 	// begin Singleton stuff

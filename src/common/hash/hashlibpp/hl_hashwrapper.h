@@ -74,7 +74,7 @@
 
 //----------------------------------------------------------------------	
 //STL includes
-#include <string>
+#include "../defs.h"
 
 //----------------------------------------------------------------------	
 //C includes
@@ -114,7 +114,7 @@ class hashwrapper
 		 *
 		 *  @return 	the created hash as std::string
 		 */  
-		virtual std::string hashIt(void) = 0;
+		virtual string hashIt(void) = 0;
 
 		/**
 		 *  @brief 	This internal member-function
@@ -127,7 +127,7 @@ class hashwrapper
 		 *  @param 	data The hash-data to covert into HEX
 		 *  @return	The converted data as std::string
 		 */  
-		virtual std::string convToString(unsigned char *data) = 0;
+		virtual string convToString(unsigned char *data) = 0;
 
 		/**
 		 *  @brief 	This method adds the given data to the 
@@ -170,7 +170,7 @@ class hashwrapper
 		 *  		parameter is forwarded to updateContext()
 		 *  @return 	the created hash as std::string
 		 */  
-		virtual std::string getHashFromString(std::string text)
+		virtual string getHashFromString(string text)
 		{
 			/*
 			 * reset the context so that we can start
@@ -205,7 +205,7 @@ class hashwrapper
 		 *  @return	The created hash of the file or "-1" in case
 		 *  		the file could not be opened
 		 */  
-		virtual std::string getHashFromFile(std::string filename)
+		virtual string getHashFromFile(string filename)
 		{
 
 			FILE *file;

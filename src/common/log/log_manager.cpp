@@ -22,23 +22,23 @@
 
 
 
-void LogManager::init(bool console_output, const std::string& log_file)
+void LogManager::init(bool console_output, const string& log_file)
 {
 	m_console_output = console_output;
 	
-	m_log_file.open(log_file.c_str(), std::fstream::out | std::fstream::app);
+	m_log_file.open(log_file.c_str(), fstream::out | fstream::app);
 	
 	if(m_log_file.fail())
 	{
-		std::cout<<"Error opening "<<log_file<<" for logging."<<std::endl;
+		cout<<"Error opening "<<log_file<<" for logging."<<endl;
 	}
 	else
 	{
 
 		time_t current_time;
 		time(&current_time);
-		m_log_file<<"\n\n****\nLog started - "<<asctime(localtime ( &current_time ))<<"****\n"<<std::endl;
-		std::cout<<"\n****\nLog started - "<<asctime(localtime ( &current_time ))<<"****\n"<<std::endl;
+		m_log_file<<"\n\n****\nLog started - "<<asctime(localtime ( &current_time ))<<"****\n"<<endl;
+		cout<<"\n****\nLog started - "<<asctime(localtime ( &current_time ))<<"****\n"<<endl;
 	}
 	
 }
@@ -59,12 +59,12 @@ void LogManager::debug(const char* log_string)
 	
 	if(m_console_output==true)
 	{
-		std::cout<<log_string;
+		cout<<log_string;
 	}
 	m_log_file.flush();
 }
 
-LogManager& LogManager::operator<<(const std::string& log_string)
+LogManager& LogManager::operator<<(const string& log_string)
 {
 	this->debug(log_string.c_str());
 	return *this;

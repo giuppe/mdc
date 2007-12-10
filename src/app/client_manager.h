@@ -12,18 +12,18 @@
 class SearchEntry
 {
 private:
-	std::string m_name;
-	std::string m_stream_id;
+	string m_name;
+	string m_stream_id;
 public:
 	SearchEntry():m_name(""),m_stream_id(""){}
 	
-	std::string get_name(){return m_name;}
+	string get_name(){return m_name;}
 	
-	std::string get_stream_id(){return m_stream_id;}
+	string get_stream_id(){return m_stream_id;}
 	
-	void set_name(std::string name){m_name = name;}
+	void set_name(string name){m_name = name;}
 	
-	void set_stream_id(std::string stream_id){m_stream_id = stream_id;}
+	void set_stream_id(string stream_id){m_stream_id = stream_id;}
 		
 	
 };
@@ -31,24 +31,24 @@ public:
 class ClientManager
 {
 private:
-	std::vector<SearchEntry> m_last_search;
+	vector<SearchEntry> m_last_search;
 	MDStreamInfo m_last_stream_info;
 public:
 
 	
-	void search(NetEndPoint peer, std::string stream_name) const;
+	void search(NetEndPoint peer, string stream_name) const;
 	
-	std::vector<SearchEntry> get_last_search() const;
+	vector<SearchEntry> get_last_search() const;
 	
-	void request_stream_info(NetEndPoint peer, std::string stream_id) const;
+	void request_stream_info(NetEndPoint peer, string stream_id) const;
 	
 	MDStreamInfo get_last_stream_info() const;
 	
-	void request_stream(NetEndPoint peer, std::string stream_id, Uint8 flow_id, Uint32 sequence_begin, Uint32 sequence_end) const;
+	void request_stream(NetEndPoint peer, string stream_id, Uint8 flow_id, Uint32 sequence_begin, Uint32 sequence_end) const;
 	
 	void deinit(){};
 	
-	void set_last_search(const std::vector<SearchEntry>& last_search);
+	void set_last_search(const vector<SearchEntry>& last_search);
 	
 	void set_last_stream_info(MDStreamInfo stream_info);
 	

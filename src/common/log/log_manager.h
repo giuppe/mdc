@@ -51,11 +51,8 @@
  * \param x the string to log, or multiple strings concatenated by operator "<<"
  */
 
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <SDL/SDL.h>
+
+#include "../../defs.h"
 
 #ifndef LOG_MANAGER_H_
 #define LOG_MANAGER_H_
@@ -127,7 +124,7 @@ class LogManager
 private:
 	bool m_console_output;
 	
-	std::fstream m_log_file;
+	fstream m_log_file;
 	
 public:
 	
@@ -136,13 +133,13 @@ public:
 	 * @param console_output if true, shows logged strings in console.
 	 * @param log_file the path to the log file.
 	 */
-	void init(bool console_output, const std::string& log_file);
+	void init(bool console_output, const string& log_file);
 	
 	void deinit();
 
 	void debug(const char* log_string);
 	
-	LogManager& operator<<(const std::string& log_string);
+	LogManager& operator<<(const string& log_string);
 	
 	LogManager& operator<<(const char* log_string);
 	

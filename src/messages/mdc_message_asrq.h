@@ -37,9 +37,9 @@ public:
 	}
 	
 	
-	void set_hash(std::string hash);
+	void set_hash(string hash);
 	
-	std::string get_hash() const;
+	string get_hash() const;
 	
 	void set_flow_id(Uint8 flow_id);
 	

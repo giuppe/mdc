@@ -4,17 +4,17 @@
 #define HASH_H_
 
 #include "defs.h"
-#include <string>
+
 #include "../data_chunk.h"
 
 class Hash
 {
 public:
-	static std::string md5_from_file(std::string path);
+	static string md5_from_file(string path);
 	
-	static std::string md5_from_string(std::string str);
+	static string md5_from_string(string str);
 	
-	static std::string md5_from_datachunk(const DataChunk& data);
+	static string md5_from_datachunk(const DataChunk& data);
 	
 };
 

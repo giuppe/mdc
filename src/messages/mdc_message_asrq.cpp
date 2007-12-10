@@ -4,12 +4,12 @@
 #include <cstring>
 #include <cstdlib>
 
-void MDCMessageAsrq::set_hash(std::string hash)
+void MDCMessageAsrq::set_hash(string hash)
 {
 	set_parameter_part("h", hash);
 }
 	
-std::string MDCMessageAsrq::get_hash() const
+string MDCMessageAsrq::get_hash() const
 {
 	return get_parameter_part("h");
 }
@@ -18,7 +18,7 @@ void MDCMessageAsrq::set_flow_id(Uint8 flow_id)
 {
 	char* buffer = new char[255];
 	sprintf(buffer, "%d", flow_id);
-	set_parameter_part("f", std::string(buffer));
+	set_parameter_part("f", string(buffer));
 	delete [] buffer;
 }
 	
@@ -31,7 +31,7 @@ void MDCMessageAsrq::set_sequence_begin(Uint32 sequence_begin)
 {
 	char* buffer = new char[255];
 	sprintf(buffer, "%d", sequence_begin);
-	set_parameter_part("sb", std::string(buffer));
+	set_parameter_part("sb", string(buffer));
 	delete []buffer;
 }
 	
@@ -39,7 +39,7 @@ void MDCMessageAsrq::set_sequence_end(Uint32 sequence_end)
 {
 	char* buffer= new char[255];
 	sprintf(buffer, "%d", sequence_end);
-	set_parameter_part("se", std::string(buffer));
+	set_parameter_part("se", string(buffer));
 	delete [] buffer;
 }
 	

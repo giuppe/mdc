@@ -5,25 +5,25 @@
 #include <map>
 
 
-std::string StreamInfoCacheManager::get_name(std::string stream_id)
+string StreamInfoCacheManager::get_name(string stream_id)
 {
 
 	return m_stream_names.at(stream_id).name;
 		
 }
 
-void StreamInfoCacheManager::add_name(std::string stream_id, std::string name)
+void StreamInfoCacheManager::add_name(string stream_id, string name)
 {
 	m_stream_names[stream_id].name= name;
 }
 
-MDStreamInfo StreamInfoCacheManager::get_info(std::string stream_id)
+MDStreamInfo StreamInfoCacheManager::get_info(string stream_id)
 {
 	return m_stream_names.at(stream_id).info;
 		
 }
 
-void StreamInfoCacheManager::add_info(std::string stream_id, MDStreamInfo info)
+void StreamInfoCacheManager::add_info(string stream_id, MDStreamInfo info)
 {
 	m_stream_names[stream_id].info= info;
 }

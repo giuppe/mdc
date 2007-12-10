@@ -1,7 +1,7 @@
 /* 
  * hashlib++ - a simple hash library for C++
  * 
- * Copyright (c) 2007 Benjamin Grüdelbach
+ * Copyright (c) 2007 Benjamin Grï¿½delbach
  * 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -82,7 +82,7 @@ class sha1wrapper : public hashwrapper
 			 *
 			 *  @return 	a hash as std::string
 			 */  
-			virtual std::string hashIt(void);
+			virtual string hashIt(void);
 
 			/**
 			 *  @brief 	This internal member-function
@@ -92,7 +92,7 @@ class sha1wrapper : public hashwrapper
 			 *  @param 	data The hash-data to covert into HEX
 			 *  @return	the converted data as std::string
 			 */  
-			virtual std::string convToString(unsigned char *data);
+			virtual string convToString(unsigned char *data);
 
 			/**
 			 *  @brief 	This method adds the given data to the 

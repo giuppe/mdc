@@ -7,7 +7,7 @@
 
 struct DescriptorId
 {
-	std::string hash;
+	string hash;
 	Uint8 flow_id;
 	Uint32 sequence_id;
 };
@@ -21,7 +21,7 @@ struct DescriptorToSend
 class DescriptorsSendList
 {
 private:
-	std::list<DescriptorToSend> m_list;
+	list<DescriptorToSend> m_list;
 public:
 	void push_back(NetEndPoint dest, DescriptorId desc);
 	bool pop_front(DescriptorToSend& desc_send);

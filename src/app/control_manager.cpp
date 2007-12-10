@@ -13,7 +13,7 @@ void ControlManager::handle_LIST(const NetEndPoint& sender, const MDCMessageList
 {
 
 	LOG_INFO("Requested name is "<<msg.get_name());
-	std::vector<MDStream*> stream_list;
+	vector<MDStream*> stream_list;
 
 	stream_list = StreamRepository::instance()->find_by_name(msg.get_name());
 
@@ -44,7 +44,7 @@ void ControlManager::handle_PEER(const NetEndPoint& sender, const MDCMessagePeer
 #if 0
 
 	LOG_INFO("Requested name is "<<msg.get_name());
-	std::vector<MDStream*> stream_list;
+	vector<MDStream*> stream_list;
 
 	stream_list = StreamRepository::instance()->find_by_name(msg.get_name());
 
@@ -115,7 +115,7 @@ void ControlManager::handle_SREQ(const NetEndPoint& sender, const MDCMessageSreq
 
 	DescriptorId descriptor_id;
 	
-	std::string hash = msg.get_stream_id();
+	string hash = msg.get_stream_id();
 	Uint8 flow_id = msg.get_flow_id();
 	
 	
@@ -154,7 +154,7 @@ void ControlManager::handle_ALST(const NetEndPoint& sender, const MDCMessageAlst
 
 
 	
-	std::vector<SearchEntry> m_last_search;
+	vector<SearchEntry> m_last_search;
 	
 	if(entries_num>0)
 	{
@@ -180,7 +180,7 @@ void ControlManager::handle_APER(const NetEndPoint& sender, const MDCMessageAper
 #if 0
 
 	LOG_INFO("Requested name is "<<msg.get_name());
-	std::vector<MDStream*> stream_list;
+	vector<MDStream*> stream_list;
 
 	stream_list = StreamRepository::instance()->find_by_name(msg.get_name());
 

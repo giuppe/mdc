@@ -11,7 +11,7 @@ void ReceiveManager::handle_ASRQ(const NetEndPoint& sender, const MDCMessageAsrq
 {
 
 	ReceiveFilterList::instance()->add(sender.get_ip(), msg.get_hash());
-	std::string temp_name = StreamInfoCacheManager::instance()->get_name(msg.get_hash());
+	string temp_name = StreamInfoCacheManager::instance()->get_name(msg.get_hash());
 	
 	if(temp_name=="")
 	{

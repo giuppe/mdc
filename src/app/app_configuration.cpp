@@ -22,25 +22,25 @@
 void AppConfiguration::init() {
 	m_xml_config = new XMLConfiguration("./config.xml", true);
 	Uint32 control_port;
-	if (m_xml_config->get_int(std::string("network"), std::string("control_port"), control_port))
+	if (m_xml_config->get_int(string("network"), string("control_port"), control_port))
 		m_control_port = control_port;
 	else {
 		m_control_port = 5551;
-		m_xml_config->set_int(std::string("network"), std::string("control_port"), m_control_port);
+		m_xml_config->set_int(string("network"), string("control_port"), m_control_port);
 	}
 	Uint32 data_port;
-	if (m_xml_config->get_int(std::string("network"), std::string("data_port"), data_port))
+	if (m_xml_config->get_int(string("network"), string("data_port"), data_port))
 		m_data_port = data_port;
 	else {
 		m_data_port = 5552;
-		m_xml_config->set_int(std::string("network"), std::string("data_port"), m_data_port);
+		m_xml_config->set_int(string("network"), string("data_port"), m_data_port);
 	}
-	std::string path;
-	if (m_xml_config->get_string(std::string("repository"), std::string("path"), path))
+	string path;
+	if (m_xml_config->get_string(string("repository"), string("path"), path))
 		m_repository_path = path;
 	else {
 		m_repository_path = "./shared";
-		m_xml_config->set_string(std::string("repository"), std::string("path"), m_repository_path);
+		m_xml_config->set_string(string("repository"), string("path"), m_repository_path);
 	}
 }
 
@@ -59,4 +59,4 @@ AppConfiguration* AppConfiguration::instance() {
 
 Uint16 AppConfiguration::get_control_port() {return m_control_port;}
 Uint16 AppConfiguration::get_data_port() {return m_data_port;}
-std::string AppConfiguration::get_repository_path() {return m_repository_path;}
+string AppConfiguration::get_repository_path() {return m_repository_path;}

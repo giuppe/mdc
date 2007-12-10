@@ -28,7 +28,7 @@ class AppConfiguration {
 private:
 	Uint16 m_control_port;
 	Uint16 m_data_port;
-	std::string m_repository_path;
+	string m_repository_path;
 	XMLConfiguration* m_xml_config;
 	
 public:
@@ -55,7 +55,7 @@ public:
 	 * Gets repository path
 	 * @returns: path of shared files folder 
 	 */
-	std::string get_repository_path();
+	string get_repository_path();
 	
 // begin Singleton stuff
 private:

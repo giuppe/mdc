@@ -21,7 +21,7 @@
 
 
 
-std::vector<std::string> MDCMessageVector::get_rows() const
+vector<string> MDCMessageVector::get_rows() const
 {
 	return m_rows;
 }
@@ -29,7 +29,7 @@ std::vector<std::string> MDCMessageVector::get_rows() const
 
 
 
-void MDCMessageVector::set_rows(const std::vector<std::string>& rows)
+void MDCMessageVector::set_rows(const vector<string>& rows)
 {
 	m_rows = rows;
 }
@@ -98,30 +98,30 @@ Uint32 MDCMessageVector::get_num_rows() const
 	return m_rows.size();
 }
 
-std::string MDCMessageVector::get_parameter_part(Uint32 index, std::string left_part) const
+string MDCMessageVector::get_parameter_part(Uint32 index, string left_part) const
 {
-	std::string m_parameter = m_rows[index];
-	std::string::size_type start_pos = m_parameter.find(left_part+"=", 0);
-	if(start_pos != std::string::npos)
+	string m_parameter = m_rows[index];
+	string::size_type start_pos = m_parameter.find(left_part+"=", 0);
+	if(start_pos != string::npos)
 	{
 		start_pos = start_pos + left_part.size() +1;
-		std::string::size_type end_pos = m_parameter.find(';', start_pos);
-		std::string::size_type substr_lenght = end_pos - start_pos;
+		string::size_type end_pos = m_parameter.find(';', start_pos);
+		string::size_type substr_lenght = end_pos - start_pos;
 		return m_parameter.substr(start_pos, substr_lenght);
 	}
 	return "";
 }
 
 
-void MDCMessageVector::set_parameter_part(Uint32 index, std::string left_part, std::string right_part)
+void MDCMessageVector::set_parameter_part(Uint32 index, string left_part, string right_part)
 {
-	std::string m_parameter =m_rows[index];
-	std::string::size_type start_pos = m_parameter.find(left_part+"=", 0);
-	if(start_pos != std::string::npos)
+	string m_parameter =m_rows[index];
+	string::size_type start_pos = m_parameter.find(left_part+"=", 0);
+	if(start_pos != string::npos)
 	{
 		start_pos = start_pos + left_part.size() +1;
-		std::string::size_type end_pos = m_parameter.find(';', start_pos);
-		std::string::size_type substr_lenght = end_pos - start_pos;
+		string::size_type end_pos = m_parameter.find(';', start_pos);
+		string::size_type substr_lenght = end_pos - start_pos;
 		m_parameter.erase(start_pos, substr_lenght);
 		m_parameter.insert(start_pos, right_part);
 	}

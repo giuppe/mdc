@@ -9,12 +9,12 @@
 
 class ReceiveEntry
 {
-	std::string m_ip;
-	std::string m_hash;
+	string m_ip;
+	string m_hash;
 		
 public:
 	
-	ReceiveEntry(std::string ip, std::string hash):m_ip(ip),m_hash(hash){}
+	ReceiveEntry(string ip, string hash):m_ip(ip),m_hash(hash){}
 	
 	bool operator==(const ReceiveEntry& r) const
 	{
@@ -31,15 +31,15 @@ public:
 class ReceiveFilterList
 {
 private:
-	std::map<ReceiveEntry, Uint64> m_list;
+	map<ReceiveEntry, Uint64> m_list;
 	
 	Uint32 m_timeout;
 	
 public:
 	
-	bool exists(std::string ip, std::string hash);
+	bool exists(string ip, string hash);
 	
-	void add(std::string ip, std::string hash);
+	void add(string ip, string hash);
 	
 	void remove_outdated();
 	

@@ -14,11 +14,12 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include <string>
-#include <SDL/SDL.h>
+
 
 #ifndef ABSTRACT_CONFIGURATION_H_
 #define ABSTRACT_CONFIGURATION_H_
+
+#include "../defs.h"
 
 /**
  * Represents an abstract configuration object, a sort of database containing pairs of

@@ -14,7 +14,7 @@ SiteManager::SiteManager()
 	m_listening_socket = NetManager::instance()->create_UDP_listen_socket("localhost", control_port);
 	LOG_INFO("Listening on port "<<control_port<<" for control packets.");
 	
-	std::string repository_path = AppConfiguration::instance()->get_repository_path();
+	string repository_path = AppConfiguration::instance()->get_repository_path();
 	LOG_INFO("Using "<<repository_path<<" as repository");
 	StreamRepository::instance()->init(repository_path);
 	

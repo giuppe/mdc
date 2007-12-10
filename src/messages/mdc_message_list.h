@@ -36,15 +36,15 @@ public:
 
 	}
 	
-	void set_name(const std::string name)
+	void set_name(const string name)
 	{
-		set_parameter_part(std::string("n"), name);
+		set_parameter_part(string("n"), name);
 	}
 	
-	std::string get_name() const
+	string get_name() const
 	{
 		
-		return get_parameter_part(std::string("n"));
+		return get_parameter_part(string("n"));
 	}
 
 	

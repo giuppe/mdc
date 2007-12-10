@@ -26,7 +26,7 @@
 
 struct RepositoryEntry
 {
-	std::string name;
+	string name;
 	MDStream* stream;
 };
 
@@ -36,27 +36,27 @@ class StreamRepository
 	
 private:
 
-	std::map<std::string, RepositoryEntry> m_streams;
+	map<string, RepositoryEntry> m_streams;
 	
 	bool m_is_valid;
 	
-	std::string m_path;
+	string m_path;
 
 public:
 	
-	void init(std::string path);
+	void init(string path);
 
-	std::vector<MDStream*> find_by_name(std::string regexp);
+	vector<MDStream*> find_by_name(string regexp);
 	
-	bool get_by_stream_id(std::string stream_id, MDStream* &stream);
+	bool get_by_stream_id(string stream_id, MDStream* &stream);
 	
 	void refresh();
 	
 	bool add_stream(RepositoryEntry entry);
 	
-	std::string get_name_by_id(std::string stream_id);
+	string get_name_by_id(string stream_id);
 	
-	void create_stream(std::string name, std::string stream_id, Uint8 flows, Uint32 sequences);
+	void create_stream(string name, string stream_id, Uint8 flows, Uint32 sequences);
 	
 	void deinit();
 
