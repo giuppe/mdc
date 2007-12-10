@@ -14,6 +14,8 @@ class ReceiveEntry
 		
 public:
 	
+	ReceiveEntry():m_ip(""), m_hash(""){};
+	
 	ReceiveEntry(string ip, string hash):m_ip(ip),m_hash(hash){}
 	
 	bool operator==(const ReceiveEntry& r) const

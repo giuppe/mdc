@@ -122,6 +122,17 @@ bool PosixDirectory::save_file(const string& path, const DataChunk& data_to_save
 }
 
 string PosixDirectory::get_filename(const string& path) {
-	string::size_type pos = path.find_last_of('/');
-	return path.substr(pos+1);
+
+	string::size_type pos = 0;
+	string::size_type last_pos = 0;
+	while(pos!=string::npos)
+	{
+		pos=path.find('/');
+		last_pos = pos;
+	}
+#ifdef USING_USTL
+	return UstlUtils::string_substr(path, last_pos+1);
+#else
+	return path.substr(last_pos+1);
+#endif
 }

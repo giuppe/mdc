@@ -74,20 +74,24 @@ string MDCMessageSingleParameter::get_parameter_part(string left_part) const
 }
 
 
-void MDCMessageSingleParameter::set_parameter_part(string left_part, string right_part)
+void MDCMessageSingleParameter::set_parameter_part(string param_key, string param_value)
 {
-	string::size_type start_pos = m_parameter.find(left_part+"=", 0);
-	if(start_pos != string::npos)
+	string::size_type old_param_value_start_pos = m_parameter.find(param_key+"=", 0);
+	if(old_param_value_start_pos != string::npos)
 	{
-		start_pos = start_pos + left_part.size() +1;
-		string::size_type end_pos = m_parameter.find(';', start_pos);
-		string::size_type substr_lenght = end_pos - start_pos;
-		m_parameter.erase(start_pos, substr_lenght);
-		m_parameter.insert(start_pos, right_part);
+		old_param_value_start_pos = old_param_value_start_pos + param_key.size() +1;
+		string::size_type old_param_value_end_pos = m_parameter.find(';', old_param_value_start_pos);
+		string::size_type old_param_value_lenght = old_param_value_end_pos - old_param_value_start_pos;
+		m_parameter.erase(old_param_value_start_pos, old_param_value_lenght);
+#ifdef USING_USTL
+		m_parameter.insert(old_param_value_start_pos, param_value, param_value.size());
+#else
+		m_parameter.insert(old_param_value_start_pos, param_value);
+#endif
 	}
 	else
 	{
-		m_parameter.append(left_part+"="+right_part+";");
+		m_parameter.append(param_key+"="+param_value+";");
 	}
 		
 	

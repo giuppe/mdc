@@ -52,14 +52,22 @@ void CommandlineConfiguration::parse_arguments(const vector<string>& arguments)
 			//DEBWARN("Argument: "<<curr_arg.substr(2)<<"\n");
 			if(prev_arg.substr(0, 2) == "--")
 			{
-				string object_name(prev_arg.substr(2)); 
+#ifdef USING_USTL
+				string object_name(UstlUtils::string_substr(prev_arg, 2));			
+#else
+				string object_name(prev_arg.substr(2));
+#endif
 				m_arguments[object_name] = string("true");
 				LOG_INFO("Setting "<<object_name<<" = true\n");
 			}
 			
 			if(it == arguments.size()-1)
 			{
+#ifdef USING_USTL
+				string object_name(UstlUtils::string_substr(curr_arg, 2));			
+#else
 				string object_name(curr_arg.substr(2)); 
+#endif
 				m_arguments[object_name] = string("true");
 				LOG_INFO("Setting "<<object_name<<" = true\n");
 			}
@@ -69,7 +77,11 @@ void CommandlineConfiguration::parse_arguments(const vector<string>& arguments)
 		{
 			if(prev_arg.substr(0, 2) == "--")
 			{
-				string object_name(prev_arg.substr(2)); 
+#ifdef USING_USTL
+				string object_name(UstlUtils::string_substr(prev_arg, 2));			
+#else
+				string object_name(prev_arg.substr(2));
+#endif
 				m_arguments[object_name] = curr_arg;
 				LOG_INFO("Setting "<<object_name<<" = "<<curr_arg<<"\n");
 				
@@ -90,12 +102,14 @@ void CommandlineConfiguration::parse_arguments(const vector<string>& arguments)
 
 bool CommandlineConfiguration::get_string(const string& section_name, const string& object_name, string& value) const
 {
-	if(m_arguments.count(object_name)==0)
-		return false;
-
 	map<string, string>::const_iterator it;
-	
 	it = m_arguments.find(object_name);
+		
+	if(it==m_arguments.end())
+		return false;
+	
+	
+	
 	
 	value = it->second;
 	return true;
@@ -104,12 +118,14 @@ bool CommandlineConfiguration::get_string(const string& section_name, const stri
 		
 bool CommandlineConfiguration::get_int(const string& section_name, const string& object_name, Uint32& value) const
 {
-	if(m_arguments.count(object_name)==0)
+	map<string, string>::const_iterator it;
+		
+	it = m_arguments.find(object_name);
+		
+	if(it==m_arguments.end())
 		return false;
 
-	map<string, string>::const_iterator it;
 	
-	it = m_arguments.find(object_name);
 	
 	value = atoi(it->second.c_str());
 	return true;

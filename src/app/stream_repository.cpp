@@ -109,13 +109,20 @@ void StreamRepository::deinit()
 
 bool StreamRepository::get_by_stream_id(string stream_id, MDStream* &stream)
 {
-	if(m_streams.count(stream_id)==1)
-	{
-		stream=m_streams.at(stream_id).stream;
+	map<string, RepositoryEntry>::const_iterator it;
+				
+		it = m_streams.find(stream_id);
+				
+		if(it==m_streams.end())
+		{
+			LOG_ERROR("Stream with stream_id "<<stream_id<<" not in repository.");
+			return false;
+		}
+		
+		stream = it->second.stream;
 		return true;
-	}
 	
-	return false;
+
 }
 
 void StreamRepository::refresh()

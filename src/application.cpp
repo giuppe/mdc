@@ -110,7 +110,7 @@ void Application::start_scheduler()
 	Scheduler* sched = new Scheduler();
 
 	ClientTestAction* client = new ClientTestAction();
-	client->init("192.168.0.130", "192.168.0.108");
+	client->init("192.168.0.30", "192.168.0.108");
 	SiteManager* site_manager = new SiteManager();
 	Receiver* receiver = new Receiver();
 	SenderAction* sender_action = new SenderAction();

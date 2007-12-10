@@ -66,7 +66,7 @@ void Descriptor::deserialize(const DataChunk& data) {
 		temp_dc->extract_head(8, preamble);
 		MDCMessage msg;
 		msg.deserialize(preamble);
-		if (msg.get_type_string() == string("DESC")) {
+		if (string(msg.get_type_string()) == string("DESC")) {
 			temp_dc->extract_head(hash);
 			m_complete_stream_md5_hash = hash;
 			temp_dc->extract_head(m_flow_id);

@@ -52,10 +52,12 @@
  */
 
 
-#include "../../defs.h"
+
 
 #ifndef LOG_MANAGER_H_
 #define LOG_MANAGER_H_
+
+#include "../../defs.h"
 
 #ifndef LOG_LEVEL
 #define LOG_LEVEL 3

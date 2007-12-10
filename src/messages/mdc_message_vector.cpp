@@ -123,7 +123,11 @@ void MDCMessageVector::set_parameter_part(Uint32 index, string left_part, string
 		string::size_type end_pos = m_parameter.find(';', start_pos);
 		string::size_type substr_lenght = end_pos - start_pos;
 		m_parameter.erase(start_pos, substr_lenght);
+#ifdef USING_USTL
+		m_parameter.insert(start_pos, right_part, right_part.size());
+#else
 		m_parameter.insert(start_pos, right_part);
+#endif
 	}
 	else
 	{

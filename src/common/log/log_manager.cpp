@@ -15,7 +15,6 @@
  ***************************************************************************/
 
 
-#include <SDL/SDL.h>
 
 #include <ctime>
 #include "log_manager.h"
@@ -37,7 +36,14 @@ void LogManager::init(bool console_output, const string& log_file)
 
 		time_t current_time;
 		time(&current_time);
-		m_log_file<<"\n\n****\nLog started - "<<asctime(localtime ( &current_time ))<<"****\n"<<endl;
+		string log_started ("\n\n****\nLog started - ");
+		string current_time_string (asctime(localtime ( &current_time )));
+		string end_header("****\n\n");
+		
+		m_log_file.write(log_started.c_str(), log_started.size());
+		m_log_file.write(current_time_string.c_str(), current_time_string.size());
+		m_log_file.write(end_header.c_str(), end_header.size());
+		
 		cout<<"\n****\nLog started - "<<asctime(localtime ( &current_time ))<<"****\n"<<endl;
 	}
 	
@@ -55,7 +61,8 @@ void LogManager::deinit()
 
 void LogManager::debug(const char* log_string)
 {
-	m_log_file<<log_string;
+	string log_string2(log_string);
+	m_log_file.write(log_string2.c_str(), log_string2.size());
 	
 	if(m_console_output==true)
 	{

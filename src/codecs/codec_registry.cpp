@@ -33,16 +33,18 @@ void CodecRegistry::register_codec(const string& name, AbstractMDCodec* codec)
 
 bool CodecRegistry::get_codec(const string& name, AbstractMDCodec*& codec) const
 {
-	if(m_codecs.count(name)==0)
+	
+	map<string, AbstractMDCodec*>::const_iterator it;
+		
+	it = m_codecs.find(name);
+		
+	if(it==m_codecs.end())
 	{
 		LOG_ERROR("No codec named "<<name<<" found.");
 		return false;
 	}
 
 	
-	map<string, AbstractMDCodec*>::const_iterator it;
-	
-	it = m_codecs.find(name);
 	
 	codec= it->second;
 	

@@ -104,15 +104,15 @@ void ClientTestAction::ask_file()
 
 		LOG_INFO("Stream "<<info.stream_id<<" has "<<info.flows_number<<" flows and "<<info.descriptors_number<<" descriptors");
 
-		//for(Uint32 i=0; i<info.flows_number; i++)
-		//{
+		for(Uint32 i=0; i<info.flows_number; i++)
+		{
 
 
 			//LOG_INFO("Downloading flow "<<i);
 
 			cl_man->request_stream(m_my_server1, m_selected_file_stream_id, 1, 0, info.descriptors_number-1);
-			cl_man->request_stream(m_my_server2, m_selected_file_stream_id, 0, 0, info.descriptors_number-1);
-		//}
+		//	cl_man->request_stream(m_my_server2, m_selected_file_stream_id, 0, 0, info.descriptors_number-1);
+		}
 		m_state = STOP_AND_WAIT;
 	}
 	else

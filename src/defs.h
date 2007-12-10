@@ -3,14 +3,18 @@
 
 #define DEBUG
 
-//#define USING_USTL 1
+//#define USING_USTL 
 
 #define LOG_LEVEL 3
 
-#if USING_USTL
+#ifdef USING_USTL
 
 #include <ustl.h>
 using namespace ustl;
+
+#ifndef USTL_UTILS_H_
+#include "common/ustl_int/ustl_utils.h"
+#endif
 
 #else
 
@@ -28,8 +32,7 @@ using namespace std;
 #endif
 
 
-#include <SDL/SDL.h>
-#include "common/log/log_manager.h"
+
 
 #ifdef NOT_HAVING_SDL_H_
 
@@ -48,7 +51,9 @@ typedef Uint8 unsigned char;
 typedef Sint8 char;
 #endif
 
-
-
+#include <SDL/SDL.h>
+#ifndef LOG_MANAGER_H_
+#include "common/log/log_manager.h"
+#endif
 
 #endif /*DEFS_H_*/

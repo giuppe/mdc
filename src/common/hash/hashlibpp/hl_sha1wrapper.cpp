@@ -77,17 +77,24 @@ string sha1wrapper::convToString(unsigned char *data)
 		/*
 		 * set the width to 2
 		 */
+#ifdef USING_USTL
+		os.set_width(2);
+#else
 		os.width(2);
-
+#endif
 		/*
 		 * fill with 0
 		 */
+#ifdef USING_USTL
+		os.fill(os.begin(),"0", 1, 2);
+#else
 		os.fill('0');
+#endif
 
 		/*
 		 * conv to hex
 		 */
-		os << hex << static_cast<unsigned int>(data[i]);
+		os << ostringstream::hex << static_cast<unsigned int>(data[i]);
 	}
 
 	/*
