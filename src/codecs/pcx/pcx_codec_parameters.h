@@ -19,8 +19,8 @@
 #include "../../common/serializable.h"
 #include "../abstract_codec_parameters.h"
 #include "pcx_stream.h"
-#include <string>
-#include <vector>
+
+
 
 #ifndef PCX_CODEC_PARAMETERS_H_
 #define PCX_CODEC_PARAMETERS_H_

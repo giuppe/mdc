@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include <string>
+
 #include "abstract_codec_parameters.h"
 
 #ifndef CODEC_PARAMETERS_FACTORY_H_

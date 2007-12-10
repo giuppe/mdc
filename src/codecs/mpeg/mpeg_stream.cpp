@@ -15,9 +15,9 @@
  ***************************************************************************/
 
 #include "mpeg_stream.h"
-#include <string>
+
 #include "defs.h"
-#include <vector>
+
 #include "../../common/data_chunk.h"
 #include <cassert>
 #include "../../common/dir/abstract_directory.h"

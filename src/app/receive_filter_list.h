@@ -3,9 +3,9 @@
 #define RECEIVE_FILTER_LIST_H_
 
 #include "defs.h"
-#include <string>
+
 #include <ctime>
-#include <map>
+
 
 class ReceiveEntry
 {

@@ -16,8 +16,8 @@
 
 #include "defs.h"
 #include "mdc_message_vector.h"
-#include <string>
-#include <vector>
+
+
 
 #ifndef MDC_MESSAGE_APER_H_
 #define MDC_MESSAGE_APER_H_

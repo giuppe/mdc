@@ -15,8 +15,8 @@
  ***************************************************************************/
 
 #include "abstract_directory.h"
-#include <vector>
-#include <string>
+
+
 
 
 

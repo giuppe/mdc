@@ -15,14 +15,14 @@
  ***************************************************************************/
 
 #include "mpeg_md_codec.h"
-#include <string>
+
 #include "defs.h"
 #include "mpeg_stream.h"
 #include "../mdc/md_stream.h"
 #include "../mdc/descriptor.h"
 #include "../../common/data_chunk.h"
 #include "mpeg_codec_parameters.h"
-#include <vector>
+
 #include <cmath>
 
 MpegMDCodec::MpegMDCodec() {

@@ -16,7 +16,7 @@
 
 
 #include "defs.h"
-#include <list>
+
 #include "scheduler.h"
 
 

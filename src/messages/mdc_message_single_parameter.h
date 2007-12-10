@@ -16,7 +16,7 @@
 
 #include "defs.h"
 #include "mdc_message.h"
-#include <string>
+
 
 #ifndef MDC_MESSAGE_SINGLE_PARAMETER_H_
 #define MDC_MESSAGE_SINGLE_PARAMETER_H_

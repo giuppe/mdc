@@ -3,7 +3,7 @@
 #define APPLICATION_H_
 
 #include "defs.h"
-#include <string>
+
 #include "app_cli_configuration.h"
 
 class Application

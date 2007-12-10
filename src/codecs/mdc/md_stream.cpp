@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "md_stream.h"
-#include <vector>
+
 #include "descriptor.h"
 #include "../../common/dir/abstract_directory.h"
 #include "../../common/dir/directory_factory.h"

@@ -16,7 +16,7 @@
 
 #include "defs.h"
 #include "action.h"
-#include <list>
+
 
 #ifndef SCHEDULER_H_
 #define SCHEDULER_H_

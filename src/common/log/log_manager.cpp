@@ -16,7 +16,7 @@
 
 
 #include <SDL/SDL.h>
-#include <fstream>
+
 #include <ctime>
 #include "log_manager.h"
 

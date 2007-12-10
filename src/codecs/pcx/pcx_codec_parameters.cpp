@@ -19,8 +19,8 @@
 #include "../../common/data_chunk.h"
 #include "../../common/serializable.h"
 #include "pcx_stream.h"
-#include <string>
-#include <vector>
+
+
 #include <cassert>
 
 PcxCodecParameters::PcxCodecParameters() 

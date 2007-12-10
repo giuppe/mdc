@@ -16,8 +16,8 @@
 
 #include "defs.h"
 #include "codec_registry.h"
-#include <map>
-#include <string>
+
+
 #include "abstract_md_codec.h"
 #include "text/text_md_codec.h"
 #include "pcx/pcx_md_codec.h"

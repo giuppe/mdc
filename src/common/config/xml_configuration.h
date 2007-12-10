@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "abstract_configuration.h"
-#include <string>
+
 #include "../defs.h"
 
 #ifndef XML_CONFIGURATION_H_

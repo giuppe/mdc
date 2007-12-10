@@ -22,7 +22,7 @@
 #include <dirent.h>
 #include <cerrno>
 #include <cassert>
-#include <string>
+
 
 vector<string> PosixDirectory::get_file_names(string path) {
 	vector<string> result;

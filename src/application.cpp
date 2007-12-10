@@ -2,7 +2,7 @@
 #include "defs.h"
 #include "application.h"
 
-#include <iostream>
+
 
 #include "common/config/commandline_configuration.h"
 #include "app/app_configuration.h"

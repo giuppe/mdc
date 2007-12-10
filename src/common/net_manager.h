@@ -16,8 +16,8 @@
 
 #include "defs.h"
 #include <SDL/SDL_net.h>
-#include <string>
-#include <vector>
+
+
 #include "net_end_point.h"
 #include "data_chunk.h"
 

@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "xml_configuration.h"
-#include <string>
+
 #include <cstring>
 #include <cassert>
 #include "tinyxml/tinyxml.h"

@@ -16,9 +16,7 @@
 
 #include "../defs.h"
 #include "abstract_configuration.h"
-#include <map>
-#include <string>
-#include <vector>
+
 
 
 #ifndef COMMANDLINE_CONFIGURATION_H_

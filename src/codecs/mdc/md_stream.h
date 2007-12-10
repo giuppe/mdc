@@ -20,8 +20,8 @@
 #define MDSTREAM_H_
 
 #include "defs.h"
-#include <string>
-#include <vector>
+
+
 #include "../../common/serializable.h"
 #include "../../common/data_chunk.h"
 

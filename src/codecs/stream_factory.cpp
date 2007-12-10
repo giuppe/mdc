@@ -18,7 +18,7 @@
 #include "abstract_stream.h"
 #include "text/text_stream.h"
 #include "pcx/pcx_stream.h"
-#include <string>
+
 #include "stream_factory.h"
 #include "mpeg/mpeg_stream.h"
 

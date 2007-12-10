@@ -1,7 +1,7 @@
 #include "defs.h"
 
 #include "receive_filter_list.h"
-#include <string>
+
 #include <cassert>
 
 bool ReceiveFilterList::exists(string ip, string hash)

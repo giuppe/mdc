@@ -15,11 +15,10 @@
  ***************************************************************************/
 
 #include "commandline_configuration.h"
-#include <map>
-#include <string>
+
 #include <cassert>
 #include <cstring>
-#include <vector>
+
 
 
 void CommandlineConfiguration::init(Sint32 argc, char* argv[])

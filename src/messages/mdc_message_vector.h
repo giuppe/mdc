@@ -16,8 +16,8 @@
 
 #include "defs.h"
 #include "mdc_message.h"
-#include <string>
-#include <vector>
+
+
 
 #ifndef MDC_MESSAGE_VECTOR_H_
 #define MDC_MESSAGE_VECTOR_H_

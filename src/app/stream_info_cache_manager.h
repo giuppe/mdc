@@ -3,8 +3,8 @@
 #define STREAM_NAME_CACHE_MANAGER_H_
 
 #include "defs.h"
-#include <string>
-#include <map>
+
+
 #include "../codecs/mdc/md_stream.h"
 
 class StreamInfoCacheManager

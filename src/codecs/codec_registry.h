@@ -15,8 +15,8 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include <map>
-#include <string>
+
+
 #include "abstract_md_codec.h"
 
 #ifndef CODEC_REGISTRY_H_

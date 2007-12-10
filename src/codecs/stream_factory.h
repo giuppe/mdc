@@ -16,7 +16,7 @@
 
 #include "defs.h"
 #include "abstract_stream.h"
-#include <string>
+
 
 #ifndef STREAM_FACTORY_H_
 #define STREAM_FACTORY_H_

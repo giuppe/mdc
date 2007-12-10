@@ -17,7 +17,7 @@
 #include "defs.h"
 #include "app_configuration.h"
 #include "../common/config/xml_configuration.h"
-#include <string>
+
 
 void AppConfiguration::init() {
 	m_xml_config = new XMLConfiguration("./config.xml", true);

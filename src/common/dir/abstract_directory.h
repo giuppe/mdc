@@ -14,7 +14,7 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include <vector>
+
 #include "../hash/hash.h"
 
 #ifndef ABSTRACT_DIRECTORY_H_

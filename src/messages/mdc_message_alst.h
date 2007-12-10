@@ -16,8 +16,8 @@
 
 #include "defs.h"
 #include "mdc_message_vector.h"
-#include <string>
-#include <vector>
+
+
 #include <cassert>
 
 #ifndef MDC_MESSAGE_ALST_H_

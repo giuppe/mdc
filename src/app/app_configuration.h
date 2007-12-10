@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include <string>
+
 #include "../common/config/xml_configuration.h"
 
 #ifndef APP_CONFIGURATION_H_

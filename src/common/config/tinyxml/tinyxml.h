@@ -50,8 +50,8 @@ distribution.
 #endif
 
 #ifdef TIXML_USE_STL
-	#include <string>
- 	#include <iostream>
+	
+ 	
 	#define TIXML_STRING	std::string
 	#define TIXML_ISTREAM	std::istream
 	#define TIXML_OSTREAM	std::ostream

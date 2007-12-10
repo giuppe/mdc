@@ -3,7 +3,7 @@
 
 #include "defs.h"
 #include "../common/net_end_point.h"
-#include <list>
+
 
 struct DescriptorId
 {

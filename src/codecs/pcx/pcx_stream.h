@@ -17,8 +17,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include "../abstract_stream.h"
-#include <vector>
-#include <string>
+
+
 #include "../../common/data_chunk.h"
 
 #ifndef PCX_STREAM_H_

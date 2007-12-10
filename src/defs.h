@@ -3,15 +3,17 @@
 
 #define DEBUG
 
+//#define USING_USTL 1
 
 #define LOG_LEVEL 3
 
 #if USING_USTL
 
 #include <ustl.h>
-using namespace ustd;
+using namespace ustl;
 
 #else
+
 #include <iostream>
 #include <vector>
 #include <map>
@@ -21,6 +23,7 @@ using namespace ustd;
 #include <sstream>
 
 using namespace std;
+
 
 #endif
 

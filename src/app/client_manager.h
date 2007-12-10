@@ -6,8 +6,8 @@
 #include "../mdc_messages.h"
 #include "../common/net_end_point.h"
 #include "../codecs/mdc/md_stream.h"
-#include <string>
-#include <vector>
+
+
 
 class SearchEntry
 {
