@@ -14,20 +14,23 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include "defs.h"
+
 
 #ifndef DATA_CHUNK_H_
 #define DATA_CHUNK_H_
 
+#include "defs.h"
+#include "data/i_data_chunk.h"
+
 /**
  * Represents a stream of bytes.
  */
-class DataChunk
+class DataChunk : public IDataChunk
 {
 
 	friend class NetManager;
 
-private:
+protected:
 	
 	Uint8* m_data;
 	
@@ -41,10 +44,9 @@ private:
 	
 	DataChunk(DataChunk&){};
 	
-
-	
 	void set_content(Uint8* data, Uint32 lenght);
 	
+	bool get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const;
 	
 public:
 	
@@ -55,6 +57,9 @@ public:
 	
 	~DataChunk();
 	
+	DataChunkIterator get_iterator() const;
+	
+	void operator+=(const IDataChunk* data);
 	
 	/**
 	 * @returns the inner data stream, as a pointer to "char"s

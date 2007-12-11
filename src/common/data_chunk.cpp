@@ -17,6 +17,7 @@
 #include "defs.h"
 #include "data_chunk.h"
 #include <cstring>
+#include <cassert>
 #include <SDL/SDL_net.h>
 #include "hash/hash.h"
 
@@ -26,6 +27,10 @@ Uint8* DataChunk::get_data() const
 	return m_data;
 }
 
+bool DataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
+{
+	assert(!"This function is a stub");
+}
 
 
 
@@ -259,7 +264,7 @@ bool DataChunk::extract_head(Uint32 lenght, DataChunk &data)
 	Uint8* buffer;
 	this->extract_head(lenght, buffer);
 	data.append(lenght, buffer);
-	
+	return true;
 }
 
 
@@ -267,6 +272,27 @@ const char* DataChunk::compute_hash_md5() const
 {
 
 	return (Hash::md5_from_datachunk(*this)).c_str();
+}
+
+
+DataChunkIterator DataChunk::get_iterator() const
+{
+	return DataChunkIterator(this);
+}
+
+void DataChunk::operator+=(const IDataChunk* data)
+{
+	
+	DataChunkIterator it = data->get_iterator();
+	if(it.is_null())
+	{
+		LOG_ERROR("Trying to add a null data_chunk.");
+		return;	
+	}
+	Uint8* temp;
+	it.get_data(data->get_lenght(), temp);
+	this->append(data->get_lenght(), temp);
+	
 }
 
 
