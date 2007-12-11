@@ -35,8 +35,7 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 	Uint32 descriptors_number = (Uint32)ceil(((double)flow_dimension)/((double)m_preferred_payload_size));
 	Uint16 max_payload_size = (flow_dimension/descriptors_number)+1;
 	md_stream->init(stream->compute_hash_md5(), m_flows_number, descriptors_number);
-	Uint8 i;
-	for (i=0; i<m_flows_number; i++) {
+	for (Uint8 i=0; i<m_flows_number; i++) {
 		Uint64 offset = 0;
 		for (Uint32 j=0; j<descriptors_number; j++) {
 			if (stream_size-(offset+i) > 0) {
@@ -50,7 +49,7 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 				DataChunk payload;
 				Uint64 k;
 				for (k=0; k<max_payload_size; k++)
-					if (offset+i+(k*m_flows_number) < stream_size)
+					if (offset+i+k+m_flows_number < stream_size)
 						payload += stream->get_data(offset+i+(k*m_flows_number), 1);
 				offset += m_flows_number*k;
 				descriptor->set_payload(payload);
@@ -81,30 +80,32 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 						Uint64 k;
 						for (k=0; k<payload_size; k++) {
 							dc->extract_head(current_received_data);
-							taken_stream[offset+i+(k*flows_number)] = current_received_data;
-							if (offset+i+(k*flows_number) > max_dimension)
-								max_dimension = offset+i+(k*flows_number);
+							if (current_received_data != 0) {
+								Uint64 locate_position = offset+i+(k*flows_number);
+								taken_stream[locate_position] = current_received_data;
+								if (locate_position > max_dimension)
+									max_dimension = locate_position;
+							}
 						}
-						offset += flows_number*payload_size;
+						offset += flows_number*k;
 					}
-				}
-				else {
-					Uint64 k;
-					for (k=0; k<payload_size; k++) {
-						taken_stream[offset+i+(k*flows_number)] = ' ';
-						if (offset+i+(k*flows_number) > max_dimension)
-							max_dimension = offset+i+(k*flows_number);
+					else {
+						Uint64 k;
+						for (k=0; k<payload_size; k++) {
+							Uint64 locate_position = offset+i+(k*flows_number);
+							taken_stream[locate_position] = ' ';
+						}
+						offset += flows_number*k;
 					}
-					offset += flows_number*payload_size;
 				}
 			}
+			DataChunk* taken_dc = new DataChunk();
+			Uint8* temp_container = new Uint8[max_dimension+1];
+			for (Uint64 i=0; i<max_dimension+1; i++)
+				temp_container[i] = taken_stream[i];
+			taken_dc->append(max_dimension+1, temp_container);
+			stream->set_data(*taken_dc);
 		}
-		DataChunk* taken_dc = new DataChunk();
-		Uint8* temp_container = new Uint8[max_dimension+1];
-		for (Uint64 i=0; i<max_dimension+1; i++)
-			temp_container[i] = taken_stream[i];
-		taken_dc->append(max_dimension+1, temp_container);
-		stream->set_data(*taken_dc);
 	}
 }
 

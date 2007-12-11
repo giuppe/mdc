@@ -19,7 +19,6 @@
 #include "../abstract_stream.h"
 #include "../abstract_md_codec.h"
 
-
 #ifndef TEXT_MD_CODEC_H_
 #define TEXT_MD_CODEC_H_
 
@@ -33,7 +32,6 @@ public:
 	 * Initialize parameter of a text mdcodec.
 	 */
 	TextMDCodec();
-	
 	
 	/*
 	 * Code the stream to be sent.
