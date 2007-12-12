@@ -67,43 +67,44 @@ void MpegMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 		Uint64 max_dimension = 0;
 		for (Uint8 i=0; i<flows_number; i++) {
 			Uint64 offset = 0;
+			Uint16 payload_size = 0;
 			for (Uint32 j=0; j<sequences_number; j++) {
 				Descriptor* descriptor = new Descriptor();
-				Uint16 payload_size = 0;
 				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="mpeg")) {
 					payload_size = descriptor->get_payload_size();
 					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) {
 						(*dc) += *(descriptor->get_payload());
 						taken_stream.resize(flows_number*sequences_number*(payload_size+1));
-						Uint8* current_received_data = dc->get_data();
-						Uint64 locate_position;
-						for (Uint64 k=0; k<payload_size; k++) {
-							locate_position = offset+k+(payload_size*i);
-							taken_stream[locate_position] = current_received_data[k];
-							if (locate_position > max_dimension)
-								max_dimension = locate_position;
+						Uint8 current_received_data;
+						Uint64 k;
+						for (k=0; k<payload_size; k++) {
+							dc->extract_head(current_received_data);
+							if (current_received_data != 0) {
+								Uint64 locate_position = offset+i+(k*flows_number);
+								taken_stream[locate_position] = current_received_data;
+								if (locate_position > max_dimension)
+									max_dimension = locate_position;
+							}
 						}
-						if (i%2 == 0)
-							offset = (i*payload_size)+(flows_number*payload_size*(j+1));
-						else offset = (i*payload_size)+(flows_number*payload_size*j);
+						offset += flows_number*k;
 					}
-//					else {
-//						Uint64 k;
-//						for (k=0; k<payload_size; k++) {
-//							Uint64 locate_position = offset+i+flows_number;
-//							taken_stream[locate_position] = 0;
-//						}
-//						offset+=flows_number;
-//					}
 				}
+//				else {
+//					Uint64 k;
+//					for (k=0; k<payload_size; k++) {
+//						Uint64 locate_position = offset+i+(k*flows_number);
+//						taken_stream[locate_position] = 0;
+//					}
+//					offset += flows_number*k;
+//				}
 			}
-			DataChunk* taken_dc = new DataChunk();
-			Uint8* temp_container = new Uint8[max_dimension+1];
-			for (Uint64 i=0; i<max_dimension+1; i++)
-				temp_container[i] = taken_stream[i];
-			taken_dc->append(max_dimension+1, temp_container);
-			stream->set_data(*taken_dc);
 		}
+		DataChunk* taken_dc = new DataChunk();
+		Uint8* temp_container = new Uint8[max_dimension+1];
+		for (Uint64 i=0; i<max_dimension+1; i++)
+			temp_container[i] = taken_stream[i];
+		taken_dc->append(max_dimension+1, temp_container);
+		stream->set_data(*taken_dc);
 	}
 }
 
