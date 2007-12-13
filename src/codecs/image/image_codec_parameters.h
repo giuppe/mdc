@@ -63,7 +63,7 @@ public:
 	 * Sets coding bits number of each pixel.
 	 * @bits_number: bits number
 	 */
-	void set_bits_per_pixel(Uint16 bits_number);
+	void set_bits_per_pixel(Uint8 bits_number);
 	
 	/*
 	 * Initialize image codec parameters.

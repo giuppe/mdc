@@ -98,14 +98,14 @@ public:
 	 */
 	bool load_from_disk(const string& path);
 	
-	
 	DataChunk& serialize() const;
-	
-	
-	
 	void deserialize(const DataChunk&);
 	
-	
+	/*
+	 * Gets bits number per pixel if the source file is an image.
+	 * @returns: bits number.
+	 */
+	Uint8 get_bits_per_pixel(){}
 };
 
 #endif /*MPEG_STREAM_H_*/

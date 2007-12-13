@@ -16,7 +16,7 @@
 
 #include "defs.h"
 #include "codec_registry.h"
-
+#include "image/image_md_codec.h"
 
 #include "abstract_md_codec.h"
 #include "text/text_md_codec.h"
@@ -54,6 +54,7 @@ bool CodecRegistry::get_codec(const string& name, AbstractMDCodec*& codec) const
 void CodecRegistry::init() {
 	this->register_codec(string("text"), new TextMDCodec());
 	register_codec(string("mpeg"), new MpegMDCodec());
+	register_codec(string("image"), new ImageMDCodec());
 #ifdef MDC_PCX_IS_WORKING
 	this->register_codec(string("pcx"), new PcxMDCodec());
 #endif

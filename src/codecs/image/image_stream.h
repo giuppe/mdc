@@ -27,7 +27,8 @@ private:
 	vector<char> m_data;
 	string m_stream_name;
 	string m_hash;
-	SDL_Surface* img;
+	SDL_Surface* m_img;
+	SDL_PixelFormat* m_pixel_format;
 public:
 	ImageStream();
 
@@ -91,8 +92,22 @@ public:
 	 */
 	bool load_from_disk(const string& path);
 
+	/*
+	 * Serialize an image data stream into a DataChunk.
+	 * @returns: Datachunk serialized
+	 */
 	DataChunk& serialize() const;
+	
+	/*
+	 * Deserialize a DataChunk to an image data stream.
+	 */
 	void deserialize(const DataChunk&);
+	
+	/*
+	 * Get bits number per pixel of an image.
+	 * @returns: bits number
+	 */
+	Uint8 get_bits_per_pixel();
 };
 
 #endif /*IMAGE_STREAM_H_*/

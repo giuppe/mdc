@@ -18,7 +18,7 @@
 #include "abstract_stream.h"
 #include "text/text_stream.h"
 #include "pcx/pcx_stream.h"
-
+#include "image/image_stream.h"
 #include "stream_factory.h"
 #include "mpeg/mpeg_stream.h"
 
@@ -30,6 +30,7 @@ AbstractStream* StreamFactory::create_stream(string codec_name)
 		return new TextStream();
 	}
 	if (codec_name == "mpeg") return new MpegStream();
+	if (codec_name == "image") return new ImageStream();
 #ifdef MDC_PCX_IS_WORKING
 	else if(codec_name=="pcx")
 	{

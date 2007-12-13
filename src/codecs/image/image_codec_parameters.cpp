@@ -18,7 +18,7 @@
 #include "../../common/data_chunk.h"
 #include "../../common/serializable.h"
 
-ImageCodecParameters::ImageCodecParameters() {m_size = 0;}
+ImageCodecParameters::ImageCodecParameters() {m_size = 5;}
 Uint32 ImageCodecParameters::get_size() const {return m_size;}
 
 DataChunk& ImageCodecParameters::serialize() const {
@@ -33,4 +33,4 @@ void ImageCodecParameters::set_width(Uint16 width) {m_width = width;}
 Uint16 ImageCodecParameters::get_height() {return m_height;}
 void ImageCodecParameters::set_height(Uint16 height) {m_height = height;}
 Uint8 ImageCodecParameters::get_bits_per_pixel() {return m_bits_per_pixel;}
-void ImageCodecParameters::set_bits_per_pixel(Uint16 bits_number) {m_bits_per_pixel = bits_number;}
+void ImageCodecParameters::set_bits_per_pixel(Uint8 bits_number) {m_bits_per_pixel = bits_number;}

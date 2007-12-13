@@ -17,7 +17,6 @@
 #include "image_stream.h"
 #include "defs.h"
 #include "../../common/data_chunk.h"
-#include <cassert>
 #include "../../common/dir/abstract_directory.h"
 #include "../../common/dir/directory_factory.h"
 #include "../../common/hash/hash.h"
@@ -25,19 +24,28 @@
 ImageStream::ImageStream() {m_data.resize(0);}
 
 bool ImageStream::load_from_disk(const string& path) {
+	
+	// Prototype code //
+	
+	/* Load the BMP file into a surface */
+	m_img = SDL_LoadBMP(path.c_str());
+	m_pixel_format = m_img->format;
+	/* Lock the surface */
+	SDL_LockSurface(m_img);
+	/* Get the topleft pixel */
+	SDL_Color color;
+	Uint8 index;
+	index = *(Uint8 *)m_img->pixels;
+	color = m_pixel_format->palette->colors[index];
+	
+	// Old standard code //
+	
 	if (path.size() > 0) {
-		m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of("."));
-		
-		//default load image function
-		SDL_Surface* loadImage(const char* fileName);
-		
+		m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of("."));		
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
 		DataChunk dc;
 		if (dir->load_file(path, dc)) {
 			deserialize(dc);
-			
-			//img
-			
 			return true;
 		}
 	}
@@ -97,7 +105,7 @@ string ImageStream::compute_hash_md5() const {
 	return Hash::md5_from_datachunk(this->serialize());
 }
 
-ImageStream::~ImageStream() {delete img;}
+ImageStream::~ImageStream() {}
 
 void ImageStream::set_data (DataChunk& data) {
 	Uint32 real_data_size = data.get_lenght();
@@ -106,3 +114,5 @@ void ImageStream::set_data (DataChunk& data) {
 	for (Uint32 i=0; i<data.get_lenght(); i++)
 		m_data[i] = real_data[i];
 }
+
+Uint8 ImageStream::get_bits_per_pixel() {return m_pixel_format->BitsPerPixel;}
