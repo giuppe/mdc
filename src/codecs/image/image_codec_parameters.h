@@ -1,7 +1,7 @@
 /***************************************************************************
-           mpeg_codec_parameters.h  -  MPEG Codec Parameters class
+           image_codec_parameters.h  -  Image Codec Parameters class
                              -------------------
-    begin                : Dec 7, 2007
+    begin                : Dec 13, 2007
     copyright            : Livio Pipitone
     email                : livent@tiscalinet.it
  ***************************************************************************/
@@ -19,16 +19,56 @@
 #include "../../common/serializable.h"
 #include "../abstract_codec_parameters.h"
 
-#ifndef MPEG_CODEC_PARAMETERS_H_
-#define MPEG_CODEC_PARAMETERS_H_
+#ifndef IMAGE_CODEC_PARAMETERS_H_
+#define IMAGE_CODEC_PARAMETERS_H_
 
-class MpegCodecParameters : public AbstractCodecParameters {
+class ImageCodecParameters : public AbstractCodecParameters {
+private:
+	Uint16 m_width;
+	Uint16 m_height;
+	Uint8 m_bits_per_pixel;
 public:
+	
+	/*
+	 * Gets image width size in pixel.
+	 * @returns: image width size
+	 */
+	Uint16 get_width();
+	
+	/*
+	 * Sets image width size parameter.
+	 * @width: image width
+	 */
+	void set_width(Uint16 width);
+	
+	/*
+	 * Gets image height size in pixel.
+	 * @returns: image height size
+	 */
+	Uint16 get_height();
+	
+	/*
+	 * Sets image height size parameter.
+	 * @height: image height
+	 */
+	void set_height(Uint16 height);
 
 	/*
-	 * Initialize mpeg codec parameters.
+	 * Gets coded bits number of each pixel.
+	 * @returns: bits number
 	 */
-	MpegCodecParameters();
+	Uint8 get_bits_per_pixel();
+	
+	/*
+	 * Sets coding bits number of each pixel.
+	 * @bits_number: bits number
+	 */
+	void set_bits_per_pixel(Uint16 bits_number);
+	
+	/*
+	 * Initialize image codec parameters.
+	 */
+	ImageCodecParameters();
 
 	/*
 	 * Serialize a data chunk.
@@ -48,7 +88,7 @@ public:
 	Uint32 get_size() const;
 	
 	
-	~MpegCodecParameters();
+	~ImageCodecParameters();
 };
 
-#endif /*MPEG_CODEC_PARAMETERS_H_*/
+#endif /*IMAGE_CODEC_PARAMETERS_H_*/

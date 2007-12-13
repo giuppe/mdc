@@ -1,7 +1,7 @@
 /***************************************************************************
-           mpeg_codec_parameters.h  -  MPEG Codec Parameters class
+           image_codec_parameters.cpp  -  Image Codec Parameters
                              -------------------
-    begin                : Dec 7, 2007
+    begin                : Dec 13, 2007
     copyright            : Livio Pipitone
     email                : livent@tiscalinet.it
  ***************************************************************************/
@@ -14,41 +14,23 @@
  *                                                                                                                 
  ***************************************************************************/
 
-#include "defs.h"
+#include "image_codec_parameters.h"
 #include "../../common/data_chunk.h"
 #include "../../common/serializable.h"
-#include "../abstract_codec_parameters.h"
 
-#ifndef MPEG_CODEC_PARAMETERS_H_
-#define MPEG_CODEC_PARAMETERS_H_
+ImageCodecParameters::ImageCodecParameters() {m_size = 0;}
+Uint32 ImageCodecParameters::get_size() const {return m_size;}
 
-class MpegCodecParameters : public AbstractCodecParameters {
-public:
+DataChunk& ImageCodecParameters::serialize() const {
+	DataChunk* dc = new DataChunk;
+	return *dc;
+}
 
-	/*
-	 * Initialize mpeg codec parameters.
-	 */
-	MpegCodecParameters();
-
-	/*
-	 * Serialize a data chunk.
-	 * @returns: data chunk
-	 */
-	DataChunk& serialize() const;
-
-	/*
-	 * Deserialize a data chunk.
-	 */
-	void deserialize(const DataChunk& dc);
-	
-	/*
-	 * Get parameters' size.
-	 * @returns: parameters' size
-	 */
-	Uint32 get_size() const;
-	
-	
-	~MpegCodecParameters();
-};
-
-#endif /*MPEG_CODEC_PARAMETERS_H_*/
+void ImageCodecParameters::deserialize(const DataChunk& dc) {}
+ImageCodecParameters::~ImageCodecParameters() {}
+Uint16 ImageCodecParameters::get_width() {return m_width;}
+void ImageCodecParameters::set_width(Uint16 width) {m_width = width;}
+Uint16 ImageCodecParameters::get_height() {return m_height;}
+void ImageCodecParameters::set_height(Uint16 height) {m_height = height;}
+Uint8 ImageCodecParameters::get_bits_per_pixel() {return m_bits_per_pixel;}
+void ImageCodecParameters::set_bits_per_pixel(Uint16 bits_number) {m_bits_per_pixel = bits_number;}
