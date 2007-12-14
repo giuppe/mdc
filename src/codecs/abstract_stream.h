@@ -84,11 +84,7 @@ public:
 	 */
 	virtual DataChunk& get_data(Uint64 offset, Uint64 size) const = 0;
 	
-	/*
-	 * Gets bits number per pixel if the source file is an image.
-	 * @returns: bits number.
-	 */
-	virtual Uint8 get_bits_per_pixel() = 0;
+
 };
 
 #endif /*ABSTRACTSTREAM_H_*/
