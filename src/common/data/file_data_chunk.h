@@ -13,12 +13,14 @@ protected:
 	
 	bool m_is_null;
 	
+	bool m_is_open_file;
+	
 	void open_file();
 	
 	bool get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const;
 	
 public:
-	FileDataChunk():m_is_null(true){}
+	FileDataChunk():m_is_null(true),m_is_open_file(false){}
 	
 	explicit FileDataChunk(string path);
 	
