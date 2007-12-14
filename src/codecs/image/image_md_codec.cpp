@@ -44,9 +44,9 @@ void ImageMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
 				descriptor->set_codec_name(string("image"));
-				ImageCodecParameters* tcp = new ImageCodecParameters();
-				tcp->set_bits_per_pixel(stream->get_bits_per_pixel());
-				descriptor->set_codec_parameter(tcp);
+				ImageCodecParameters* icp = new ImageCodecParameters();
+				//icp->set_bits_per_pixel(stream->get_bits_per_pixel());
+				descriptor->set_codec_parameter(icp);
 				DataChunk payload;
 				Uint64 k;
 				for (k=0; k<max_payload_size; k++)

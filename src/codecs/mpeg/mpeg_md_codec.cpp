@@ -44,8 +44,8 @@ void MpegMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 				descriptor->set_flow_id(i);
 				descriptor->set_sequence_number(j);
 				descriptor->set_codec_name(string("mpeg"));
-				MpegCodecParameters* tcp = new MpegCodecParameters();
-				descriptor->set_codec_parameter(tcp);
+				MpegCodecParameters* mcp = new MpegCodecParameters();
+				descriptor->set_codec_parameter(mcp);
 				DataChunk payload;
 				if (offset+(m_flows_number*max_payload_size) < stream_size)
 					payload += stream->get_data(offset, max_payload_size);
