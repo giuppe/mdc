@@ -20,26 +20,49 @@
 #include "../../common/dir/abstract_directory.h"
 #include "../../common/dir/directory_factory.h"
 #include "../../common/hash/hash.h"
+#include "RGB_container.h"
 
 ImageStream::ImageStream() {m_data.resize(0);}
 
 bool ImageStream::load_from_disk(const string& path) {
-	
-	// Prototype code //
-	
-	/* Load the BMP file into a surface */
-	m_img = SDL_LoadBMP(path.c_str());
-	m_pixel_format = m_img->format;
-	/* Lock the surface */
-	SDL_LockSurface(m_img);
-	/* Get the topleft pixel */
-	SDL_Color color;
-	Uint8 index;
-	index = *(Uint8 *)m_img->pixels;
-	color = m_pixel_format->palette->colors[index];
+	if (path.size() > 0) {
+		m_img = SDL_LoadBMP(path.c_str());
+		m_pixel_format = m_img->format;
+		SDL_LockSurface(m_img);
+		if (m_pixel_format->BitsPerPixel == 24) {
+			Uint32 temp, pixel;
+			Uint8 red, green, blue, alpha;
+			/* Extracting color components from a 24-bit color value */
+			pixel = *((Uint32*)m_img->pixels);
+			SDL_UnlockSurface(m_img);
+			/* Get Red component */
+			temp = pixel&m_pixel_format->Rmask; /* Isolate red component */
+			temp = temp>>m_pixel_format->Rshift;/* Shift it down to 8-bit */
+			temp = temp<<m_pixel_format->Rloss; /* Expand to a full 8-bit number */
+			red = (Uint8)temp;
+			/* Get Green component */
+			temp = pixel&m_pixel_format->Gmask; /* Isolate green component */
+			temp = temp>>m_pixel_format->Gshift;/* Shift it down to 8-bit */
+			temp = temp<<m_pixel_format->Gloss; /* Expand to a full 8-bit number */
+			green = (Uint8)temp;
+			/* Get Blue component */
+			temp = pixel&m_pixel_format->Bmask; /* Isolate blue component */
+			temp = temp>>m_pixel_format->Bshift;/* Shift it down to 8-bit */
+			temp = temp<<m_pixel_format->Bloss; /* Expand to a full 8-bit number */
+			blue = (Uint8)temp;
+			/* Get Alpha component */
+			temp = pixel&m_pixel_format->Amask; /* Isolate alpha component */
+			temp = temp>>m_pixel_format->Ashift;/* Shift it down to 8-bit */
+			temp = temp<<m_pixel_format->Aloss; /* Expand to a full 8-bit number */
+			alpha = (Uint8)temp;
+			RGB_container rgb;
+			
+		}
+		return true;
+	}
+	return false;
 	
 	// Old standard code //
-	
 	if (path.size() > 0) {
 		m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of("."));		
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();

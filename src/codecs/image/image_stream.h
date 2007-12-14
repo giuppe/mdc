@@ -18,13 +18,14 @@
 #include <cstdio>
 #include "../abstract_stream.h"
 #include "../../common/data_chunk.h"
+#include "RGB_container.h"
 
 #ifndef IMAGE_STREAM_H_
 #define IMAGE_STREAM_H_
 
 class ImageStream : public AbstractStream {
 private:
-	vector<char> m_data;
+	vector<RGB_container> m_data;
 	string m_stream_name;
 	string m_hash;
 	SDL_Surface* m_img;
@@ -104,8 +105,8 @@ public:
 	void deserialize(const DataChunk&);
 	
 	/*
-	 * Get bits number per pixel of an image.
-	 * @returns: bits number
+	 * Gets bits number per pixel if the source file is an image.
+	 * @returns: bits number.
 	 */
 	Uint8 get_bits_per_pixel();
 };
