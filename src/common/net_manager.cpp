@@ -17,7 +17,7 @@
 
 #include "defs.h"
 #include <SDL/SDL_net.h>
-#include "data_chunk.h"
+#include "data/mem_data_chunk.h"
 #include <cassert>
 #include <cstring>
 #include "net_manager.h"
@@ -124,7 +124,7 @@ UDPsocket NetManager::get_socket(Uint32 socket_handle)
 }
 
 
-void NetManager::send_data(NetEndPoint destination,  const DataChunk& data)
+void NetManager::send_data(NetEndPoint destination,  const MemDataChunk& data)
 {
 	//UDPsocket socket = get_socket(source_socket_handle);
 	
@@ -174,7 +174,7 @@ void NetManager::send_data(NetEndPoint destination,  const DataChunk& data)
 
 
 
-bool NetManager::receive_data(Uint32 source_socket_handle, DataChunk& data, NetEndPoint& sender)
+bool NetManager::receive_data(Uint32 source_socket_handle, MemDataChunk& data, NetEndPoint& sender)
 {
 	UDPpacket packet;
 	

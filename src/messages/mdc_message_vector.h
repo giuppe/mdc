@@ -34,9 +34,9 @@ protected:
 public:
 	MDCMessageVector(){};
 	
-	DataChunk& serialize() const;
+	MemDataChunk& serialize() const;
 	
-	void deserialize(const DataChunk&);
+	void deserialize(const IDataChunk*);
 	
 
 	

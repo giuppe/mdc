@@ -16,7 +16,7 @@
 
 #include "posix_directory.h"
 #include "../log/log_manager.h"
-#include "../data_chunk.h"
+#include "../data/mem_data_chunk.h"
 
 #include <sys/types.h>
 #include <dirent.h>
@@ -48,7 +48,7 @@ vector<string> PosixDirectory::get_file_names(string path) {
 	return result;
 }
 
-bool PosixDirectory::load_file(const string& path, DataChunk& loaded_data) {
+bool PosixDirectory::load_file(const string& path, FileDataChunk& loaded_data) {
 	loaded_data.erase();
 	FILE *m_f;
 
@@ -78,7 +78,7 @@ bool PosixDirectory::load_file(const string& path, DataChunk& loaded_data) {
 				return false;
 			}
 
-			loaded_data.append(lSize, buffer);
+			loaded_data.append_data(lSize, buffer);
 			delete[] buffer;
 			fclose(m_f);
 			return true;
@@ -88,10 +88,13 @@ bool PosixDirectory::load_file(const string& path, DataChunk& loaded_data) {
 	return false;
 }
 
-bool PosixDirectory::save_file(const string& path, const DataChunk& data_to_save) {
+bool PosixDirectory::save_file(const string& path, const IDataChunk* data_to_save) {
 	//FIXME: always overwrite to output file
-	DataChunk dc;
+	FileDataChunk dc(path);
+	dc.erase();
 	dc += data_to_save;
+/*	
+	dc.
 	FILE *m_f;
 	Uint64 lSize;
 	Uint8* buffer;
@@ -119,6 +122,7 @@ bool PosixDirectory::save_file(const string& path, const DataChunk& data_to_save
 		}
 	}
 	return false;
+	*/
 }
 
 string PosixDirectory::get_filename(const string& path) {

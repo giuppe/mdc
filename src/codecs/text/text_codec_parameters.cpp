@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "text_codec_parameters.h"
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include "../../common/serializable.h"
 
 TextCodecParameters::TextCodecParameters() {m_size = 0;}
@@ -28,16 +28,16 @@ Uint32 TextCodecParameters::get_size() const
 
 
 
-DataChunk& TextCodecParameters::serialize() const 
+MemDataChunk& TextCodecParameters::serialize() const 
 {
-	DataChunk* dc = new DataChunk;
+	MemDataChunk* dc = new MemDataChunk;
 	return *dc;
 }
 
 
 
 
-void TextCodecParameters::deserialize(const DataChunk& dc) {}
+void TextCodecParameters::deserialize(const IDataChunk* dc) {}
 
 
 

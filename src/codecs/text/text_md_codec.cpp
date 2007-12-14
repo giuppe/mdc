@@ -19,7 +19,7 @@
 #include "text_stream.h"
 #include "../mdc/md_stream.h"
 #include "../mdc/descriptor.h"
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include "text_codec_parameters.h"
 #include <cmath>
 
@@ -46,11 +46,11 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 				descriptor->set_codec_name(string("text"));
 				TextCodecParameters* tcp = new TextCodecParameters();
 				descriptor->set_codec_parameter(tcp);
-				DataChunk payload;
+				MemDataChunk payload;
 				Uint64 k;
 				for (k=0; k<max_payload_size; k++)
 					if (offset+i+k+m_flows_number < stream_size)
-						payload += stream->get_data(offset+i+(k*m_flows_number), 1);
+						payload += &stream->get_data(offset+i+(k*m_flows_number), 1);
 				offset += m_flows_number*k;
 				descriptor->set_payload(payload);
 				md_stream->set_descriptor(descriptor);
@@ -61,7 +61,7 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 
 void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const {
 	if (!md_stream->is_empty()) {
-		DataChunk* dc = new DataChunk();
+		MemDataChunk* dc = new MemDataChunk();
 		vector<Uint8> taken_stream;
 		Uint8 flows_number = md_stream->get_flows_number();
 		Uint32 sequences_number = md_stream->get_sequences_number();
@@ -74,7 +74,7 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="text")) {
 					payload_size = descriptor->get_payload_size();
 					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) {
-						(*dc) += *(descriptor->get_payload());
+						(*dc) += (descriptor->get_payload());
 						taken_stream.resize(flows_number*sequences_number*(payload_size+1));
 						Uint8 current_received_data;
 						Uint64 k;
@@ -100,11 +100,11 @@ void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) cons
 				}
 			}
 		}
-		DataChunk* taken_dc = new DataChunk();
+		MemDataChunk* taken_dc = new MemDataChunk();
 		Uint8* temp_container = new Uint8[max_dimension+1];
 		for (Uint64 i=0; i<max_dimension+1; i++)
 			temp_container[i] = taken_stream[i];
-		taken_dc->append(max_dimension+1, temp_container);
+		taken_dc->append_data(max_dimension+1, temp_container);
 		stream->set_data(*taken_dc);
 	}
 }

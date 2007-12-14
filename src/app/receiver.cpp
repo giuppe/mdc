@@ -24,7 +24,7 @@ void Receiver::action()
 	ReceiveFilterList* filter_list = ReceiveFilterList::instance();
 	
 
-	DataChunk received;
+	MemDataChunk received;
 
 
 	
@@ -36,14 +36,14 @@ void Receiver::action()
 	{
 
 		MDCMessage msg;
-		msg.deserialize(received);
+		msg.deserialize(&received);
 		LOG_INFO("Received packet, of type: "<<msg.get_type_string());
 		
 		//-receive every descriptor
 		if(strcmp(msg.get_type_string(), "DESC")==0)
 		{
 			Descriptor* curr_desc = new Descriptor();
-			curr_desc->deserialize(received);
+			curr_desc->deserialize(&received);
 			
 			LOG_INFO("Descriptor ("<<curr_desc->get_flow_id()<<", "<<curr_desc->get_sequence_number()<<") for stream id "<<curr_desc->get_stream_id());
 			//-filter every descriptor with the help of a list, filled with result of ASRQs

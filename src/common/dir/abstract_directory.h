@@ -15,21 +15,24 @@
  ***************************************************************************/
 
 
-#include "../hash/hash.h"
+
 
 #ifndef ABSTRACT_DIRECTORY_H_
 #define ABSTRACT_DIRECTORY_H_
 
-class DataChunk;
+#include "../hash/hash.h"
+#include "../defs.h"
+#include "../data/file_data_chunk.h"
+
 
 class AbstractDirectory
 {
 public:
 	virtual vector<string> get_file_names(string path) = 0;
 	
-	virtual bool load_file(const string& path, DataChunk& loaded_data) = 0;
+	virtual bool load_file(const string& path, FileDataChunk& loaded_data) = 0;
 	
-	virtual bool save_file(const string& path, const DataChunk& data_to_save) = 0;
+	virtual bool save_file(const string& path, const IDataChunk* data_to_save) = 0;
 	
 	virtual string get_filename(const string& path) = 0;
 	

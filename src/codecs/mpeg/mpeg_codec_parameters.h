@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include "../../common/serializable.h"
 #include "../abstract_codec_parameters.h"
 
@@ -34,12 +34,12 @@ public:
 	 * Serialize a data chunk.
 	 * @returns: data chunk
 	 */
-	DataChunk& serialize() const;
+	MemDataChunk& serialize() const;
 
 	/*
 	 * Deserialize a data chunk.
 	 */
-	void deserialize(const DataChunk& dc);
+	void deserialize(const IDataChunk* dc);
 	
 	/*
 	 * Get parameters' size.

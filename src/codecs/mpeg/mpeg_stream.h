@@ -19,7 +19,7 @@
 #include "../abstract_stream.h"
 
 
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 
 #ifndef MPEG_STREAM_H_
 #define MPEG_STREAM_H_
@@ -38,7 +38,7 @@ public:
 	 * @dimension: number of single data
 	 * @returns: a data chunk containing data set
 	 */
-	DataChunk& get_data(Uint16 dimension) const;
+	MemDataChunk& get_data(Uint16 dimension) const;
 
 	/*
 	 * Get parts of a text stream, specifying size and starting from offset.
@@ -46,7 +46,7 @@ public:
 	 * @param size: data size
 	 * @returns: a data chunk containing data selected
 	 */
-	DataChunk& get_data(Uint64 offset, Uint64 size) const;
+	MemDataChunk& get_data(Uint64 offset, Uint64 size) const;
 
 	/*
 	 * Get data dimension.
@@ -84,7 +84,7 @@ public:
 	 * Insert data to the current stream.
 	 * @data: data to be added;
 	 */
-	void set_data(DataChunk& data);
+	void set_data(MemDataChunk& data);
 	
 	
 	
@@ -98,14 +98,10 @@ public:
 	 */
 	bool load_from_disk(const string& path);
 	
-	DataChunk& serialize() const;
-	void deserialize(const DataChunk&);
+	MemDataChunk& serialize() const;
+	void deserialize(const IDataChunk*);
 	
-	/*
-	 * Gets bits number per pixel if the source file is an image.
-	 * @returns: bits number.
-	 */
-	Uint8 get_bits_per_pixel(){}
+	
 };
 
 #endif /*MPEG_STREAM_H_*/

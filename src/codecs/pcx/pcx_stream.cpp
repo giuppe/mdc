@@ -19,7 +19,7 @@
 
 #include "defs.h"
 
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include "../../common/dir/abstract_directory.h"
 #include "../../common/dir/directory_factory.h"
 
@@ -36,9 +36,9 @@ bool PcxStream::load_from_disk(const string& path)
 	LOG_INFO("Open File\n");
 	if (path.size() > 0) {
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
-		DataChunk dc;
+		FileDataChunk dc;
 		if (dir->load_file(path, dc)) {
-			deserialize(dc);
+			deserialize(&dc);
 			m_stream_name = dir->get_filename(path);
 			return true;
 		}
@@ -55,7 +55,7 @@ bool PcxStream::save_to_disk(const string& path) const
 	if (path.size()>0 && m_data.size()>0) {
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
 		
-		if (dir->save_file(path, this->serialize())) return true;
+		if (dir->save_file(path, &this->serialize())) return true;
 	}
 	LOG_ERROR("Unable to write pcx stream to "<<path);
 	return false;
@@ -63,19 +63,19 @@ bool PcxStream::save_to_disk(const string& path) const
 
 
 
-DataChunk& PcxStream::serialize() const
+MemDataChunk& PcxStream::serialize() const
 {
-	DataChunk* dc;
+	MemDataChunk* dc;
 	Uint8* buffer = new Uint8[m_data.size()];
 	for (Uint32 i=0; i<m_data.size(); i++)
 		buffer[i]= m_data[i];
-	dc->append(m_data.size(), buffer);
+	dc->append_data(m_data.size(), buffer);
 	return *dc;
 			
 }
 
-void PcxStream::deserialize(const DataChunk& datachunk) {
-	DataChunk dc;
+void PcxStream::deserialize(const IDataChunk* datachunk) {
+	MemDataChunk dc;
 	dc += datachunk;
 	while (dc.get_lenght() > 0) {
 		Uint8 curr_char;
@@ -84,16 +84,16 @@ void PcxStream::deserialize(const DataChunk& datachunk) {
 	}
 }
 
-DataChunk& PcxStream::get_data(Uint64 offset, Uint64 size) const
+MemDataChunk& PcxStream::get_data(Uint64 offset, Uint64 size) const
 {
-	DataChunk* d = new DataChunk();
+	MemDataChunk* d = new MemDataChunk();
 	Uint8* buffer = new Uint8[size];
 	for(Uint64 i=0; i<size; i++)
 	{
 		buffer[i]=m_data[offset+i];
 		//DEBUG_OUT(Uint32 (offset+i)<<": "<<buffer[i]<<"\n");
 	}
-	d->append(size, buffer);
+	d->append_data(size, buffer);
 	delete[] buffer;
 	return *d;
 }
@@ -147,7 +147,7 @@ PcxStream::~PcxStream() {}
 
 
 
-void PcxStream::set_data (DataChunk& data) 
+void PcxStream::set_data (MemDataChunk& data) 
 {
 	Uint32 real_data_size = data.get_lenght();
 	m_data.resize(real_data_size);

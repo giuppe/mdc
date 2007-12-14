@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "descriptor.h"
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include "../../messages/mdc_message.h"
 #include "../codec_parameters_factory.h"
 
@@ -34,38 +34,38 @@ Descriptor::~Descriptor() {delete m_codec_parameters;}
 
 
 
-DataChunk& Descriptor::serialize() const {
-	DataChunk* result = new DataChunk();
+MemDataChunk& Descriptor::serialize() const {
+	MemDataChunk* result = new MemDataChunk();
 	MDCMessage msg;
 	msg.set_type_string("DESC");
-	(*result)+=msg.serialize();
-	result->append(m_complete_stream_md5_hash.c_str());
-	result->append(m_flow_id);
-	result->append(m_sequence_number);
-	result->append(m_codec_name.c_str());
-	DataChunk temp_codec_parameters;
-	temp_codec_parameters += m_codec_parameters->serialize();
-	result->append(temp_codec_parameters.get_lenght());
-	(*result)+=temp_codec_parameters;
+	(*result)+=&msg.serialize();
+	result->append_cstring(m_complete_stream_md5_hash.c_str());
+	result->append_Uint8(m_flow_id);
+	result->append_Uint32(m_sequence_number);
+	result->append_cstring(m_codec_name.c_str());
+	MemDataChunk temp_codec_parameters;
+	temp_codec_parameters += &m_codec_parameters->serialize();
+	result->append_Uint32(temp_codec_parameters.get_lenght());
+	(*result)+=&temp_codec_parameters;
 	Uint16 payload_size = m_payload.get_lenght();
-	result->append(payload_size);
-	(*result)+=this->m_payload;
+	result->append_Uint16(payload_size);
+	(*result)+=&this->m_payload;
 	return (*result);
 }
 
 
 
 
-void Descriptor::deserialize(const DataChunk& data) {
-	if (data.get_lenght() > 0) {
-		DataChunk* temp_dc = new DataChunk();
+void Descriptor::deserialize(const IDataChunk* data) {
+	if (data->get_lenght() > 0) {
+		MemDataChunk* temp_dc = new MemDataChunk();
 		temp_dc->operator +=(data);
 		char* hash;
 		char* codec_name;
-		DataChunk preamble;
+		MemDataChunk preamble;
 		temp_dc->extract_head(8, preamble);
 		MDCMessage msg;
-		msg.deserialize(preamble);
+		msg.deserialize(&preamble);
 		if (string(msg.get_type_string()) == string("DESC")) {
 			temp_dc->extract_head(hash);
 			m_complete_stream_md5_hash = hash;
@@ -75,10 +75,10 @@ void Descriptor::deserialize(const DataChunk& data) {
 			m_codec_name= codec_name;
 			Uint32 codec_parameters_size = 0;
 			temp_dc->extract_head(codec_parameters_size);
-			DataChunk* codec_parameters_dc = new DataChunk();
+			MemDataChunk* codec_parameters_dc = new MemDataChunk();
 			temp_dc->extract_head(codec_parameters_size, *codec_parameters_dc);
 			m_codec_parameters=CodecParametersFactory::create_codec_parameters(m_codec_name);
-			m_codec_parameters->deserialize(*codec_parameters_dc);
+			m_codec_parameters->deserialize(codec_parameters_dc);
 			delete codec_parameters_dc;
 			Uint16 payload_size = 0;
 			temp_dc->extract_head(payload_size);
@@ -95,19 +95,19 @@ Uint16 Descriptor::get_payload_size() const {return m_payload.get_lenght();}
 
 
 
-void Descriptor::set_payload(DataChunk& payload)
+void Descriptor::set_payload(MemDataChunk& payload)
 {
 	m_payload.erase();
-	m_payload+=payload;
+	m_payload+=&payload;
 }
 
 
 
 
-DataChunk* Descriptor::get_payload() const
+MemDataChunk* Descriptor::get_payload() const
 {
-	DataChunk* payload = new DataChunk();
-	(*payload)+=m_payload;
+	MemDataChunk* payload = new MemDataChunk();
+	(*payload)+=&m_payload;
 	return payload;
 }
 

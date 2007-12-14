@@ -23,7 +23,7 @@
 
 
 #include "../../common/serializable.h"
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 
 class Descriptor;
 
@@ -104,8 +104,8 @@ public:
 	 * @returns: true if stream is empty
 	 */
 	bool is_empty() const;
-	DataChunk& serialize() const;
-	void deserialize(const DataChunk&);
+	MemDataChunk& serialize() const;
+	void deserialize(const IDataChunk*);
 	
 	/*
 	 * Gets maximum sequences number

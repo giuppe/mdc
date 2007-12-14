@@ -16,7 +16,7 @@
 
 
 
-#include "../common/data_chunk.h"
+#include "../common/data/mem_data_chunk.h"
 #include "../common/serializable.h"
 
 #ifndef ABSTRACTSTREAM_H_
@@ -74,7 +74,7 @@ public:
 	 * Insert data to the current stream.
 	 * @data: data to be added;
 	 */
-	virtual void set_data(DataChunk& data) = 0;
+	virtual void set_data(MemDataChunk& data) = 0;
 	
 	/*
 	 * Gets data from a file.
@@ -82,9 +82,7 @@ public:
 	 * @size: data quantity taken;
 	 * @returns: a DataChunk containing the data readed.
 	 */
-	virtual DataChunk& get_data(Uint64 offset, Uint64 size) const = 0;
-	
-
+	virtual MemDataChunk& get_data(Uint64 offset, Uint64 size) const = 0;
 };
 
 #endif /*ABSTRACTSTREAM_H_*/

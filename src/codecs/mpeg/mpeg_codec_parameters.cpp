@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "mpeg_codec_parameters.h"
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include "../../common/serializable.h"
 
 MpegCodecParameters::MpegCodecParameters() {m_size = 0;}
@@ -28,16 +28,16 @@ Uint32 MpegCodecParameters::get_size() const
 
 
 
-DataChunk& MpegCodecParameters::serialize() const 
+MemDataChunk& MpegCodecParameters::serialize() const 
 {
-	DataChunk* dc = new DataChunk;
+	MemDataChunk* dc = new MemDataChunk;
 	return *dc;
 }
 
 
 
 
-void MpegCodecParameters::deserialize(const DataChunk& dc) {}
+void MpegCodecParameters::deserialize(const IDataChunk* dc) {}
 
 
 

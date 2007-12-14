@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include "../../common/serializable.h"
 #include "../abstract_codec_parameters.h"
 #include "pcx_stream.h"
@@ -30,7 +30,7 @@ class PcxCodecParameters : public AbstractCodecParameters
 protected:
 	Uint8 m_headerinfo[128];
 	Uint8 m_bytes_per_line;
-	DataChunk sdata;
+	MemDataChunk sdata;
 public:
 
 	/*
@@ -44,12 +44,12 @@ public:
 	 * Serialize a data chunk.
 	 * @returns: data chunk
 	 */
-	DataChunk& serialize() const;
+	MemDataChunk& serialize() const;
 
 	/*
 	 * Deserialize a data chunk.
 	 */
-	void deserialize(const DataChunk& dc);
+	void deserialize(const IDataChunk* dc);
 	
 	/*
 	 * Get parameters' size.

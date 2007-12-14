@@ -15,43 +15,55 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include "data_chunk.h"
+#include "mem_data_chunk.h"
 #include <cstring>
 #include <cassert>
 #include <SDL/SDL_net.h>
-#include "hash/hash.h"
+#include "../hash/hash.h"
 
-Uint8* DataChunk::get_data() const
+Uint8* MemDataChunk::get_data() const
 {
 	// FIXME: maybe we should return a copy of the data
 	return m_data;
 }
 
-bool DataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
+bool MemDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
 {
-	assert(!"This function is a stub");
+	
+	if((m_lenght<(offset+lenght))||(lenght==0));
+	{
+		LOG_ERROR("Cannot get data: offset/lenght outside range");
+		return false;
+	}
+	data = new Uint8[lenght];
+	Uint8* data_offsetted = m_data + offset;
+	memcpy(data, data_offsetted, lenght);
+	return true;
+	
 }
 
 
 
-Uint32 DataChunk::get_lenght() const
+Uint32 MemDataChunk::get_lenght() const
 {
 	return m_lenght;
 }
 
-void DataChunk::set_content(Uint8* data, Uint32 lenght)
+void MemDataChunk::set_content(Uint8* data, Uint32 lenght)
 {
 	m_data = data;
 	m_real_data = m_data;
 	m_lenght = lenght;
 }
  
-
-void DataChunk::operator +=(const DataChunk& data) {
-	append(data.m_lenght, data.m_data);
+/*
+void MemDataChunk::operator +=(const MemDataChunk& data) {
+	AbstractDataChunk::operator+=(&data);
 }
 
-void DataChunk::append(Uint32 lenght, Uint8* data) {
+*/
+
+void MemDataChunk::append_data(Uint32 lenght, Uint8* data) {
 	if(lenght==0) 
 		return;
 	
@@ -66,8 +78,8 @@ void DataChunk::append(Uint32 lenght, Uint8* data) {
 	this->m_real_data = this->m_data;
 	this->m_lenght += lenght;
 }
-
-void DataChunk::append(Uint32 data)
+/*
+void MemDataChunk::append(Uint32 data)
 {
 	Uint8* new_data = new Uint8[sizeof(Uint32)];
 	SDLNet_Write32(data, new_data);
@@ -75,7 +87,7 @@ void DataChunk::append(Uint32 data)
 	delete [] new_data;
 }
 
-void DataChunk::append(Sint32 data)
+void MemDataChunk::append(Sint32 data)
 {
 	Uint8* new_data = new Uint8[sizeof(Sint32)];
 	SDLNet_Write32((Uint32)data, new_data);
@@ -83,7 +95,7 @@ void DataChunk::append(Sint32 data)
 	delete [] new_data;
 }
 
-void DataChunk::append(Uint16 data)
+void MemDataChunk::append(Uint16 data)
 {
 	Uint8* new_data = new Uint8[sizeof(Uint16)];
 	SDLNet_Write16(data, new_data);
@@ -91,7 +103,7 @@ void DataChunk::append(Uint16 data)
 	delete [] new_data;
 }
 
-void DataChunk::append(Sint16 data)
+void MemDataChunk::append(Sint16 data)
 {
 	Uint8* new_data = new Uint8[sizeof(Sint16)];
 	SDLNet_Write16((Uint16)data, new_data);
@@ -99,18 +111,18 @@ void DataChunk::append(Sint16 data)
 	delete [] new_data;
 }
 
-void DataChunk::append(Uint8 data)
+void MemDataChunk::append(Uint8 data)
 {
 	append(1, &data);
 }
 
-void DataChunk::append(Sint8 data)
+void MemDataChunk::append(Sint8 data)
 {
 	Uint8 new_data = (Uint8)data;
 	append(1, &new_data);
 }
 
-void DataChunk::append(const char* data)
+void MemDataChunk::append(const char* data)
 {
 	Uint32 new_lenght = strlen(data)+1;
 	Uint8* new_data = new Uint8[new_lenght];
@@ -124,8 +136,8 @@ void DataChunk::append(const char* data)
 	delete [] new_data;
 	
 }
-
-bool DataChunk::extract_head(Uint32 lenght, Uint8* &data)
+*/
+bool MemDataChunk::extract_head(Uint32 lenght, Uint8* &data)
 {
 //	LOG_INFO("Extracting "<<lenght<<" bytes rom datachunk.")
 	if(lenght==0)
@@ -150,7 +162,7 @@ bool DataChunk::extract_head(Uint32 lenght, Uint8* &data)
 }
 
 
-bool DataChunk::extract_head(Uint32& data)
+bool MemDataChunk::extract_head(Uint32& data)
 {
 	Uint8* new_data;
 	bool result = extract_head(4, new_data);
@@ -162,7 +174,7 @@ bool DataChunk::extract_head(Uint32& data)
 	return result;
 }
 
-bool DataChunk::extract_head(Sint32& data)
+bool MemDataChunk::extract_head(Sint32& data)
 {
 	Uint8* new_data;
 	bool result = extract_head(4, new_data);
@@ -175,7 +187,7 @@ bool DataChunk::extract_head(Sint32& data)
 }
 
 
-bool DataChunk::extract_head(Uint16& data)
+bool MemDataChunk::extract_head(Uint16& data)
 {
 	Uint8* new_data;
 	bool result = extract_head(2, new_data);
@@ -187,7 +199,7 @@ bool DataChunk::extract_head(Uint16& data)
 	return result;
 }
 	
-bool DataChunk::extract_head(Sint16& data)
+bool MemDataChunk::extract_head(Sint16& data)
 {
 	Uint8* new_data;
 	bool result = extract_head(2, new_data);
@@ -199,7 +211,7 @@ bool DataChunk::extract_head(Sint16& data)
 	return result;
 }
 	
-bool DataChunk::extract_head(Uint8& data)
+bool MemDataChunk::extract_head(Uint8& data)
 {
 	Uint8* new_data;
 	bool result = extract_head(1, new_data);
@@ -211,7 +223,7 @@ bool DataChunk::extract_head(Uint8& data)
 	return result;
 }
 		
-bool DataChunk::extract_head(Sint8& data)
+bool MemDataChunk::extract_head(Sint8& data)
 {
 	Uint8* new_data;
 	bool result = extract_head(1, new_data);
@@ -227,7 +239,7 @@ bool DataChunk::extract_head(Sint8& data)
  * Extract a null-terminated string (in char* format) from the beginning of DataChunk.
  * @param data (char*&) - this parameter will be replaced with content.
  */ 
-bool DataChunk::extract_head(char* &data)
+bool MemDataChunk::extract_head(char* &data)
 {
 	Uint8* new_data;
 	Uint32 new_lenght = (Uint8*)memchr(this->m_data, 0, 255)-this->m_data+1;
@@ -242,7 +254,7 @@ bool DataChunk::extract_head(char* &data)
 }
 
 
-DataChunk::~DataChunk()
+MemDataChunk::~MemDataChunk()
 {
 	if(m_lenght!=0)
 		delete [] m_real_data;
@@ -250,7 +262,7 @@ DataChunk::~DataChunk()
 
 
 
-void DataChunk::erase()
+void MemDataChunk::erase()
 {
 	if(m_lenght!=0)
 			delete [] m_real_data;
@@ -258,41 +270,24 @@ void DataChunk::erase()
 	m_lenght=0;
 }
 
-bool DataChunk::extract_head(Uint32 lenght, DataChunk &data)
+bool MemDataChunk::extract_head(Uint32 lenght, MemDataChunk &data)
 {
 	data.erase();
 	Uint8* buffer;
 	this->extract_head(lenght, buffer);
-	data.append(lenght, buffer);
+	data.append_data(lenght, buffer);
 	return true;
 }
 
 
-const char* DataChunk::compute_hash_md5() const
+const char* MemDataChunk::compute_hash_md5() const
 {
 
 	return (Hash::md5_from_datachunk(*this)).c_str();
 }
 
 
-DataChunkIterator DataChunk::get_iterator() const
-{
-	return DataChunkIterator(this);
-}
 
-void DataChunk::operator+=(const IDataChunk* data)
-{
-	
-	DataChunkIterator it = data->get_iterator();
-	if(it.is_null())
-	{
-		LOG_ERROR("Trying to add a null data_chunk.");
-		return;	
-	}
-	Uint8* temp;
-	it.get_data(data->get_lenght(), temp);
-	this->append(data->get_lenght(), temp);
-	
-}
+
 
 

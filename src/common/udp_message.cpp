@@ -37,10 +37,10 @@ UDPMessage::UDPMessage()
 }
 
 
-void UDPMessage::set_payload(const DataChunk& data)
+void UDPMessage::set_payload(const MemDataChunk& data)
 {
 	m_payload.erase();
-	m_payload+=data;
+	m_payload+=&data;
 }	
 
 

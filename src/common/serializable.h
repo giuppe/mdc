@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include "data_chunk.h"
+#include "data/mem_data_chunk.h"
 
 #ifndef SERIALIZABLE_H_
 #define SERIALIZABLE_H_
@@ -32,13 +32,13 @@ public:
 			 * This function serializes the object's state and produces a DataChunk.
 			 * It is the opposite of deserialize() function.
 			 */
-	virtual DataChunk& serialize() const = 0;
+	virtual MemDataChunk& serialize() const = 0;
 	
 	/**
 		 * This function deserializes data, i.e. restore object's state embedded in data.
 		 * It is the opposite of serialize().
 		 */
-	virtual void deserialize(const DataChunk&) = 0;
+	virtual void deserialize(const IDataChunk*) = 0;
 	
 	virtual ~Serializable(){};
 

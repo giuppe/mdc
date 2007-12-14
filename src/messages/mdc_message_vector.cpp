@@ -37,19 +37,19 @@ void MDCMessageVector::set_rows(const vector<string>& rows)
 
 
 
-DataChunk& MDCMessageVector::serialize() const
+MemDataChunk& MDCMessageVector::serialize() const
 {
-	DataChunk* data = new DataChunk();
+	MemDataChunk* data = new MemDataChunk();
 	
-	(*data)+=MDCMessage::serialize();
+	(*data)+=&MDCMessage::serialize();
 	
 	Uint32 num_rows = m_rows.size();
 	
-	data->append(num_rows);
+	data->append_Uint32(num_rows);
 	
 	for(Uint32 i = 0; i<num_rows; i++)
 	{
-		data->append(m_rows[i].c_str());
+		data->append_cstring(m_rows[i].c_str());
 	}
 	
 	
@@ -60,9 +60,9 @@ DataChunk& MDCMessageVector::serialize() const
 
 
 
-void MDCMessageVector::deserialize(const DataChunk& data)
+void MDCMessageVector::deserialize(const IDataChunk* data)
 {
-	DataChunk temp_data;
+	MemDataChunk temp_data;
 	temp_data+=data;
 	
 	MDCMessage::deserialize(data);

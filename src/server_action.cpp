@@ -17,7 +17,7 @@
 
 #include "defs.h"
 #include "server_action.h"
-#include "common/data_chunk.h"
+#include "common/data/mem_data_chunk.h"
 #include "common/net_manager.h"
 #include "mdc_messages.h"
 #include "codecs/mdc/md_stream.h"
@@ -34,7 +34,7 @@ ServerAction::ServerAction()
 void ServerAction::action()
 {
 #if 0
-	DataChunk received;
+	MemDataChunk received;
 	
 	Uint32 sender_address;
 	

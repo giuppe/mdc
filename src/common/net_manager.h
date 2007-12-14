@@ -19,7 +19,7 @@
 
 
 #include "net_end_point.h"
-#include "data_chunk.h"
+#include "data/mem_data_chunk.h"
 
 #ifndef NET_MANAGER_H_
 #define NET_MANAGER_H_
@@ -65,7 +65,7 @@ public:
 		 * @param destination the endpoint of the destination.
 		 * @param data the DataChunk to send.
 		 */
-	void send_data(NetEndPoint destination, const DataChunk& data);
+	void send_data(NetEndPoint destination, const MemDataChunk& data);
 	
 	/**
 		 * Receive a DataChunk through a previously created listening socket.
@@ -73,7 +73,7 @@ public:
 		 * @param data object filled with received data.
 		 * @returns true if data received.
 		 */
-	bool receive_data(Uint32 source_socket_handle, DataChunk& data, NetEndPoint& sender);
+	bool receive_data(Uint32 source_socket_handle, MemDataChunk& data, NetEndPoint& sender);
 	
 	
 	Uint32 resolve(string hostname);

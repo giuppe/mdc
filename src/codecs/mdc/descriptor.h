@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include "../abstract_codec_parameters.h"
 #include "../../common/serializable.h"
 
@@ -34,7 +34,7 @@ private:
 	Uint32 m_sequence_number;
 	string m_codec_name;
 	AbstractCodecParameters* m_codec_parameters;
-	DataChunk m_payload;
+	MemDataChunk m_payload;
 public:
 	Descriptor();
 	~Descriptor();
@@ -103,25 +103,25 @@ public:
 	 * Set payload.
 	 * @payload: real payload
 	 */
-	void set_payload(DataChunk& payload);
+	void set_payload(MemDataChunk& payload);
 	
 	/*
 	 * Get payload.
 	 * @returns: data chunk containing payload
 	 */
-	DataChunk* get_payload() const;
+	MemDataChunk* get_payload() const;
 	
 	/**
 	 * This function serializes the Descriptor state and produces a DataChunk for net sending.
 	 * It is the opposite of deserialize() function.
 	 */
-	DataChunk& serialize() const;
+	MemDataChunk& serialize() const;
 	
 	/**
 	 * This function deserializes data, i.e. restore Descriptor state embedded in data.
 	 * It is the opposite of serialize();
 	 */
-	void deserialize(const DataChunk& data);
+	void deserialize(const IDataChunk* data);
 	
 	string get_stream_id() const;
 	

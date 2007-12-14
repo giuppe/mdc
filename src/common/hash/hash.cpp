@@ -42,7 +42,7 @@ string Hash::md5_from_string(string str)
 	return hash1;
 }
 
-string Hash::md5_from_datachunk(const DataChunk& data)
+string Hash::md5_from_datachunk(const MemDataChunk& data)
 {
 
 	hashwrapper *myWrapper = new md5wrapper();

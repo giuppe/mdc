@@ -28,20 +28,20 @@ void MDCMessageSingleParameter::set_parameter(const char* parameter)
 	m_parameter = parameter;
 }
 
-DataChunk& MDCMessageSingleParameter::serialize() const
+MemDataChunk& MDCMessageSingleParameter::serialize() const
 {
-	DataChunk* data = new DataChunk();
+	MemDataChunk* data = new MemDataChunk();
 	
-	(*data)+=MDCMessage::serialize();
+	(*data)+=&MDCMessage::serialize();
 	
-	data->append(m_parameter.c_str());
+	data->append_cstring(m_parameter.c_str());
 	
 	return *data;
 }
 	
-void MDCMessageSingleParameter::deserialize(const DataChunk& data)
+void MDCMessageSingleParameter::deserialize(const IDataChunk* data)
 {
-	DataChunk temp_data;
+	MemDataChunk temp_data;
 	temp_data+=data;
 	
 	MDCMessage::deserialize(data);

@@ -20,7 +20,7 @@
 #include "pcx_stream.h"
 #include "../mdc/md_stream.h"
 #include "../mdc/descriptor.h"
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include "pcx_codec_parameters.h"
 
 #include <cmath>
@@ -74,7 +74,7 @@ void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
 					payload_size = max_payload_size;
 				}
 				
-				DataChunk payload;
+				MemDataChunk payload;
 				DEBUG_OUT("offset: "<<(Uint32 (offset))<<"\n");
 				DEBUG_OUT("payload_size: "<<payload_size<<"\n");
 				
@@ -85,7 +85,7 @@ void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
 			
 				
 				for(Uint32 k = 0; k < (stream->get_data_dim() - pcp->get_size()); ){
-					DataChunk& p_data = stream->get_data(offset, (( pcp->get_bytes_per_line() * 3 ) + 2));
+					MemDataChunk& p_data = stream->get_data(offset, (( pcp->get_bytes_per_line() * 3 ) + 2));
 					Uint8* b_data = p_data.get_data();
 					DEBUG_OUT("LENGHT: "<<p_data.get_lenght()<<"\n");
 					Uint8 l = 0;
@@ -93,12 +93,12 @@ void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
 					for(; l < (spago+pcp->get_bytes_per_line()+1);  l++ ){
 						if(b_data[l] != 193){
 							if(v%m_flows_number == 0){
-								payload+=(stream->get_data(offset, 1));
+								payload+=&(stream->get_data(offset, 1));
 								//DEBUG_OUT("\t\tpixel[red]:\t"<<b_data[l]<<"\n");
 							}
 							v++;
 						}else{
-							payload+=(stream->get_data(offset, 1));
+							payload+=&(stream->get_data(offset, 1));
 						}
 						offset++;
 						k++;
@@ -109,12 +109,12 @@ void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
 					for(; l < (spago+pcp->get_bytes_per_line());  l++ ){
 						if(b_data[l] != 193){
 							if(v%m_flows_number == 0){
-								payload+=(stream->get_data(offset, 1));
+								payload+=&(stream->get_data(offset, 1));
 								//DEBUG_OUT("\t\tpixel[green]:\t"<<b_data[l]<<"\n");
 							}
 							v++;
 						}else{
-							payload+=(stream->get_data(offset, 1));
+							payload+=&(stream->get_data(offset, 1));
 						}
 						offset++;
 						k++;
@@ -124,12 +124,12 @@ void PcxMDCodec::code(AbstractStream* stream, MDStream* md_stream) const
 					for(; l < (spago+pcp->get_bytes_per_line()+1);  l++ ){
 						if(b_data[l] != 193){
 							if(v%m_flows_number == 0){
-								payload+=(stream->get_data(offset, 1));
+								payload+=&(stream->get_data(offset, 1));
 								//DEBUG_OUT("\t\tpixel[blue]:\t"<<b_data[l]<<"\n");
 							}
 							v++;
 						}else{
-							payload+=(stream->get_data(offset, 1));
+							payload+=&(stream->get_data(offset, 1));
 						}
 						offset++;
 						k++;
@@ -150,13 +150,13 @@ void PcxMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const
 {
 	DEBUG_OUT("DECODE\n");
 	if (!md_stream->is_empty()) {
-		DataChunk* dc = new DataChunk();
+		MemDataChunk* dc = new MemDataChunk();
 		for (Uint8 i=0; i<md_stream->get_flows_number(); i++)
 			for (Uint32 j=0; j<md_stream->get_sequences_number(); j++) {
 				Descriptor* descriptor = new Descriptor();
 				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="text")) {
 					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number()))
-						(*dc) += *(descriptor->get_payload());
+						(*dc) += (descriptor->get_payload());
 				}
 			}
 		stream->set_data(*dc);

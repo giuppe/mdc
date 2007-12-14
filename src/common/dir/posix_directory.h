@@ -29,9 +29,9 @@ class PosixDirectory : public AbstractDirectory
 public:
 	vector<string> get_file_names(string path);
 	
-	bool load_file(const string& path, DataChunk& loaded_data);
+	bool load_file(const string& path, FileDataChunk& loaded_data);
 
-	bool save_file(const string& path, const DataChunk& data_to_save);
+	bool save_file(const string& path, const IDataChunk* data_to_save);
 	
 	string get_filename(const string& path);
 	

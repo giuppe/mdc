@@ -82,10 +82,10 @@ MDStream::~MDStream() {
 }
 
 bool MDStream::load_from_disk(const string& path) {
-	DataChunk data;
+	FileDataChunk data;
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
 	if (dir->load_file(path, data)) {
-		deserialize(data);
+		deserialize(&data);
 		LOG_INFO("Loaded MD Stream from "<<path.c_str());
 		return true;
 	}
@@ -94,10 +94,10 @@ bool MDStream::load_from_disk(const string& path) {
 }
 
 bool MDStream::save_to_disk(const string& path) {
-	DataChunk data;
-	data += serialize();
+	MemDataChunk data;
+	data += &serialize();
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
-	if (dir->save_file(path, data)) {
+	if (dir->save_file(path, &data)) {
 		LOG_INFO("Saved MD Stream in "<<path.c_str());
 		return true;
 	}
@@ -105,14 +105,14 @@ bool MDStream::save_to_disk(const string& path) {
 	return false;
 }
 
-DataChunk& MDStream::serialize() const {
-	DataChunk* result = new DataChunk();
-	DataChunk temp;
+MemDataChunk& MDStream::serialize() const {
+	MemDataChunk* result = new MemDataChunk();
+	MemDataChunk temp;
 	Uint8 flows_number = m_stream.size();
 	Uint32 sequence_size = m_stream[0].size();
-	result->append(m_stream_id.c_str());
-	result->append(flows_number);
-	result->append(sequence_size);
+	result->append_cstring(m_stream_id.c_str());
+	result->append_Uint8(flows_number);
+	result->append_Uint32(sequence_size);
 	for (Uint8 flow=0; flow<flows_number; flow++)
 	{
 		for (Uint32 sequence=0; sequence<sequence_size; sequence++)
@@ -122,10 +122,10 @@ DataChunk& MDStream::serialize() const {
 				//LOG_INFO("Writing descriptor ("<<flow<<", "<<sequence<<")");
 				temp.erase();
 				Descriptor* current_descriptor = m_stream[flow][sequence];
-				temp += (*current_descriptor).serialize();
+				temp += &(*current_descriptor).serialize();
 				Uint16 descriptor_size = temp.get_lenght();
-				result->append(descriptor_size);
-				result->operator+=(temp);
+				result->append_Uint16(descriptor_size);
+				result->operator+=(&temp);
 			}
 			else
 			{
@@ -136,9 +136,9 @@ DataChunk& MDStream::serialize() const {
 	return *result;
 }
 
-void MDStream::deserialize(const DataChunk& data) {
-	if (data.get_lenght() > 0) {
-		DataChunk* temp_dc = new DataChunk();
+void MDStream::deserialize(const IDataChunk* data) {
+	if (data->get_lenght() > 0) {
+		MemDataChunk* temp_dc = new MemDataChunk();
 		temp_dc->operator +=(data);
 		char* stream_id;
 		temp_dc->extract_head(stream_id);
@@ -154,10 +154,10 @@ void MDStream::deserialize(const DataChunk& data) {
 			temp_dc->extract_head(descriptor_size);
 			Uint8* current_descriptor;
 			temp_dc->extract_head(descriptor_size, current_descriptor);
-			DataChunk* temp_curr_descriptor = new DataChunk();
-			temp_curr_descriptor->append(descriptor_size, current_descriptor);
+			MemDataChunk* temp_curr_descriptor = new MemDataChunk();
+			temp_curr_descriptor->append_data(descriptor_size, current_descriptor);
 			Descriptor* d = new Descriptor();
-			d->deserialize(*temp_curr_descriptor);
+			d->deserialize(temp_curr_descriptor);
 			set_descriptor(d);
 		}
 	}

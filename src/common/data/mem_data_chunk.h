@@ -16,16 +16,16 @@
 
 
 
-#ifndef DATA_CHUNK_H_
-#define DATA_CHUNK_H_
+#ifndef MEM_DATA_CHUNK_H_
+#define MEM_DATA_CHUNK_H_
 
 #include "defs.h"
-#include "data/i_data_chunk.h"
+#include "abstract_data_chunk.h"
 
 /**
- * Represents a stream of bytes.
+ * Represents a stream of bytes in memory.
  */
-class DataChunk : public IDataChunk
+class MemDataChunk : public AbstractDataChunk
 {
 
 	friend class NetManager;
@@ -40,9 +40,9 @@ protected:
 	
 	//bool m_initialized;
 	
-	DataChunk(const DataChunk&){};
+	MemDataChunk(const MemDataChunk&){};
 	
-	DataChunk(DataChunk&){};
+	MemDataChunk(MemDataChunk&){};
 	
 	void set_content(Uint8* data, Uint32 lenght);
 	
@@ -53,13 +53,11 @@ public:
 	/**
 	 * Default DataChunk constructor.
 	 */
-	DataChunk():m_lenght(0){};
+	MemDataChunk():m_lenght(0){};
 	
-	~DataChunk();
+	~MemDataChunk();
 	
-	DataChunkIterator get_iterator() const;
-	
-	void operator+=(const IDataChunk* data);
+
 	
 	/**
 	 * @returns the inner data stream, as a pointer to "char"s
@@ -74,50 +72,8 @@ public:
 	/**
 	 * Used to append a DataChunk at the end of the stream.
 	 */
-	void operator+=(const DataChunk& data);
-	
-	/**
-	 * Adds a 32 bit long unsigned integer (i.e. "unsigned int" on i386)  to the end of the stream.
-	 * @param data the integer to add.
-	 */
-	void append(Uint32 data);
-	
-	/**
-		 * Add a 32 bit long signed integer (i.e. "int" on i386)  to the end of the stream.
-		 * @param data the integer to add.
-		 */
-	void append(Sint32 data);
-	
-	/**
-		 * Add a 16 bit long unsigned integer (i.e. "unsigned short" on i386) to the end of the stream.
-		 * @param data the integer to add.
-		 */
-	void append(Uint16 data);
-	
-	/**
-		 * Add a 16 bit long signed integer (i.e. "short" on i386)  to the end of the stream.
-		 * @param data the integer to add.
-		 */
-	void append(Sint16 data);
-	
-	/**
-		 * Add an 8 bit long unsigned integer (i.e. "unsigned char" on i386)  to the end of the stream.
-		 * @param data the integer to add.
-		 */
-	void append(Uint8 data);
-	
-	/**
-		 * Add an 8 bit long signed integer (i.e. "char" on i386)  to the end of the stream.
-		 * @param data the integer to add.
-		 */
-	void append(Sint8 data);
-	
-	/**
-		 * Add a c-string (i.e. null-terminated string) to the end of the stream.
-		 * @param data the string to add.
-		 */
-	void append(const char* data);
-	
+//	void operator+=(const MemDataChunk& data);
+
 	/**
 	 * Extracts 32 bits from the beginning of the stream, 
 	 * converting them to a 32 bit unsigned integer.
@@ -175,11 +131,11 @@ public:
 	bool extract_head(char* &data);
 	
 	
-	void append(Uint32 lenght, Uint8* data);
+	void append_data(Uint32 lenght, Uint8* data);
 	
 	bool extract_head(Uint32 lenght, Uint8* &data);
 	
-	bool extract_head(Uint32 lenght, DataChunk &data);
+	bool extract_head(Uint32 lenght, MemDataChunk &data);
 	
 	void erase();
 	
@@ -187,4 +143,4 @@ public:
 	
 };
 
-#endif /*DATA_CHUNK_H_*/
+#endif /*MEM_DATA_CHUNK_H_*/

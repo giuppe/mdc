@@ -3,7 +3,7 @@
 #include "text/text_codec_parameters.h"
 #include "pcx/pcx_codec_parameters.h"
 #include "mpeg/mpeg_codec_parameters.h"
-#include "image/image_codec_parameters.h"
+//#include "image/image_codec_parameters.h"
 
 AbstractCodecParameters* CodecParametersFactory::create_codec_parameters(string codec_name) {
 	if(codec_name=="text")
@@ -16,8 +16,7 @@ AbstractCodecParameters* CodecParametersFactory::create_codec_parameters(string 
 	}
 	else if (codec_name == "mpeg")
 		return new MpegCodecParameters();
-	else if (codec_name == "image")
-		return new ImageCodecParameters();
+
 	LOG_FATAL_STATIC("Unable to manage codec parameters of type: "<<codec_name);
 	exit(1);
 	return NULL;

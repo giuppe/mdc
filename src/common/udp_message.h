@@ -4,7 +4,7 @@
 
 #include "defs.h"
 #include "net_end_point.h"
-#include "data_chunk.h"
+#include "data/mem_data_chunk.h"
 
 
 class UDPMessage
@@ -12,7 +12,7 @@ class UDPMessage
 private:
 	NetEndPoint m_destination;
 	
-	DataChunk m_payload;
+	MemDataChunk m_payload;
 	
 public:
 	UDPMessage();
@@ -21,7 +21,7 @@ public:
 	
 	NetEndPoint get_destination() const;
 	
-	void set_payload(const DataChunk& data);
+	void set_payload(const MemDataChunk& data);
 	
 	void send();
 	

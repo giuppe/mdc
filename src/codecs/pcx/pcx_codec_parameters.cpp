@@ -16,7 +16,7 @@
  
  
 #include "pcx_codec_parameters.h"
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include "../../common/serializable.h"
 #include "pcx_stream.h"
 
@@ -58,18 +58,18 @@ Uint32 PcxCodecParameters::get_size() const
 
 
 
-DataChunk& PcxCodecParameters::serialize() const 
+MemDataChunk& PcxCodecParameters::serialize() const 
 {
 	DEBUG_OUT("SERIALIZE: data_lenght: "<<sdata.get_lenght()<<"\n");
-	DataChunk* dc = new DataChunk;
+	MemDataChunk* dc = new MemDataChunk;
 	for(Uint8 i=0; i < 128 ; i++){
-		dc->append(m_headerinfo[i]);
+		dc->append_Uint8(m_headerinfo[i]);
 		//DEBUG_OUT(i<<":\t"<<m_headerinfo[i]<<"\n");
 	}
 	return *dc;
 }
 
-void PcxCodecParameters::deserialize(const DataChunk& dc)
+void PcxCodecParameters::deserialize(const IDataChunk* dc)
 {
 	assert(!"This function is a stub.");
 }

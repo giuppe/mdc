@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 #include "defs.h"
-#include "../common/data_chunk.h"
+#include "../common/data/mem_data_chunk.h"
 #include "../common/serializable.h"
 
 #ifndef ABSTRACT_CODEC_PARAMETERS_H_
@@ -36,12 +36,12 @@ public:
 	/*
 	 * Serialize a data chunk.
 	 */
-	virtual DataChunk& serialize() const = 0;
+	virtual MemDataChunk& serialize() const = 0;
 	
 	/*
 	 * Deserialize a data chunk.
 	 */
-	virtual void deserialize(const DataChunk&) = 0;
+	virtual void deserialize(const IDataChunk*) = 0;
 	
 	/*
 	 * Returns parameters' size.

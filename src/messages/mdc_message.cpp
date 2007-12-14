@@ -59,18 +59,18 @@ void MDCMessage::set_type_string(const char* type) {
 	set_type(byte_type);
 }
 
-DataChunk& MDCMessage::serialize() const
+MemDataChunk& MDCMessage::serialize() const
 {
-	DataChunk* data = new DataChunk();
-	data->append((Uint32) 3, m_header_title);
-	data->append(m_version);
-	data->append((Uint32) 4, m_type);
+	MemDataChunk* data = new MemDataChunk();
+	data->append_data((Uint32) 3, m_header_title);
+	data->append_Uint8(m_version);
+	data->append_data((Uint32) 4, m_type);
 	return *data;
 }
 	
-void MDCMessage::deserialize(const DataChunk& data)
+void MDCMessage::deserialize(const IDataChunk* data)
 {
-	DataChunk temp_data;
+	MemDataChunk temp_data;
 	temp_data+=data;
 	temp_data.extract_head(3, m_header_title);
 	temp_data.extract_head(m_version);

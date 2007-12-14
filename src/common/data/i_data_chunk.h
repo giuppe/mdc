@@ -2,7 +2,7 @@
 #ifndef I_DATA_CHUNK_H_
 #define I_DATA_CHUNK_H_
 
-#include "../defs.h"
+#include "defs.h"
 #include "data_chunk_iterator.h"
 
 class IDataChunk
@@ -14,8 +14,9 @@ protected:
 public:
 	virtual ~IDataChunk(){}
 	
-	virtual DataChunkIterator get_iterator() const =0;
+
 	
+	virtual DataChunkIterator get_iterator() const =0;
 	/**
 	 * @returns the total steam lenght.
 	 */
@@ -30,45 +31,45 @@ public:
 	 * Adds a 32 bit long unsigned integer (i.e. "unsigned int" on i386)  to the end of the stream.
 	 * @param data the integer to add.
 	 */
-	virtual void append(Uint32 data)=0;
+	virtual void append_Uint32(Uint32 data)=0;
 	
 	/**
 		 * Add a 32 bit long signed integer (i.e. "int" on i386)  to the end of the stream.
 		 * @param data the integer to add.
 		 */
-	virtual void append(Sint32 data)=0;
+	virtual void append_Sint32(Sint32 data)=0;
 	
 	/**
 		 * Add a 16 bit long unsigned integer (i.e. "unsigned short" on i386) to the end of the stream.
 		 * @param data the integer to add.
 		 */
-	virtual void append(Uint16 data)=0;
+	virtual void append_Uint16(Uint16 data)=0;
 	
 	/**
 		 * Add a 16 bit long signed integer (i.e. "short" on i386)  to the end of the stream.
 		 * @param data the integer to add.
 		 */
-	virtual void append(Sint16 data)=0;
+	virtual void append_Sint16(Sint16 data)=0;
 	
 	/**
 		 * Add an 8 bit long unsigned integer (i.e. "unsigned char" on i386)  to the end of the stream.
 		 * @param data the integer to add.
 		 */
-	virtual void append(Uint8 data)=0;
+	virtual void append_Uint8(Uint8 data)=0;
 	
 	/**
 		 * Add an 8 bit long signed integer (i.e. "char" on i386)  to the end of the stream.
 		 * @param data the integer to add.
 		 */
-	virtual void append(Sint8 data)=0;
+	virtual void append_Sint8(Sint8 data)=0;
 	
 	/**
 		 * Add a c-string (i.e. null-terminated string) to the end of the stream.
 		 * @param data the string to add.
 		 */
-	virtual void append(const char* data)=0;
+	virtual void append_cstring(const char* data)=0;
 	
-	virtual void append(Uint32 lenght, Uint8* data)=0;
+	virtual void append_data(Uint32 lenght, Uint8* data)=0;
 	
 	virtual void erase()=0;
 		

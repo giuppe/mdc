@@ -2,13 +2,13 @@
 #ifndef DATA_CHUNK_ITERATOR_H_
 #define DATA_CHUNK_ITERATOR_H_
 
-#include "../defs.h"
+#include "defs.h"
 
 class IDataChunk;
 
 class DataChunkIterator
 {
-private:
+protected:
 	Uint32 m_position;
 	const IDataChunk* m_data;
 	

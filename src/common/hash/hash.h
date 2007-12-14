@@ -5,7 +5,7 @@
 
 #include "defs.h"
 
-#include "../data_chunk.h"
+#include "../data/mem_data_chunk.h"
 
 class Hash
 {
@@ -14,7 +14,7 @@ public:
 	
 	static string md5_from_string(string str);
 	
-	static string md5_from_datachunk(const DataChunk& data);
+	static string md5_from_datachunk(const MemDataChunk& data);
 	
 };
 

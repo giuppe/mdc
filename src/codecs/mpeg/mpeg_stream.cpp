@@ -18,7 +18,7 @@
 
 #include "defs.h"
 
-#include "../../common/data_chunk.h"
+#include "../../common/data/mem_data_chunk.h"
 #include <cassert>
 #include "../../common/dir/abstract_directory.h"
 #include "../../common/dir/directory_factory.h"
@@ -30,9 +30,9 @@ bool MpegStream::load_from_disk(const string& path) {
 	if (path.size() > 0) {
 		m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of("."));
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
-		DataChunk dc;
+		FileDataChunk dc;
 		if (dir->load_file(path, dc)) {
-			deserialize(dc);
+			deserialize(&dc);
 			return true;
 		}
 	}
@@ -43,17 +43,17 @@ bool MpegStream::save_to_disk(const string& path) const
 {
 	if (path.size()>0 && m_data.size()>0) {
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
-		if (dir->save_file(path, this->serialize())) return true;
+		if (dir->save_file(path, &this->serialize())) return true;
 	}
 	return false;
 }
 
-DataChunk& MpegStream::get_data(Uint64 offset, Uint64 size) const {
-	DataChunk* d = new DataChunk();
+MemDataChunk& MpegStream::get_data(Uint64 offset, Uint64 size) const {
+	MemDataChunk* d = new MemDataChunk();
 	Uint8* buffer = new Uint8[size];
 	for(Uint64 i=0; i<size; i++)
 		buffer[i]=m_data[offset+i];
-	d->append(size, buffer);
+	d->append_data(size, buffer);
 	delete[] buffer;
 	return *d;
 }
@@ -80,18 +80,18 @@ string MpegStream::get_stream_name() const
 	return m_stream_name;
 }
 
-DataChunk& MpegStream::serialize() const {
-	DataChunk* dc = new DataChunk();
+MemDataChunk& MpegStream::serialize() const {
+	MemDataChunk* dc = new MemDataChunk();
 	Uint8* buffer = new Uint8[m_data.size()];
 	for (Uint32 i=0; i<m_data.size(); i++)
 		buffer[i]= m_data[i];
 	Uint32 size = m_data.size();
-	dc->append(size, buffer);
+	dc->append_data(size, buffer);
 	return *dc;			
 }
 
-void MpegStream::deserialize(const DataChunk& datachunk) {
-	DataChunk dc;
+void MpegStream::deserialize(const IDataChunk* datachunk) {
+	MemDataChunk dc;
 	dc += datachunk;
 	while (dc.get_lenght() > 0) {
 		Uint8 curr_char;
@@ -114,7 +114,7 @@ MpegStream::~MpegStream() {}
 
 
 
-void MpegStream::set_data (DataChunk& data) 
+void MpegStream::set_data (MemDataChunk& data) 
 {
 	Uint32 real_data_size = data.get_lenght();
 	m_data.resize(real_data_size);
