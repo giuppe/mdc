@@ -98,7 +98,11 @@ string md5wrapper::convToString(unsigned char *bytes)
 		/*
 		 * conv to hex
 		 */
+#ifdef USING_USTL
 		os << ostringstream::hex << static_cast<unsigned int>(bytes[i]);
+#else
+		os << hex << static_cast<unsigned int>(bytes[i]);
+#endif
 	}
 
 	/*

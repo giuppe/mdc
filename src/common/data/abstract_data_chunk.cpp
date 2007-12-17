@@ -79,8 +79,10 @@ void AbstractDataChunk::operator+=(const IDataChunk* data)
 		return;	
 	}
 	Uint8* temp;
-	it.get_data(data->get_lenght(), temp);
-	this->append_data(data->get_lenght(), temp);
+	if(it.get_data(data->get_lenght(), temp))
+	{
+		this->append_data(data->get_lenght(), temp);
+	}
 	
 }
 

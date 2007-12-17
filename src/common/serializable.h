@@ -38,7 +38,7 @@ public:
 		 * This function deserializes data, i.e. restore object's state embedded in data.
 		 * It is the opposite of serialize().
 		 */
-	virtual void deserialize(const IDataChunk*) = 0;
+	virtual bool deserialize(const IDataChunk*) = 0;
 	
 	virtual ~Serializable(){};
 

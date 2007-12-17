@@ -90,14 +90,15 @@ MemDataChunk& TextStream::serialize() const {
 	return *dc;			
 }
 
-void TextStream::deserialize(const IDataChunk* datachunk) {
-	MemDataChunk dc;
-	dc += datachunk;
-	while (dc.get_lenght() > 0) {
-		Uint8 curr_char;
-		dc.extract_head(curr_char);
-		m_data.push_back((Sint8)curr_char);
+bool TextStream::deserialize(const IDataChunk* datachunk) {
+	DataChunkIterator dc = datachunk->get_iterator();
+
+	while (dc.has_next()) {
+		Sint8 curr_char;
+		dc.get_Sint8(curr_char);
+		m_data.push_back(curr_char);
 	}
+	return true;
 }
 
 

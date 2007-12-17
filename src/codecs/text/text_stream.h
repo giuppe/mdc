@@ -104,7 +104,7 @@ public:
 	
 	
 	
-	void deserialize(const IDataChunk*);
+	bool deserialize(const IDataChunk*);
 	
 	
 };

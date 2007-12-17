@@ -29,12 +29,19 @@ Uint8* MemDataChunk::get_data() const
 
 bool MemDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
 {
-	
-	if((m_lenght<(offset+lenght))||(lenght==0));
+		
+	if(m_lenght<(offset+lenght))
 	{
-		LOG_ERROR("Cannot get data: offset/lenght outside range");
+		//LOG_ERROR("Cannot get data: offset/lenght outside range");
 		return false;
 	}
+	
+	if(lenght==0)
+	{
+		//LOG_ERROR("Cannot get data: lenght == 0");
+		return false;
+	}
+	
 	data = new Uint8[lenght];
 	Uint8* data_offsetted = m_data + offset;
 	memcpy(data, data_offsetted, lenght);
@@ -242,7 +249,12 @@ bool MemDataChunk::extract_head(Sint8& data)
 bool MemDataChunk::extract_head(char* &data)
 {
 	Uint8* new_data;
-	Uint32 new_lenght = (Uint8*)memchr(this->m_data, 0, 255)-this->m_data+1;
+	Uint32 new_lenght; // = (Uint8*)memchr(this->m_data, 0, 255)-this->m_data+1;
+	if(!find_null(0, new_lenght))
+	{
+		return false;
+	}
+	
 	bool result =  extract_head(new_lenght, new_data);
 	if(result == true)
 	{
@@ -287,6 +299,22 @@ const char* MemDataChunk::compute_hash_md5() const
 }
 
 
+bool MemDataChunk::find_null(Uint32 offset, Uint32& position) const
+{
+	if(m_lenght<(offset))
+	{
+		LOG_ERROR("Cannot find null: offset/lenght outside range");
+		return false;
+	}
+	
+	Uint8* null_position = (Uint8*)memchr((this->m_data+offset), 0, 255);
+	if(null_position == NULL)
+	{
+		return false;
+	}
+	position = (Uint32)(null_position - this->m_data +1);
+	return true;
+}
 
 
 

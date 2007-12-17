@@ -49,8 +49,10 @@ vector<string> PosixDirectory::get_file_names(string path) {
 }
 
 bool PosixDirectory::load_file(const string& path, FileDataChunk& loaded_data) {
-	loaded_data.erase();
-	FILE *m_f;
+
+	loaded_data.open(path);
+	
+/*	FILE *m_f;
 
 	Uint64 lSize;
 	Uint8* buffer;
@@ -86,43 +88,29 @@ bool PosixDirectory::load_file(const string& path, FileDataChunk& loaded_data) {
 	}
 	
 	return false;
+	*/
 }
 
 bool PosixDirectory::save_file(const string& path, const IDataChunk* data_to_save) {
 	//FIXME: always overwrite to output file
-	FileDataChunk dc(path);
-	dc.erase();
-	dc += data_to_save;
-/*	
-	dc.
-	FILE *m_f;
-	Uint64 lSize;
-	Uint8* buffer;
-	size_t result;
-	
-	if (path.size() > 0)
+	FileDataChunk dc;
+	if(dc.open(path))
 	{
-		m_f = fopen(path.c_str(), "w");
-		if (m_f != NULL) 
+		if(data_to_save->get_lenght() == 0)
 		{
-			lSize = dc.get_lenght();
-			
-			dc.extract_head(lSize, buffer);
-			
-			result = fwrite (buffer,1,lSize,m_f);
-						
-			if (result != lSize)
-			{
-				LOG_ERROR("Write error on file "<<path);
-				return false;
-			}
-			
-			fclose(m_f);
-			return true;
+			LOG_WARN("Unable to save an empty datachunk.");
+			return false;
 		}
+		dc.erase();
+		dc += data_to_save;
+		return true;
 	}
-	return false;
-	*/
+	else
+	{
+		LOG_ERROR("Unable to open file "<<path<<" during save.");
+		return false;
+	}
+
 }
 
 string PosixDirectory::get_filename(const string& path) {

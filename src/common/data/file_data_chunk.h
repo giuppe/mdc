@@ -11,18 +11,21 @@ protected:
 	FILE* m_file;
 	string m_path;
 	
-	bool m_is_null;
 	
 	bool m_is_open_file;
 	
 	void open_file();
 	
+	void close_file();
+	
 	bool get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const;
 	
-public:
-	FileDataChunk():m_is_null(true),m_is_open_file(false){}
+	bool find_null(Uint32 offset, Uint32& position) const;
 	
-	explicit FileDataChunk(string path);
+public:
+	FileDataChunk():m_is_open_file(false){}
+	
+//	explicit FileDataChunk(string path):m_is_open_file(false){open(path);}
 	
 	~FileDataChunk();
 	
@@ -38,7 +41,8 @@ public:
 	void erase();
 			
 	const char* compute_hash_md5() const;
-		
+	
+	bool open(string path);
 	
 };
 

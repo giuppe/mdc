@@ -121,7 +121,7 @@ public:
 	 * This function deserializes data, i.e. restore Descriptor state embedded in data.
 	 * It is the opposite of serialize();
 	 */
-	void deserialize(const IDataChunk* data);
+	bool deserialize(const IDataChunk* data);
 	
 	string get_stream_id() const;
 	

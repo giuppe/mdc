@@ -56,35 +56,72 @@ MemDataChunk& Descriptor::serialize() const {
 
 
 
-void Descriptor::deserialize(const IDataChunk* data) {
-	if (data->get_lenght() > 0) {
-		MemDataChunk* temp_dc = new MemDataChunk();
-		temp_dc->operator +=(data);
-		char* hash;
-		char* codec_name;
-		MemDataChunk preamble;
-		temp_dc->extract_head(8, preamble);
-		MDCMessage msg;
-		msg.deserialize(&preamble);
-		if (string(msg.get_type_string()) == string("DESC")) {
-			temp_dc->extract_head(hash);
-			m_complete_stream_md5_hash = hash;
-			temp_dc->extract_head(m_flow_id);
-			temp_dc->extract_head(m_sequence_number);
-			temp_dc->extract_head(codec_name);
-			m_codec_name= codec_name;
-			Uint32 codec_parameters_size = 0;
-			temp_dc->extract_head(codec_parameters_size);
-			MemDataChunk* codec_parameters_dc = new MemDataChunk();
-			temp_dc->extract_head(codec_parameters_size, *codec_parameters_dc);
-			m_codec_parameters=CodecParametersFactory::create_codec_parameters(m_codec_name);
-			m_codec_parameters->deserialize(codec_parameters_dc);
-			delete codec_parameters_dc;
-			Uint16 payload_size = 0;
-			temp_dc->extract_head(payload_size);
-			temp_dc->extract_head((Uint32)payload_size, m_payload);
-		}
+bool Descriptor::deserialize(const IDataChunk* data) {
+	if (data->get_lenght() == 0) {
+		return false;
 	}
+	DataChunkIterator temp_dc = data->get_iterator();
+
+	char* hash;
+	char* codec_name;
+	IDataChunk* preamble;
+	temp_dc.get_data_chunk(8, preamble);
+	MDCMessage msg;
+	if(!msg.deserialize(preamble))
+	{
+		return false;
+	}
+	if (string(msg.get_type_string()) != string("DESC")) 
+	{
+		return false;
+	}
+	if(!temp_dc.get_cstring(hash))
+	{
+		return false;
+	}
+	m_complete_stream_md5_hash = hash;
+	if(!temp_dc.get_Uint8(m_flow_id))
+	{
+		return false;
+	}
+	if(!temp_dc.get_Uint32(m_sequence_number))
+	{
+		return false;
+	}
+
+	if(!temp_dc.get_cstring(codec_name))
+	{
+		return false;
+	}
+	m_codec_name= codec_name;
+	Uint32 codec_parameters_size = 0;
+	if(!temp_dc.get_Uint32(codec_parameters_size))
+	{
+		return false;
+	}
+	IDataChunk* codec_parameters_dc;
+	if(!temp_dc.get_data_chunk(codec_parameters_size, codec_parameters_dc))
+	{
+		return false;
+	}
+	m_codec_parameters=CodecParametersFactory::create_codec_parameters(m_codec_name);
+	if(!m_codec_parameters->deserialize(codec_parameters_dc))
+	{
+		return false;
+	}
+	delete codec_parameters_dc;
+	Uint16 payload_size = 0;
+	if(!temp_dc.get_Uint16(payload_size))
+	{
+		return false;
+	}
+	IDataChunk* temp_payload = &m_payload;
+	if(!temp_dc.get_data_chunk((Uint32)payload_size, temp_payload))
+	{
+		return false;
+	}
+	return true;
+
 }
 
 

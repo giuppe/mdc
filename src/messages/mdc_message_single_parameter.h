@@ -39,7 +39,7 @@ public:
 	
 	MemDataChunk& serialize() const;
 	
-	void deserialize(const IDataChunk*);
+	bool deserialize(const IDataChunk*);
 	
 
 	

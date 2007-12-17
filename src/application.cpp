@@ -164,7 +164,7 @@ void Application::stream_converter(string output_filename, string input_filename
 	bool is_decoding = m_cli_config->get_is_decoding();
 	
 	DEBUG_OUT("converting "<<input_filename<<" to "<<output_filename<<"\n");
-	DEBUG_OUT("\t using "<<codec_name<<" as codec");
+	DEBUG_OUT("\t using "<<codec_name<<" as codec\n");
 	CodecRegistry* codecReg = CodecRegistry::instance();
 	AbstractMDCodec* codec;
 	bool exists_codec = false;

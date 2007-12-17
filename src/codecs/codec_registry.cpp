@@ -20,8 +20,7 @@
 
 #include "abstract_md_codec.h"
 #include "text/text_md_codec.h"
-#include "pcx/pcx_md_codec.h"
-#include "mpeg/mpeg_md_codec.h"
+
 
 
 void CodecRegistry::register_codec(const string& name, AbstractMDCodec* codec)
@@ -53,11 +52,7 @@ bool CodecRegistry::get_codec(const string& name, AbstractMDCodec*& codec) const
 
 void CodecRegistry::init() {
 	this->register_codec(string("text"), new TextMDCodec());
-	register_codec(string("mpeg"), new MpegMDCodec());
 
-#ifdef MDC_PCX_IS_WORKING
-	this->register_codec(string("pcx"), new PcxMDCodec());
-#endif
 }
 
 void CodecRegistry::deinit()

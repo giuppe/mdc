@@ -105,7 +105,7 @@ public:
 	 */
 	bool is_empty() const;
 	MemDataChunk& serialize() const;
-	void deserialize(const IDataChunk*);
+	bool deserialize(const IDataChunk*);
 	
 	/*
 	 * Gets maximum sequences number

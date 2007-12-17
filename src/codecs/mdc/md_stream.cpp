@@ -119,7 +119,7 @@ MemDataChunk& MDStream::serialize() const {
 		{
 			if (m_valid_descriptor[flow][sequence]==true)
 			{
-				//LOG_INFO("Writing descriptor ("<<flow<<", "<<sequence<<")");
+				LOG_INFO("Writing descriptor ("<<flow<<", "<<sequence<<")");
 				temp.erase();
 				Descriptor* current_descriptor = m_stream[flow][sequence];
 				temp += &(*current_descriptor).serialize();
@@ -136,31 +136,55 @@ MemDataChunk& MDStream::serialize() const {
 	return *result;
 }
 
-void MDStream::deserialize(const IDataChunk* data) {
-	if (data->get_lenght() > 0) {
-		MemDataChunk* temp_dc = new MemDataChunk();
-		temp_dc->operator +=(data);
-		char* stream_id;
-		temp_dc->extract_head(stream_id);
-
-		Uint8 flows_number;
-		temp_dc->extract_head(flows_number);
-		Uint32 sequences_number;
-		temp_dc->extract_head(sequences_number);
-		init(stream_id, flows_number, sequences_number);
-		while(temp_dc->get_lenght()>0)
-		{
-			Uint16 descriptor_size;
-			temp_dc->extract_head(descriptor_size);
-			Uint8* current_descriptor;
-			temp_dc->extract_head(descriptor_size, current_descriptor);
-			MemDataChunk* temp_curr_descriptor = new MemDataChunk();
-			temp_curr_descriptor->append_data(descriptor_size, current_descriptor);
-			Descriptor* d = new Descriptor();
-			d->deserialize(temp_curr_descriptor);
-			set_descriptor(d);
-		}
+bool MDStream::deserialize(const IDataChunk* data) {
+	if (data->get_lenght() == 0) 
+	{
+		return false;
 	}
+
+	DataChunkIterator temp_dc = data->get_iterator();
+
+	char* stream_id;
+	if(!temp_dc.get_cstring(stream_id))
+	{
+		return false;
+	}
+
+	Uint8 flows_number;
+	if(!temp_dc.get_Uint8(flows_number))
+	{
+		return false;
+	}
+
+	Uint32 sequences_number;
+	if(!temp_dc.get_Uint32(sequences_number))
+	{
+		return false;
+	}
+
+	init(stream_id, flows_number, sequences_number);
+
+	while(temp_dc.has_next())
+	{
+		Uint16 descriptor_size;
+		if(!temp_dc.get_Uint16(descriptor_size))
+		{
+			return false;
+		}
+		IDataChunk* current_descriptor;
+		if(!temp_dc.get_data_chunk((Uint32)descriptor_size, current_descriptor))
+		{
+			return false;
+		}
+		Descriptor* d = new Descriptor();
+		if(!d->deserialize(current_descriptor))
+		{
+			return false;
+		}
+		set_descriptor(d);
+	}
+	return true;
+
 }
 
 bool MDStream::is_empty() const {return m_is_empty;}
@@ -176,7 +200,7 @@ MDStreamInfo MDStream::get_info()
 	info.stream_id = get_stream_id();
 	info.flows_number = get_flows_number();
 	info.descriptors_number = get_sequences_number();
-	
+
 	return info;
 }
 

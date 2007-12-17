@@ -37,7 +37,7 @@ MemDataChunk& TextCodecParameters::serialize() const
 
 
 
-void TextCodecParameters::deserialize(const IDataChunk* dc) {}
+bool TextCodecParameters::deserialize(const IDataChunk* dc) {return true;}
 
 
 

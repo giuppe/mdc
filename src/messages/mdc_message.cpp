@@ -68,13 +68,30 @@ MemDataChunk& MDCMessage::serialize() const
 	return *data;
 }
 	
-void MDCMessage::deserialize(const IDataChunk* data)
+bool MDCMessage::deserialize(const IDataChunk* data)
 {
-	MemDataChunk temp_data;
-	temp_data+=data;
-	temp_data.extract_head(3, m_header_title);
-	temp_data.extract_head(m_version);
-	temp_data.extract_head(4, m_type);
+	DataChunkIterator it;
+	if(data->get_lenght()==0)
+		return false;
+	
+	it = data->get_iterator();
+	
+	if(!(it.get_data(3, m_header_title)))
+	{
+		return false;
+	}
+	
+	if(!it.get_Uint8(m_version))
+	{
+		return false;
+	}
+	
+	if(!it.get_data(4, m_type))
+	{
+		return false;
+	}
+	
+	return true;
 	
 }
 

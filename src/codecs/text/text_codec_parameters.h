@@ -40,7 +40,7 @@ public:
 	/*
 	 * Deserialize a data chunk.
 	 */
-	void deserialize(const IDataChunk* dc);
+	bool deserialize(const IDataChunk* dc);
 	
 	/*
 	 * Get parameters' size.

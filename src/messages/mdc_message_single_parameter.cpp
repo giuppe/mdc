@@ -39,24 +39,33 @@ MemDataChunk& MDCMessageSingleParameter::serialize() const
 	return *data;
 }
 	
-void MDCMessageSingleParameter::deserialize(const IDataChunk* data)
+bool MDCMessageSingleParameter::deserialize(const IDataChunk* data)
 {
-	MemDataChunk temp_data;
-	temp_data+=data;
+	DataChunkIterator it;
+	if(data->get_lenght()==0)
+		return false;
 	
-	MDCMessage::deserialize(data);
+	it = data->get_iterator();
 	
-	Uint8* mdc_header;
+	IDataChunk* mdc_header;
 	
-	temp_data.extract_head(8, mdc_header);
+	it.get_data_chunk(8, mdc_header);
+		
 	
-	if(temp_data.get_lenght()>0)
+	if(!MDCMessage::deserialize(mdc_header))
 	{
-		char* parameter;
-		temp_data.extract_head(parameter);
-		m_parameter = parameter;
+		return false;
 	}
 	
+	
+	if(it.has_next())
+	{
+		char* parameter;
+		it.get_cstring(parameter);
+		m_parameter = parameter;
+		return true;
+	}
+	return false;
 }
 
 string MDCMessageSingleParameter::get_parameter_part(string left_part) const

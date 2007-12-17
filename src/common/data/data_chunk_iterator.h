@@ -82,7 +82,9 @@ public:
 		
 		bool get_data(Uint32 lenght, Uint8* &data);
 		
-		bool get_data_chunk(Uint32 lenght, IDataChunk* data);
+		bool get_data_chunk(Uint32 lenght, IDataChunk*& data);
+		
+		bool has_next();
 };
 
 #endif /*DATA_CHUNK_ITERATOR_H_*/

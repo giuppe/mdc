@@ -3,21 +3,15 @@
 #include "file_data_chunk.h"
 #include "../hash/hash.h"
 
-FileDataChunk::FileDataChunk(string path)
-{
-	m_path = path;
-	m_is_open_file = false;
-	m_is_null = false;
-	open_file();
-}
 
 void FileDataChunk::open_file()
 {
-	m_file = fopen(m_path.c_str(), "rw+");
+	close_file();
+	
+	m_file = fopen(m_path.c_str(), "ab+");
 	if (m_file == NULL) 
 	{
 		LOG_ERROR("Unable to open file "<<m_path);
-		m_is_null=true;
 		m_is_open_file = false;
 		return;
 	}
@@ -28,16 +22,11 @@ void FileDataChunk::open_file()
 Uint32 FileDataChunk::get_lenght() const
 {
 	if(m_is_open_file==false)
-		{
+	{
 			LOG_ERROR("File "<<m_path<<" is not open.");
 			return false;
-		}
-		
-		if(m_is_null==true)
-		{
-			LOG_ERROR("Accessing uninitialized file datachunk.");
-			return false;
-		}
+	}
+
 	Uint32 lSize=0;
 			fseek (m_file , 0 , SEEK_END);
 			lSize = ftell (m_file);
@@ -47,10 +36,7 @@ Uint32 FileDataChunk::get_lenght() const
 
 FileDataChunk::~FileDataChunk()
 {
-	if((m_is_null!=true)||(m_is_open_file==true))
-	{
-		fclose(m_file);
-	}
+	close_file();
 }
 
 const char* FileDataChunk::compute_hash_md5() const
@@ -67,11 +53,7 @@ void FileDataChunk::append_data(Uint32 lenght, Uint8* data)
 			return;
 	}
 		
-		if(m_is_null==true)
-		{
-			LOG_ERROR("Accessing uninitialized file datachunk.");
-			return;
-		}
+
 	
 	fseek (m_file , 0 , SEEK_END);
 	
@@ -83,19 +65,21 @@ void FileDataChunk::append_data(Uint32 lenght, Uint8* data)
 void FileDataChunk::erase()
 {
 
-		
-		if(m_is_null==true)
-		{
-			LOG_ERROR("Trying to erase uninitialized file datachunk.");
-			return;
-		}
-	
-	if(m_is_open_file==true)
-	{
-		fclose(m_file);
-	}
+	close_file();
 	remove(m_path.c_str());
 	open_file();
+}
+
+void FileDataChunk::close_file()
+{
+	if(m_is_open_file!=true)
+	{
+		return;
+	}
+
+	fclose(m_file);
+	m_is_open_file = false;
+	
 }
 
 bool FileDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
@@ -105,12 +89,7 @@ bool FileDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
 		LOG_ERROR("File "<<m_path<<" is not open.");
 		return false;
 	}
-	
-	if(m_is_null==true)
-	{
-		LOG_ERROR("Accessing uninitialized file datachunk.");
-		return false;
-	}
+
 	
 	if(lenght==0)
 	{
@@ -122,12 +101,48 @@ bool FileDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
 
 	fseek(m_file, offset, SEEK_SET);
 	Uint32 read_lenght = fread(buffer, lenght, 1, m_file);
-	if(read_lenght!=lenght)
+	if(read_lenght!=1)
 	{
-		LOG_ERROR("Trying to read outside range.");
+		LOG_ERROR("Trying to read outside range: "<<read_lenght<<"!=1");
 		return false;
 	}
 	data = buffer;
 	return true;
 
 }
+
+
+bool FileDataChunk::open(string path)
+{
+	m_path = path;
+
+	open_file();
+	return m_is_open_file;
+}
+
+bool FileDataChunk::find_null(Uint32 offset, Uint32& position) const
+{
+	if(!m_is_open_file)
+	{
+		return false;
+	}
+	Uint32 count = 0;
+	fseek(m_file, offset, SEEK_SET);
+	char ch = getc(m_file);
+	if(feof(m_file)!=0)
+	{
+		return false;
+	}
+	while(ch != 0)
+	{
+		count++;
+		ch = getc(m_file);
+		if(feof(m_file)!=0)
+		{
+			return false;
+		}
+	}
+	position = offset + count;
+	return true;
+}
+
