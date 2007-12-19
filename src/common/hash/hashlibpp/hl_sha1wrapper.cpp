@@ -86,7 +86,7 @@ string sha1wrapper::convToString(unsigned char *data)
 		 * fill with 0
 		 */
 #ifdef USING_USTL
-		os.fill(os.begin(),"0", 1, 2);
+		//os.fill(os.begin(),"0", 1, 2);
 #else
 		os.fill('0');
 #endif

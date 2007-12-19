@@ -91,7 +91,7 @@ string md5wrapper::convToString(unsigned char *bytes)
 		 * fill with 0
 		 */
 #ifdef USING_USTL
-		os.fill(os.begin(),"0", 1, 2);
+		//os.fill(os.begin(),'0', 1, 2);
 #else
 		os.fill('0');
 #endif

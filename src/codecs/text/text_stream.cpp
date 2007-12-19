@@ -31,7 +31,8 @@ bool TextStream::load_from_disk(const string& path) {
 		m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of("."));
 		AbstractDirectory* dir = DirectoryFactory::createDirectory();
 		FileDataChunk dc;
-		if (dir->load_file(path, dc)) {
+		bool loaded = dir->load_file(path, dc);
+		if (loaded) {
 			deserialize(&dc);
 			return true;
 		}
