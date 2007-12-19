@@ -106,7 +106,7 @@ bool DataChunkIterator::get_cstring(char* &data)
 		return false;
 	}
 	
-	Uint32 new_lenght = null_position - m_position;
+	Uint32 new_lenght = null_position - m_position +1;
 	
 	bool result =  get_data(new_lenght, new_data);
 	
@@ -117,13 +117,18 @@ bool DataChunkIterator::get_cstring(char* &data)
 		//delete [] new_data;
 	}
 	//remove the terminating null
-	m_position++;
+	//m_position++;
 	return result;
 }
 
 bool DataChunkIterator::get_data_chunk(Uint32 lenght, IDataChunk*& data)
 {
+
 	data = new MemDataChunk();
+	if(lenght == 0)
+	{
+		return true;
+	}
 	Uint8* buffer;
 	if(!this->get_data(lenght, buffer))
 	{

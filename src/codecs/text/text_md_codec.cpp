@@ -61,10 +61,13 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 
 void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const {
 	if (!md_stream->is_empty()) {
+		LOG_INFO("Decoding...");
 		MemDataChunk* dc = new MemDataChunk();
 		vector<Uint8> taken_stream;
 		Uint8 flows_number = md_stream->get_flows_number();
+		LOG_INFO("Flows number: "<<flows_number);
 		Uint32 sequences_number = md_stream->get_sequences_number();
+		LOG_INFO("Sequences number: "<<sequences_number);
 		Uint64 max_dimension = 0;
 		for (Uint8 i=0; i<flows_number; i++) {
 			Uint64 offset = 0;

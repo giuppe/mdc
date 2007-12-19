@@ -312,7 +312,7 @@ bool MemDataChunk::find_null(Uint32 offset, Uint32& position) const
 	{
 		return false;
 	}
-	position = (Uint32)(null_position - this->m_data +1);
+	position = (Uint32)(null_position - this->m_data);
 	return true;
 }
 

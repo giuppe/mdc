@@ -115,11 +115,13 @@ bool Descriptor::deserialize(const IDataChunk* data) {
 	{
 		return false;
 	}
-	IDataChunk* temp_payload = &m_payload;
+	IDataChunk* temp_payload;
 	if(!temp_dc.get_data_chunk((Uint32)payload_size, temp_payload))
 	{
 		return false;
 	}
+	m_payload.erase();
+	m_payload += temp_payload;
 	return true;
 
 }
