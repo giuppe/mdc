@@ -60,56 +60,69 @@ void TextMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 }
 
 void TextMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const {
-	if (!md_stream->is_empty()) {
-		LOG_INFO("Decoding...");
-		MemDataChunk* dc = new MemDataChunk();
-		vector<Uint8> taken_stream;
-		Uint8 flows_number = md_stream->get_flows_number();
-		LOG_INFO("Flows number: "<<flows_number);
-		Uint32 sequences_number = md_stream->get_sequences_number();
-		LOG_INFO("Sequences number: "<<sequences_number);
-		Uint64 max_dimension = 0;
-		for (Uint8 i=0; i<flows_number; i++) {
-			Uint64 offset = 0;
-			Uint16 payload_size = 0;
-			for (Uint32 j=0; j<sequences_number; j++) {
-				Descriptor* descriptor = new Descriptor();
-				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="text")) {
-					payload_size = descriptor->get_payload_size();
-					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) {
-						(*dc) += (descriptor->get_payload());
-						taken_stream.resize(flows_number*sequences_number*(payload_size+1));
-						Uint8 current_received_data;
-						Uint64 k;
-						for (k=0; k<payload_size; k++) {
-							dc->extract_head(current_received_data);
-							if (current_received_data != 0) {
-								Uint64 locate_position = offset+i+(k*flows_number);
-								taken_stream[locate_position] = current_received_data;
-								if (locate_position > max_dimension)
-									max_dimension = locate_position;
-							}
-						}
-						offset += flows_number*k;
-					}
-				}
-				else {
+	if (md_stream->is_empty()) 
+	{
+		return;
+	}
+	LOG_INFO("Decoding...");
+	MemDataChunk* dc = new MemDataChunk();
+	vector<Uint8> taken_stream;
+	Uint8 flows_number = md_stream->get_flows_number();
+	LOG_INFO("Flows number: "<<flows_number);
+	Uint32 sequences_number = md_stream->get_sequences_number();
+	LOG_INFO("Sequences number: "<<sequences_number);
+	Uint64 max_dimension = 0;
+	for (Uint8 i=0; i<flows_number; i++) 
+	{
+		Uint64 offset = 0;
+		Uint16 payload_size = 0;
+		for (Uint32 j=0; j<sequences_number; j++) 
+		{
+			Descriptor* descriptor = new Descriptor();
+			if(!(descriptor->get_codec_name()=="text"))
+			{
+				continue;
+			}
+
+			if (md_stream->get_descriptor(i, j, descriptor)) 
+			{
+				payload_size = descriptor->get_payload_size();
+				if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) 
+				{
+					(*dc) += (descriptor->get_payload());
+					taken_stream.resize(flows_number*sequences_number*(payload_size+1));
+					Uint8 current_received_data;
 					Uint64 k;
 					for (k=0; k<payload_size; k++) {
-						Uint64 locate_position = offset+i+(k*flows_number);
-						taken_stream[locate_position] = ' ';
+						dc->extract_head(current_received_data);
+						if (current_received_data != 0) {
+							Uint64 locate_position = offset+i+(k*flows_number);
+							taken_stream[locate_position] = current_received_data;
+							if (locate_position > max_dimension)
+								max_dimension = locate_position;
+						}
 					}
 					offset += flows_number*k;
 				}
 			}
+			else 
+			{
+				Uint64 k;
+				for (k=0; k<payload_size; k++) {
+					Uint64 locate_position = offset+i+(k*flows_number);
+					taken_stream[locate_position] = ' ';
+				}
+				offset += flows_number*k;
+			}
 		}
-		MemDataChunk* taken_dc = new MemDataChunk();
-		Uint8* temp_container = new Uint8[max_dimension+1];
-		for (Uint64 i=0; i<max_dimension+1; i++)
-			temp_container[i] = taken_stream[i];
-		taken_dc->append_data(max_dimension+1, temp_container);
-		stream->set_data(*taken_dc);
 	}
+	MemDataChunk* taken_dc = new MemDataChunk();
+	Uint8* temp_container = new Uint8[max_dimension+1];
+	for (Uint64 i=0; i<max_dimension+1; i++)
+		temp_container[i] = taken_stream[i];
+	taken_dc->append_data(max_dimension+1, temp_container);
+	stream->set_data(*taken_dc);
+
 }
 
 TextMDCodec::~TextMDCodec() {}
