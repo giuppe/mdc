@@ -28,7 +28,7 @@
 class MemDataChunk : public AbstractDataChunk
 {
 
-	friend class NetManager;
+	//friend class NetManager;
 
 protected:
 	

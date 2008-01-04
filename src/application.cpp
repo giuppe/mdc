@@ -1,9 +1,8 @@
 
 #include "defs.h"
 #include "application.h"
-
-
-
+#include "codecs/image/image_md_codec.h"
+#include "codecs/image/image_stream.h"
 #include "common/config/commandline_configuration.h"
 #include "app/app_configuration.h"
 #include <cstdlib>
@@ -18,7 +17,6 @@
 #include "app/sender_action.h"
 #include "app/receiver.h"
 
-
 void Application::print_usage()
 {
 	cout << "Multiple Description Codec\n\n";
@@ -30,7 +28,7 @@ void Application::print_usage()
 	cout << "\t--decode \t activate decoding from input MDC file to output file.\n";
 	cout << "\t--codec \t select codec type to use for coding input file.\n";
 	cout << "\t--flows \t number of output coded flows (from 1 to 64), DEFAULT 2.\n";
-	cout << "\t--payload \t preferred payload size of each descriptor (from 25 to 55000 bytes for text), DEFAULT 1000.\n";
+	cout << "\t--payload \t preferred payload size of each descriptor, DEFAULT 1000.\n";
 	cout << "\t--help \t\t show this help page.\n\n";
 	cout << "Examples:\n";
 	cout << "  mdc --input input_file.txt --codec text --code --flows 4 --payload 2000 --output output_file.mdc.\n";
@@ -187,7 +185,11 @@ void Application::stream_converter(string output_filename, string input_filename
 	}
 	else if (is_decoding) {
 		mdstream.load_from_disk(input_filename);
+		if (codec_name == "image")
+			dynamic_cast<ImageMDCodec*>(codec)->set_null_pixel_colors(0, 255, 0);
 		codec->decode(&mdstream, stream);
+		if ((codec_name=="image") && (dynamic_cast<ImageStream*>(stream)->get_null_pixel_presence()))
+			dynamic_cast<ImageStream*>(stream)->interpolate_pixels(dynamic_cast<ImageMDCodec*>(codec)->get_null_pixel_colors());
 		stream->save_to_disk(output_filename);
 	}
 	delete stream;

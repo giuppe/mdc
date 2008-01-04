@@ -18,7 +18,7 @@
 #include "abstract_stream.h"
 #include "text/text_stream.h"
 
-//#include "image/image_stream.h"
+#include "image/image_stream.h"
 #include "stream_factory.h"
 
 
@@ -29,7 +29,7 @@ AbstractStream* StreamFactory::create_stream(string codec_name)
 	{
 		return new TextStream();
 	}
-
+	if (codec_name == "image") return new ImageStream();
 	LOG_FATAL_STATIC("Unable to manage stream of type: "<<codec_name);
 	exit(1);
 }

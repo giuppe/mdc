@@ -60,7 +60,7 @@ void ClientTestAction::action()
 
 void ClientTestAction::ask_list()
 {
-	string name("aml");
+	string name("cap");
 
 
 	ClientManager* cl_man = ClientManager::instance();

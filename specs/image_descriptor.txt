@@ -1,6 +1,6 @@
-The MDC mpeg codec function take a stream containing the text file and an empty md_stream
-that must be filled with flows and descriptors. The code() function cycles on flows and
-sequences numbers and, if the stream not be at end of file, create a new empty descriptor.
+The MDC text codec function take a stream containing the image file and an empty md_stream
+that must be filled up with flows and descriptors. The code() function cycles on flows and
+sequences numbers and, if the stream not is at end of file, create a new empty descriptor.
 Now fills up the descriptor with corrects value as follows: 
 
 Byte		Content
@@ -15,6 +15,7 @@ dimension	description
 4 bytes		sequence_number
 ??			codec name (null terminated)
 4 bytes		codec parameters size
+?? 			codec parameters
 2 bytes		payload size
 ??			payload
 
@@ -30,29 +31,31 @@ number indicated.
 Sequence number is a value that takes count of single descriptors, but it's used by
 algorithm as a user independent parameter.
 
-Codec name is the name of codec: in this case it's "mpeg".
+Codec name is the name of codec: in this case it's "image".
 
-For this implementation of mpeg codec is not necessary the "codec parameter" and has been
-added with size to 0 without any real codec parameter.
+For image codec the "codec parameter" and has been added with 5 bytes size. These bytes
+represents the image width (2 bytes), height (2 bytes) and number of bits used for coding
+colours for each pixel (1 byte).
 
-Payload size is the size of payload of a single descriptor and contains a value, for text
-implementation, between 1000 and 55.000 bytes. This value represents the user preferred
+Payload size is the size of payload of a single descriptor and contains a value, for image
+implementation, between 10 and 18.330 pixels. This value represents the user preferred
 payload size. The algorithm can vary it if it's necessary for load balacing between
 descriptors and flows: the product between flows number and real descriptor payload must
-approximate as best as possible text file size (it's a lower bound).
+approximate as best as possible image file size (it's a lower bound).
 
-The payload is extracted from the stream from an initial point called "offset", bytes
-are extracted from a round robin algorithm to fill up a payload ofapprossimativaly size
+The payload is extracted from the stream from an initial point called "offset", pixels
+are extracted from a round robin like algorithm to fill up a payload of approssimativaly size
 "max_payload_size". Then, payload is added to the current descriptor. The "offset" parameter
 is used to monitorize this procedure.
 
-The stream contains a copy of mpeg file contents.
+The stream contains a copy of image file contents.
 
 
-Payload contains parts of the mpeg stream; division is made out of this algorithm:
+
+
+Payload contains parts of the image; division is made out of this algorithm:
 Specifing flows_number, preferred_payload, and file_size,
 1) Compute flow_size as file_size/flows_number,
 2) compute descriptors_number, as flow_size/preferred_payload
 3) compute max_payload_size, as flow_size/descriptor_number
-4) append nth byte of the mpeg stream to descriptor which flow_id=(n%flows_number) and
-desc_id=n%max_payload_size
+4) append nth pixel of image to descriptor which flow_id=(n%flows_number) and desc_id=n%max_payload_size

@@ -183,7 +183,7 @@ bool NetManager::receive_data(Uint32 source_socket_handle, MemDataChunk& data, N
 	string sender_host;
 	
 	//FIXME: we assume that MTU is 1500
-	packet.data = new Uint8[1500];
+	packet.data = new Uint8[15000];
 	
 	UDPsocket udpsock = get_socket(source_socket_handle);
 	
@@ -200,10 +200,12 @@ bool NetManager::receive_data(Uint32 source_socket_handle, MemDataChunk& data, N
 			break;
 		case 1:
 			LOG_INFO("Received packet from "<<SDLNet_ResolveIP(&packet.address));
-			data.set_content(packet.data, packet.len);
+			data.erase();
+			data.append_data(packet.len, packet.data);
 			
 			sender_port = packet.address.port;
 			sender = NetEndPoint(string(SDLNet_ResolveIP(&(packet.address))), sender_port);
+			//SDLNet_FreePacket(&packet);
 			return true;
 		default:
 			LOG_FATAL("SDLNet error: "<<SDLNet_GetError());
