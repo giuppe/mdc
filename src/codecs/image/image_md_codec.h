@@ -22,6 +22,9 @@
 #ifndef IMAGE_MD_CODEC_H_
 #define IMAGE_MD_CODEC_H_
 
+#define IMAGE_CODEC_TYPE_CODE 2
+#define IMAGE_CODEC_TYPE_STRING "image"
+
 class ImageMDCodec : public AbstractMDCodec{
 private:
 	vector<Uint8> m_flows_id;
@@ -72,6 +75,10 @@ public:
 	 * @returns: pixel color components
 	 */
 	pixel_container get_null_pixel_colors();
+	
+	std::string get_codec_type_string(){return std::string(IMAGE_CODEC_TYPE_STRING);}
+		
+	Uint8 get_codec_type_code(){return IMAGE_CODEC_TYPE_CODE;}
 };
 
 #endif /*IMAGE_MD_CODEC_H_*/

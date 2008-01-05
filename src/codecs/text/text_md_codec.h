@@ -22,6 +22,10 @@
 #ifndef TEXT_MD_CODEC_H_
 #define TEXT_MD_CODEC_H_
 
+#define TEXT_CODEC_TYPE_CODE 1
+#define TEXT_CODEC_TYPE_STRING "text"
+
+
 class TextMDCodec : public AbstractMDCodec{
 private:
 	vector<Uint8> m_flows_id;
@@ -60,6 +64,10 @@ public:
 	 * @size: desidered size of each descriptor
 	 */
 	void set_preferred_payload_size (Uint16 size);
+	
+	std::string get_codec_type_string(){return std::string(TEXT_CODEC_TYPE_STRING);}
+		
+	Uint8 get_codec_type_code(){return TEXT_CODEC_TYPE_CODE;}
 };
 
 #endif /*TEXT_MD_CODEC_H_*/

@@ -49,6 +49,11 @@ public:
 	 * @md_stream: abstract description of a generic stream coded by MDC
 	 */
 	virtual void decode(const MDStream* md_stream, AbstractStream* stream) const = 0;
+	
+	virtual std::string get_codec_type_string()=0;
+	
+	virtual Uint8 get_codec_type_code()=0;
+	
 	virtual ~AbstractMDCodec(){};
 	
 	/*
