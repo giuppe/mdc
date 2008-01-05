@@ -182,54 +182,62 @@ void ImageStream::interpolate_pixels(pixel_container pc) {
 	for (Uint32 i=0; i<m_data.size(); i++)
 		if ((m_data[i].get_r()==pc.get_r()) && (m_data[i].get_g()==pc.get_g()) && (m_data[i].get_b()==pc.get_b())) {
 			if (i%m_width == 0) { 									//pixels on extreme left
-				new_r = m_data[calculate_position(i, 3)].get_r();
-				new_g = m_data[calculate_position(i, 3)].get_g();
-				new_b = m_data[calculate_position(i, 3)].get_b();
+				new_r = m_data[calculate_position(i, 3, pc)].get_r();
+				new_g = m_data[calculate_position(i, 3, pc)].get_g();
+				new_b = m_data[calculate_position(i, 3, pc)].get_b();
 				set_pixel_in_data(i, new_r, new_g, new_b);
 			}
 			else if (i == Uint32(m_width-1)) { 						//pixels on extreme right
-				new_r = m_data[calculate_position(i, 4)].get_r();
-				new_g = m_data[calculate_position(i, 4)].get_g();
-				new_b = m_data[calculate_position(i, 4)].get_b();
+				new_r = m_data[calculate_position(i, 4, pc)].get_r();
+				new_g = m_data[calculate_position(i, 4, pc)].get_g();
+				new_b = m_data[calculate_position(i, 4, pc)].get_b();
 				set_pixel_in_data(i, new_r, new_g, new_b);
 			}
 			else if ((i>0) && (i<Uint32(m_width-1))) { 				//pixels on first row
-				new_r = m_data[calculate_position(i, 2)].get_r();
-				new_g = m_data[calculate_position(i, 2)].get_g();
-				new_b = m_data[calculate_position(i, 2)].get_b();
+				new_r = m_data[calculate_position(i, 2, pc)].get_r();
+				new_g = m_data[calculate_position(i, 2, pc)].get_g();
+				new_b = m_data[calculate_position(i, 2, pc)].get_b();
 				set_pixel_in_data(i, new_r, new_g, new_b);
 			}
 			else if (Uint32(i/m_width)+1 == Uint32(m_height-1)) {	//pixels on last row
-				new_r = m_data[calculate_position(i, 1)].get_r();
-				new_g = m_data[calculate_position(i, 1)].get_g();
-				new_b = m_data[calculate_position(i, 1)].get_b();
+				new_r = m_data[calculate_position(i, 1, pc)].get_r();
+				new_g = m_data[calculate_position(i, 1, pc)].get_g();
+				new_b = m_data[calculate_position(i, 1, pc)].get_b();
 				set_pixel_in_data(i, new_r, new_g, new_b);
 			}
 			else {
-				new_r = (m_data[calculate_position(i, 1)].get_r()+m_data[calculate_position(i, 2)].get_r()+m_data[calculate_position(i, 3)].get_r()+m_data[calculate_position(i, 4)].get_r())/4;
-				new_g = (m_data[calculate_position(i, 1)].get_g()+m_data[calculate_position(i, 2)].get_g()+m_data[calculate_position(i, 3)].get_g()+m_data[calculate_position(i, 4)].get_g())/4;
-				new_b = (m_data[calculate_position(i, 1)].get_b()+m_data[calculate_position(i, 2)].get_b()+m_data[calculate_position(i, 3)].get_b()+m_data[calculate_position(i, 4)].get_b())/4;
+				new_r = (m_data[calculate_position(i, 1, pc)].get_r()+m_data[calculate_position(i, 2, pc)].get_r()+m_data[calculate_position(i, 3, pc)].get_r()+m_data[calculate_position(i, 4, pc)].get_r())/4;
+				new_g = (m_data[calculate_position(i, 1, pc)].get_g()+m_data[calculate_position(i, 2, pc)].get_g()+m_data[calculate_position(i, 3, pc)].get_g()+m_data[calculate_position(i, 4, pc)].get_g())/4;
+				new_b = (m_data[calculate_position(i, 1, pc)].get_b()+m_data[calculate_position(i, 2, pc)].get_b()+m_data[calculate_position(i, 3, pc)].get_b()+m_data[calculate_position(i, 4, pc)].get_b())/4;
 				set_pixel_in_data(i, new_r, new_g, new_b);
 			}
 		}
 }
 
-Uint32 ImageStream::calculate_position (Uint32 current_position, Uint8 direction) {
-	Uint32 final_position;
+Uint32 ImageStream::calculate_position (Uint32 current_position, Uint8 direction, pixel_container pc) {
+	Uint32 final_position = current_position;
 	switch (direction) {
 	case 4: // west direction
-		final_position = current_position-1;
+		if ((m_data[current_position-1].get_r()!=pc.get_r()) || (m_data[current_position-1].get_g()!=pc.get_g()) || (m_data[current_position-1].get_b()!=pc.get_b()))
+			final_position--;
+		else final_position -= 2;
 		break;
 	case 3: // east direction
-		final_position = current_position+1;
+		if ((m_data[current_position+1].get_r()!=pc.get_r()) || (m_data[current_position+1].get_g()!=pc.get_g()) || (m_data[current_position+1].get_b()!=pc.get_b()))
+			final_position++;
+		else final_position += 2;
 		break;
 	case 1: // north direction
-		final_position = current_position-m_width;
+		if ((m_data[current_position-m_width].get_r()!=pc.get_r()) || (m_data[current_position-m_width].get_g()!=pc.get_g()) || (m_data[current_position-m_width].get_b()!=pc.get_b()))
+			final_position -= m_width;
+		else final_position -= m_width-1;
 		break;
 	case 2: // south direction
-		if (current_position+m_width < Uint32(m_width*m_height))
-			final_position = current_position+m_width;
-		else final_position = current_position;
+		if (current_position+m_width < Uint32(m_width*m_height)) {
+			if ((m_data[current_position+m_width].get_r()!=pc.get_r()) || (m_data[current_position+m_width].get_g()!=pc.get_g()) || (m_data[current_position+m_width].get_b()!=pc.get_b()))
+				final_position += m_width;
+			else final_position += m_width+1;
+		}
 		break;
 	default:
 		break;

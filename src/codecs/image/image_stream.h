@@ -80,7 +80,7 @@ private:
 	 * east direction = 3;
 	 * west direction = 4;
 	 */
-	Uint32 calculate_position(Uint32 current_position, Uint8 direction);
+	Uint32 calculate_position(Uint32 current_position, Uint8 direction, pixel_container pc);
 	
 	/*
 	 * Sets color component for a pixel contained in stream.
