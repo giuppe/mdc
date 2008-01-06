@@ -44,4 +44,5 @@ bool pixel_container::deserialize(const IDataChunk* data) {
 	temp_data.extract_head(m_r);
 	temp_data.extract_head(m_g);
 	temp_data.extract_head(m_b);
+	return true;
 }
