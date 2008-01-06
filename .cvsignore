@@ -2,3 +2,4 @@ mdc_log.txt
 doxygen
 my
 la_giara.txt
+callgrind.out.*

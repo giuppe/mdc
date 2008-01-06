@@ -22,24 +22,24 @@ bool DataChunkIterator::has_next()
 
 bool DataChunkIterator::get_Uint32(Uint32& data)
 {
-	Uint8* new_data;
+	Uint8* new_data = new Uint8[4];
 	bool result = get_data(4, new_data);
 	if(result == true)
 	{
 		data = SDLNet_Read32(new_data);
-		delete new_data;
+		delete[] new_data;
 	}
 	return result;
 }
 
 bool DataChunkIterator::get_Sint32(Sint32& data)
 {
-	Uint8* new_data;
+	Uint8* new_data = new Uint8[4];
 	bool result = get_data(4, new_data);
 	if(result == true)
 	{
 		data = (Sint32)SDLNet_Read32(new_data);
-		delete new_data;
+		delete[] new_data;
 	}
 	return result;
 }
@@ -47,31 +47,31 @@ bool DataChunkIterator::get_Sint32(Sint32& data)
 
 bool DataChunkIterator::get_Uint16(Uint16& data)
 {
-	Uint8* new_data;
+	Uint8* new_data = new Uint8[2];
 	bool result = get_data(2, new_data);
 	if(result == true)
 	{
 		data = SDLNet_Read16(new_data);
-		delete new_data;
+		delete[] new_data;
 	}
 	return result;
 }
 	
 bool DataChunkIterator::get_Sint16(Sint16& data)
 {
-	Uint8* new_data;
+	Uint8* new_data = new Uint8[2];
 	bool result = get_data(2, new_data);
 	if(result == true)
 	{
 		data = (Sint16)SDLNet_Read16(new_data);
-		delete new_data;
+		delete[] new_data;
 	}
 	return result;
 }
 	
 bool DataChunkIterator::get_Uint8(Uint8& data)
 {
-	Uint8* new_data;
+	Uint8* new_data = new Uint8;
 	bool result = get_data(1, new_data);
 	if(result == true)
 	{
@@ -83,7 +83,7 @@ bool DataChunkIterator::get_Uint8(Uint8& data)
 		
 bool DataChunkIterator::get_Sint8(Sint8& data)
 {
-	Uint8* new_data;
+	Uint8* new_data = new Uint8;
 	bool result = get_data(1, new_data);
 	if(result == true)
 	{
@@ -107,14 +107,14 @@ bool DataChunkIterator::get_cstring(char* &data)
 	}
 	
 	Uint32 new_lenght = null_position - m_position +1;
-	
+	new_data = new Uint8[new_lenght];
 	bool result =  get_data(new_lenght, new_data);
 	
 	if(result == true)
 	{
 		data = new char[new_lenght];
 		memcpy(data, new_data, new_lenght);
-		//delete [] new_data;
+		delete [] new_data;
 	}
 	//remove the terminating null
 	//m_position++;
@@ -129,12 +129,13 @@ bool DataChunkIterator::get_data_chunk(Uint32 lenght, IDataChunk*& data)
 	{
 		return true;
 	}
-	Uint8* buffer;
+	Uint8* buffer=new Uint8[lenght];
 	if(!this->get_data(lenght, buffer))
 	{
 		return false;
 	}
 	data->append_data(lenght, buffer);
+	delete[] buffer;
 	return true;
 }
 
