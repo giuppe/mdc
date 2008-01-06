@@ -50,7 +50,7 @@ vector<string> PosixDirectory::get_file_names(string path) {
 
 bool PosixDirectory::load_file(const string& path, FileDataChunk& loaded_data) {
 
-	loaded_data.open(path);
+	return loaded_data.open(path);
 	
 /*	FILE *m_f;
 
