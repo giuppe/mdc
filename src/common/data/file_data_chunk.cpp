@@ -82,7 +82,7 @@ void FileDataChunk::close_file()
 	
 }
 
-bool FileDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
+bool FileDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8* data) const
 {
 	if(m_is_open_file==false)
 	{
@@ -106,7 +106,7 @@ bool FileDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
 		LOG_ERROR("Trying to read outside range: "<<read_lenght<<"!=1");
 		return false;
 	}
-	data = buffer;
+	memcpy(data, buffer, lenght);
 	return true;
 
 }

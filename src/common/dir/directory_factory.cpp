@@ -18,10 +18,15 @@
 #include "directory_factory.h"
 #include "posix_directory.h"
 
+AbstractDirectory* DirectoryFactory::m_directory = 0;
 
 AbstractDirectory* DirectoryFactory::createDirectory()
 {
-	//FIXME: should support other directory types, now only posix
-	AbstractDirectory* result = new PosixDirectory();
-	return result;
+	
+	if(m_directory==0)
+	{
+		//FIXME: should support other directory types, now only posix
+		m_directory = new PosixDirectory();
+	}
+	return m_directory;
 }

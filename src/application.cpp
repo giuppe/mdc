@@ -155,6 +155,7 @@ void Application::deinit_all() {
 	CodecRegistry::instance()->deinit();
 	NetManager::instance()->deinit();
 	LogManager::instance()->deinit();
+	SDL_Quit();
 }
 
 void Application::stream_converter(string output_filename, string input_filename, string codec_name, Uint32 flows_number, Uint32 payload_size) {

@@ -18,7 +18,7 @@ protected:
 	
 	void close_file();
 	
-	bool get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const;
+	bool get_data(Uint32 offset, Uint32 lenght, Uint8* data) const;
 	
 	bool find_null(Uint32 offset, Uint32& position) const;
 	

@@ -22,7 +22,12 @@
 
 class DirectoryFactory
 {
+private:
+	static AbstractDirectory* m_directory;
 public:
+
+	
+
 	static AbstractDirectory* createDirectory();
 };
 

@@ -78,11 +78,11 @@ void AbstractDataChunk::operator+=(const IDataChunk* data)
 		LOG_ERROR("Trying to add a null data_chunk.");
 		return;	
 	}
-	Uint8* temp;
+	Uint8* temp = new Uint8[data->get_lenght()];
 	if(it.get_data(data->get_lenght(), temp))
 	{
 		this->append_data(data->get_lenght(), temp);
 	}
-	
+	delete[] temp;
 }
 

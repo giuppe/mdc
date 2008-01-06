@@ -31,6 +31,7 @@ public:
 	/**
 			 * This function serializes the object's state and produces a DataChunk.
 			 * It is the opposite of deserialize() function.
+			 * Keep in mind that every serialization returns a copy, and you should delete it after use.
 			 */
 	virtual MemDataChunk& serialize() const = 0;
 	

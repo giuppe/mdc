@@ -94,13 +94,17 @@ bool MDStream::load_from_disk(const string& path) {
 }
 
 bool MDStream::save_to_disk(const string& path) {
-	MemDataChunk data;
-	data += &serialize();
+	MemDataChunk* data;
+	data = &serialize();
 	AbstractDirectory* dir = DirectoryFactory::createDirectory();
-	if (dir->save_file(path, &data)) {
+	bool save_result = dir->save_file(path, data);
+	delete data;
+	if (save_result == true) {
 		LOG_INFO("Saved MD Stream in "<<path.c_str());
+		
 		return true;
 	}
+	
 	LOG_ERROR("Cannot save MD stream to "<<path);
 	return false;
 }
@@ -124,7 +128,9 @@ MemDataChunk& MDStream::serialize() const {
 				LOG_INFO("Writing descriptor ("<<flow<<", "<<sequence<<")");
 				temp.erase();
 				Descriptor* current_descriptor = m_stream[flow][sequence];
-				temp += &(*current_descriptor).serialize();
+				MemDataChunk* curr_desc_serialized = &(*current_descriptor).serialize(); 
+				temp += curr_desc_serialized;
+				delete curr_desc_serialized;
 				Uint16 descriptor_size = temp.get_lenght();
 				result->append_Uint16(descriptor_size);
 				result->operator+=(&temp);

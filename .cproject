@@ -66,7 +66,6 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.1169312677" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 <option id="gnu.cpp.link.option.libs.525930725" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="SDL"/>
-<listOptionValue builtIn="false" value="ustl"/>
 <listOptionValue builtIn="false" value="SDL_net"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1271723064" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">

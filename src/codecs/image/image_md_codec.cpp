@@ -48,14 +48,18 @@ void ImageMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 				icp->set_width(dynamic_cast<ImageStream*>(stream)->get_width());
 				icp->set_height(dynamic_cast<ImageStream*>(stream)->get_height());
 				icp->set_bits_per_pixel(dynamic_cast<ImageStream*>(stream)->get_bits_per_pixel());
-				MemDataChunk temp_codec_parameters;
-				temp_codec_parameters += &(icp->serialize());
+				MemDataChunk* temp_codec_parameters= &(icp->serialize());
 				descriptor->set_codec_parameter(icp);
+				delete temp_codec_parameters;
 				MemDataChunk payload;
 				Uint64 k;
 				for (k=0; k<max_payload_size; k++)
 					if (offset+i+(k*m_flows_number) < stream_size)
-						payload += &(stream->get_data(offset+i+(k*m_flows_number), 1));
+					{
+						MemDataChunk* stream_data = &(stream->get_data(offset+i+(k*m_flows_number), 1)); 
+						payload += stream_data;
+						delete stream_data;
+					}
 				offset += m_flows_number*k;
 				descriptor->set_payload(payload);
 				md_stream->set_descriptor(descriptor);

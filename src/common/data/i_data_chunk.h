@@ -9,7 +9,7 @@ class IDataChunk
 {
 protected:
 	friend class DataChunkIterator;
-	virtual bool get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const =0;
+	virtual bool get_data(Uint32 offset, Uint32 lenght, Uint8* data) const =0;
 	
 	virtual bool find_null(Uint32 offset, Uint32& position) const = 0;
 public:

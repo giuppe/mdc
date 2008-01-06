@@ -25,9 +25,9 @@
 
 void CodecRegistry::register_codec(AbstractMDCodec* codec)
 {
-	string name = codec->get_codec_type_string();
+	string name(codec->get_codec_type_string());
 	LOG_INFO("Registering codec: "<<name);
-	m_codec_names[codec->get_codec_type_string()]= codec->get_codec_type_code();
+	m_codec_names[name]= codec->get_codec_type_code();
 	m_codecs[codec->get_codec_type_code()] = codec;
 }
 

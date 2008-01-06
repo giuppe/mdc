@@ -62,19 +62,21 @@ MemDataChunk& Descriptor::serialize() const {
 	MemDataChunk* result = new MemDataChunk();
 	MDCMessage msg;
 	msg.set_type_string("DESC");
-	(*result)+=&msg.serialize();
+	MemDataChunk* msg_serialized = &msg.serialize(); 
+	(*result)+= msg_serialized;
+	delete msg_serialized;
 	MemDataChunk temp_stream_id; 
 	temp_stream_id.append_cstring(m_complete_stream_md5_hash.c_str());
 	result->append_data(32, temp_stream_id.get_data());
 	
 	result->append_Uint8(m_flow_id);
 	result->append_Uint32(m_sequence_number);
-	//result->append_cstring(m_codec_name.c_str());
+	
 	result->append_Uint8(m_codec_code);
-	MemDataChunk temp_codec_parameters;
-	temp_codec_parameters += &m_codec_parameters->serialize();
-	result->append_Uint32(temp_codec_parameters.get_lenght());
-	(*result)+=&temp_codec_parameters;
+	MemDataChunk* temp_codec_parameters = &m_codec_parameters->serialize();
+	result->append_Uint32(temp_codec_parameters->get_lenght());
+	(*result)+=temp_codec_parameters;
+	delete temp_codec_parameters;
 	Uint16 payload_size = m_payload.get_lenght();
 	result->append_Uint16(payload_size);
 	(*result)+=&this->m_payload;

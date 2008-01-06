@@ -46,7 +46,7 @@ protected:
 	
 	void set_content(Uint8* data, Uint32 lenght);
 	
-	bool get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const;
+	bool get_data(Uint32 offset, Uint32 lenght, Uint8* data) const;
 	
 	bool find_null(Uint32 offset, Uint32& position) const;
 	

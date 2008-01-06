@@ -27,6 +27,7 @@ ImageStream::ImageStream() {
 	m_width = 0;
 	m_height = 0;
 	m_null_pixel_present = false;
+	m_img = NULL;
 }
 
 pixel_container ImageStream::get_pixel(Uint16 x, Uint16 y) {
@@ -103,7 +104,11 @@ MemDataChunk& ImageStream::get_data(Uint64 offset, Uint64 size) const {
 	MemDataChunk* d = new MemDataChunk();
 	pixel_container buffer;
 	for (Uint64 i=0; i<size; i++)
-		(*d)+=&(m_data[offset+i].serialize());
+	{
+		MemDataChunk* curr_data = &(m_data[offset+i].serialize()); 
+		(*d)+= curr_data;
+		delete curr_data;
+	}
 	return *d;
 }
 
@@ -142,7 +147,13 @@ string ImageStream::compute_hash_md5() const {
 	return Hash::md5_from_file(this->m_path);
 }
 
-ImageStream::~ImageStream() {}
+ImageStream::~ImageStream() 
+{
+	if(m_img != NULL)
+	{
+		SDL_FreeSurface(m_img);
+	}
+}
 
 void ImageStream::set_data (MemDataChunk& data) {
 	Uint32 real_data_size = data.get_lenght();

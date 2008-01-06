@@ -27,7 +27,7 @@ Uint8* MemDataChunk::get_data() const
 	return m_data;
 }
 
-bool MemDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
+bool MemDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8* data) const
 {
 		
 	if(m_lenght<(offset+lenght))
@@ -42,7 +42,7 @@ bool MemDataChunk::get_data(Uint32 offset, Uint32 lenght, Uint8*& data) const
 		return false;
 	}
 	
-	data = new Uint8[lenght];
+	//data = new Uint8[lenght];
 	Uint8* data_offsetted = m_data + offset;
 	memcpy(data, data_offsetted, lenght);
 	return true;
