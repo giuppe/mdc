@@ -32,7 +32,8 @@ private:
 	string m_complete_stream_md5_hash;
 	Uint8 m_flow_id;
 	Uint32 m_sequence_number;
-	string m_codec_name;
+	//string m_codec_name;
+	Uint8 m_codec_code;
 	AbstractCodecParameters* m_codec_parameters;
 	MemDataChunk m_payload;
 public:

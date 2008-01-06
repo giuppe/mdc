@@ -18,6 +18,8 @@
 #include "../../common/data/mem_data_chunk.h"
 #include "../../messages/mdc_message.h"
 #include "../codec_parameters_factory.h"
+#include "../abstract_md_codec.h"
+#include "../codec_registry.h"
 
 
 Descriptor::Descriptor() {}
@@ -25,8 +27,30 @@ Uint8 Descriptor::get_flow_id() const {return m_flow_id;}
 void Descriptor::set_flow_id(Uint8 id) {m_flow_id = id;}
 Uint32 Descriptor::get_sequence_number() const {return m_sequence_number;}
 void Descriptor::set_sequence_number(Uint32 seq_num) {m_sequence_number = seq_num;}
-void Descriptor::set_codec_name(const string& codec_name) {m_codec_name = codec_name;}
-string Descriptor::get_codec_name() const {return m_codec_name;}
+void Descriptor::set_codec_name(const string& codec_name) 
+{
+	//m_codec_name = codec_name;
+	AbstractMDCodec* temp_codec;
+	if(!CodecRegistry::instance()->get_codec(codec_name, temp_codec))
+	{
+		LOG_ERROR("Cannot find codec "<<codec_name);
+		return;
+	}
+	m_codec_code = temp_codec->get_codec_type_code();
+}
+
+string Descriptor::get_codec_name() const 
+{
+	AbstractMDCodec* temp_codec;
+	if(!CodecRegistry::instance()->get_codec(m_codec_code, temp_codec))
+	{
+		LOG_ERROR("Cannot find codec of type "<<m_codec_code);
+		return "";
+	}
+	
+	return temp_codec->get_codec_type_string();
+}
+
 AbstractCodecParameters* Descriptor::get_codec_parameter() const {return m_codec_parameters;}
 void Descriptor::set_codec_parameter(AbstractCodecParameters* acp) {m_codec_parameters = acp;}
 Descriptor::~Descriptor() {delete m_codec_parameters;}
@@ -39,10 +63,14 @@ MemDataChunk& Descriptor::serialize() const {
 	MDCMessage msg;
 	msg.set_type_string("DESC");
 	(*result)+=&msg.serialize();
-	result->append_cstring(m_complete_stream_md5_hash.c_str());
+	MemDataChunk temp_stream_id; 
+	temp_stream_id.append_cstring(m_complete_stream_md5_hash.c_str());
+	result->append_data(32, temp_stream_id.get_data());
+	
 	result->append_Uint8(m_flow_id);
 	result->append_Uint32(m_sequence_number);
-	result->append_cstring(m_codec_name.c_str());
+	//result->append_cstring(m_codec_name.c_str());
+	result->append_Uint8(m_codec_code);
 	MemDataChunk temp_codec_parameters;
 	temp_codec_parameters += &m_codec_parameters->serialize();
 	result->append_Uint32(temp_codec_parameters.get_lenght());
@@ -62,8 +90,10 @@ bool Descriptor::deserialize(const IDataChunk* data) {
 	}
 	DataChunkIterator temp_dc = data->get_iterator();
 
-	char* hash;
-	char* codec_name;
+	Uint8* hash = new Uint8[33];
+	memset(hash, 0, 33);
+	//char* codec_name;
+	Uint8 codec_code;
 	IDataChunk* preamble;
 	temp_dc.get_data_chunk(8, preamble);
 	MDCMessage msg;
@@ -75,11 +105,12 @@ bool Descriptor::deserialize(const IDataChunk* data) {
 	{
 		return false;
 	}
-	if(!temp_dc.get_cstring(hash))
+	
+	if(!temp_dc.get_data(32,hash))
 	{
 		return false;
 	}
-	m_complete_stream_md5_hash = hash;
+	m_complete_stream_md5_hash =(char*) hash;
 	if(!temp_dc.get_Uint8(m_flow_id))
 	{
 		return false;
@@ -89,11 +120,13 @@ bool Descriptor::deserialize(const IDataChunk* data) {
 		return false;
 	}
 
-	if(!temp_dc.get_cstring(codec_name))
+	//if(!temp_dc.get_cstring(codec_name))
+	if(!temp_dc.get_Uint8(codec_code))
 	{
 		return false;
 	}
-	m_codec_name= codec_name;
+	m_codec_code= codec_code;
+	
 	Uint32 codec_parameters_size = 0;
 	if(!temp_dc.get_Uint32(codec_parameters_size))
 	{
@@ -104,7 +137,7 @@ bool Descriptor::deserialize(const IDataChunk* data) {
 	{
 		return false;
 	}
-	m_codec_parameters=CodecParametersFactory::create_codec_parameters(m_codec_name);
+	m_codec_parameters=CodecParametersFactory::create_codec_parameters(m_codec_code);
 	if(!m_codec_parameters->deserialize(codec_parameters_dc))
 	{
 		return false;

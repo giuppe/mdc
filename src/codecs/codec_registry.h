@@ -14,27 +14,32 @@
  *                                                                                                                 
  ***************************************************************************/
 
+
+
+#ifndef CODEC_REGISTRY_H_
+#define CODEC_REGISTRY_H_
+
 #include "defs.h"
 
 
 #include "abstract_md_codec.h"
 
-#ifndef CODEC_REGISTRY_H_
-#define CODEC_REGISTRY_H_
-
-
-
 class CodecRegistry
 {
 private:
-	map<string, AbstractMDCodec*> m_codecs;
+	map<string, Uint8> m_codec_names;
+	
+	map<Uint8, AbstractMDCodec*> m_codecs;
 	
 	
 public:
 	
-	void register_codec(const string& name, AbstractMDCodec* codec);
+	void register_codec(AbstractMDCodec* codec);
 	
 	bool get_codec(const string& name, AbstractMDCodec*& codec) const;
+
+	bool get_codec(Uint8 codec_code, AbstractMDCodec*& codec) const;
+
 
 	void init();
 	

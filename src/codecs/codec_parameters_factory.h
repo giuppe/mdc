@@ -24,6 +24,8 @@ class CodecParametersFactory
 {
 public:
 	static AbstractCodecParameters* create_codec_parameters(string codec_name);
+	static AbstractCodecParameters* create_codec_parameters(Uint8 codec_code);
+
 
 };
 #endif /*CODEC_PARAMETERS_FACTORY_H_*/

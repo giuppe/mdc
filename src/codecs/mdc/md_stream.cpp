@@ -110,7 +110,9 @@ MemDataChunk& MDStream::serialize() const {
 	MemDataChunk temp;
 	Uint8 flows_number = m_stream.size();
 	Uint32 sequence_size = m_stream[0].size();
-	result->append_cstring(m_stream_id.c_str());
+	MemDataChunk temp_stream_id; 
+	temp_stream_id.append_cstring(m_stream_id.c_str());
+	result->append_data(32, temp_stream_id.get_data());
 	result->append_Uint8(flows_number);
 	result->append_Uint32(sequence_size);
 	for (Uint8 flow=0; flow<flows_number; flow++)
@@ -144,8 +146,9 @@ bool MDStream::deserialize(const IDataChunk* data) {
 
 	DataChunkIterator temp_dc = data->get_iterator();
 
-	char* stream_id;
-	if(!temp_dc.get_cstring(stream_id))
+	Uint8* stream_id= new Uint8[33];
+	memset(stream_id, 0, 33);
+	if(!temp_dc.get_data(32, stream_id))
 	{
 		return false;
 	}
@@ -162,7 +165,7 @@ bool MDStream::deserialize(const IDataChunk* data) {
 		return false;
 	}
 
-	init(stream_id, flows_number, sequences_number);
+	init((char*)stream_id, flows_number, sequences_number);
 
 	while(temp_dc.has_next())
 	{
