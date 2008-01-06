@@ -5,13 +5,19 @@ Each descriptor contains approssimatively the same quantity of data correlated t
 Any difference can be seen between last descriptor of the last flow and the overall other
 descriptors. Each descriptor is formed as the follow:
 
+(entries larger than 1 byte are big-endian)
+Byte		Content
+dimension	description
+
+---------	-----------
+
 3 bytes  	"MDC"
-1 byte		version (=0)
-4 bytes		"DESC"
-??		    stream_id (null terminated) (hash md5 of the stream in version=0)
+1 byte		version (==0)
+4 bytes		message type (eg. "DESC")
+32 bytes    stream_id (hash md5 of the stream in version=0)
 1 byte		flow_id
 4 bytes		sequence_number
-??			codec name (null terminated)
+1 byte		codec type
 4 bytes		codec parameters size
 ??			codec parameters (depends on codec)
 2 bytes		payload size

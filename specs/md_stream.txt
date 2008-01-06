@@ -1,4 +1,4 @@
-??			stream_id (null terminated)
+32 bytes    stream_id (hash md5 of the stream in version=0)
 1 byte	  flows number
 4 byte	  max sequences number
 {

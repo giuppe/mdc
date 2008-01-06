@@ -9,11 +9,12 @@ dimension	description
 ---------	-----------
 
 3 bytes  	"MDC"
-1 byte		version
+1 byte		version == 0
 4 bytes		"DESC"
+32 bytes    stream_id (hash md5 of the stream in version=0)
 1 byte		flow_id
 4 bytes		sequence_number
-??			codec name (null terminated)
+1 byte		codec type == 2
 4 bytes		codec parameters size
 ?? 			codec parameters
 2 bytes		payload size
