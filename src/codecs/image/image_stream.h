@@ -44,11 +44,7 @@ private:
 	 */
 	MemDataChunk& fill_up_DataChunk (MemDataChunk* d, pixel_container* buffer) const;
 	
-	/*
-	 * Take pixels from a DataChunk and add them to a vector.
-	 * @data: pixels to be added.
-	 */
-	void take_pixels_from(MemDataChunk& data);
+
 	
 	/*
 	 * Sets a pixel of a surface in x,y position.
@@ -144,7 +140,7 @@ public:
 	 * Insert data to the current stream.
 	 * @data: data to be added;
 	 */
-	void set_data(MemDataChunk& data);
+	void set_data(const MemDataChunk& data);
 
 	~ImageStream();
 	

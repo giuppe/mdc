@@ -32,9 +32,10 @@ Uint8 pixel_container::get_b() const {return m_b;}
 
 MemDataChunk& pixel_container::serialize() const {
 	MemDataChunk* d = new MemDataChunk();
-	d->append_Uint8(m_r);
-	d->append_Uint8(m_g);
-	d->append_Uint8(m_b);
+	d->resize(3);
+	d->set_Uint8(0, m_r);
+	d->set_Uint8(1, m_g);
+	d->set_Uint8(2, m_b);
 	return *d;
 }
 

@@ -137,9 +137,20 @@ MemDataChunk& ImageStream::serialize() const {
 }
 
 bool ImageStream::deserialize(const IDataChunk* datachunk) {
-	MemDataChunk dc;
-	dc += datachunk;
-	take_pixels_from(dc);
+	Uint32 i = 0;
+	DataChunkIterator it = datachunk->get_iterator();
+	pixel_container curr_pixel;
+	Uint8 r,g,b;
+	while (it.has_next()) {
+		it.get_Uint8(r);
+		it.get_Uint8(g);
+		it.get_Uint8(b);	
+		curr_pixel.set_r(r);
+		curr_pixel.set_g(g);
+		curr_pixel.set_b(b);
+		m_data[i] = curr_pixel;
+		i++;
+	}
 	return true;
 }
 
@@ -155,10 +166,10 @@ ImageStream::~ImageStream()
 	}
 }
 
-void ImageStream::set_data (MemDataChunk& data) {
+void ImageStream::set_data (const MemDataChunk& data) {
 	Uint32 real_data_size = data.get_lenght();
 	m_data.resize(real_data_size/3);
-	take_pixels_from(data);
+	deserialize(&data);
 }
 
 Uint8 ImageStream::get_bits_per_pixel() {return m_pixel_format->BitsPerPixel;}
@@ -167,21 +178,7 @@ Uint16 ImageStream::get_height() {return m_height;}
 void ImageStream::set_width(Uint16 width) {m_width = width;}
 void ImageStream::set_height(Uint16 height) {m_height = height;}
 
-void ImageStream::take_pixels_from(MemDataChunk& data) {
-	Uint32 i = 0;
-	while (data.get_lenght() > 0) {
-		pixel_container curr_pixel;
-		Uint8* curr_data;
-		data.extract_head(3, curr_data);
-		curr_pixel.set_r(curr_data[0]);
-		curr_pixel.set_g(curr_data[1]);
-		curr_pixel.set_b(curr_data[2]);
-		m_data[i] = curr_pixel;
-		i++;
-		delete curr_data;
-	}
-	return;
-}
+
 
 void ImageStream::set_bits_per_pixel(Uint8 bpp) {m_bpp = bpp;}
 

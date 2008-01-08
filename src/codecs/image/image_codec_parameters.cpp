@@ -30,12 +30,21 @@ MemDataChunk& ImageCodecParameters::serialize() const {
 }
 
 bool ImageCodecParameters::deserialize(const IDataChunk* dc) {
-	MemDataChunk* temp_dc = new MemDataChunk();
-	(*temp_dc)+=(dc);
-	temp_dc->extract_head(m_width);
-	temp_dc->extract_head(m_height);
-	temp_dc->extract_head(m_bits_per_pixel);
-	delete temp_dc;
+
+	DataChunkIterator it = dc->get_iterator();
+	if(!it.get_Uint16(m_width))
+	{
+		return false;
+	}
+	if(!it.get_Uint16(m_height))
+	{
+		return false;
+	}
+	if(!it.get_Uint8(m_bits_per_pixel))
+	{
+		return false;
+	}
+	
 	return true;
 }
 

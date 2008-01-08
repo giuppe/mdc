@@ -70,7 +70,8 @@ void ImageMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 
 void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const {
 	if (!md_stream->is_empty()) {
-		MemDataChunk* dc = new MemDataChunk();
+
+		
 		vector<pixel_container> took_stream;
 		Uint8 flows_number = md_stream->get_flows_number();
 		Uint32 sequences_number = md_stream->get_sequences_number();
@@ -85,7 +86,9 @@ void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="image")) {
 					payload_size = descriptor->get_payload_size();
 					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) {
-						(*dc) += (descriptor->get_payload());
+						MemDataChunk* payload = descriptor->get_payload();
+
+						
 						took_stream.resize(flows_number*sequences_number*(payload_size+1));
 						ImageCodecParameters* icp = dynamic_cast<ImageCodecParameters*>(descriptor->get_codec_parameter());
 						image_width = icp->get_width();
@@ -94,19 +97,24 @@ void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 						if (bpp == 24) {
 							Uint32 k;
 							Uint32 pixels_number = payload_size/3;
+							DataChunkIterator it = payload->get_iterator();
 							for (k=0; k<pixels_number; k++) {
 								pixel_container curr_pixel;
-								Uint8* curr_data;
-								dc->extract_head(sizeof(Uint8)*3, curr_data);
-								curr_pixel.set_r(curr_data[0]);
-								curr_pixel.set_g(curr_data[1]);
-								curr_pixel.set_b(curr_data[2]);
+								Uint8 r,g,b;
+								it.get_Uint8(r);
+								it.get_Uint8(g);
+								it.get_Uint8(b);
+								
+								curr_pixel.set_r(r);
+								curr_pixel.set_g(g);
+								curr_pixel.set_b(b);
 								Uint32 locate_position = offset+i+(k*flows_number);
 								took_stream[locate_position] = curr_pixel;
-								delete curr_data;
+								
 							}
 							offset += flows_number*k;
 						}
+						delete payload;
 					}
 				}
 				else {
@@ -121,18 +129,23 @@ void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 				}
 			}
 		}
-		MemDataChunk* taken_dc = new MemDataChunk();
-		for (Uint32 i=0; i<Uint32(image_width*image_height); i++) {
+
+		Uint32 pixel_number = image_width*image_height;
+		MemDataChunk* final_pixels= new MemDataChunk();
+		final_pixels->resize(pixel_number*3);
+		for (Uint32 i=0; i<pixel_number; i++) {
 			MemDataChunk* pixel = &(took_stream[i].serialize());
-			taken_dc->append_data(pixel->get_lenght(), pixel->get_data());
+
+			final_pixels->set_data_chunk(i*3, pixel);
 			delete pixel;
 		}
 		dynamic_cast<ImageStream*>(stream)->set_width(image_width);
 		dynamic_cast<ImageStream*>(stream)->set_height(image_height);
 		dynamic_cast<ImageStream*>(stream)->set_bits_per_pixel(bpp);
 		dynamic_cast<ImageStream*>(stream)->set_null_pixel_presence(null_pixel_present);
-		delete dc;
-		stream->set_data(*taken_dc);
+
+		stream->set_data(*final_pixels);
+		delete final_pixels;
 	}
 }
 
