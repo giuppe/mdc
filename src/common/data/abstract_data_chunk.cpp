@@ -42,10 +42,13 @@ void AbstractDataChunk::append_Uint8(Uint8 data)
 	append_data(1, &data);
 }
 
+
+
+
 void AbstractDataChunk::append_Sint8(Sint8 data)
 {
-	Uint8 new_data = (Uint8)data;
-	append_data(1, &new_data);
+	Uint8* new_data = (Uint8*) &data;
+	append_data(1, new_data);
 }
 
 void AbstractDataChunk::append_cstring(const char* data)

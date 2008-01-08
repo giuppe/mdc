@@ -44,11 +44,15 @@ protected:
 	
 	MemDataChunk(MemDataChunk&){};
 	
-	void set_content(Uint8* data, Uint32 lenght);
+	void replace_content(Uint8* data, Uint32 lenght);
+	
+	void set_data(Uint32 offset, Uint32 lenght, Uint8* data);
 	
 	bool get_data(Uint32 offset, Uint32 lenght, Uint8* data) const;
 	
 	bool find_null(Uint32 offset, Uint32& position) const;
+	
+
 	
 public:
 	
@@ -138,6 +142,22 @@ public:
 	bool extract_head(Uint32 lenght, Uint8* &data);
 	
 	bool extract_head(Uint32 lenght, MemDataChunk &data);
+	
+	void set_Uint8(Uint32 offset, Uint8 data);
+
+	void set_Sint8(Uint32 offset, Sint8 data);
+	
+	void set_Uint16(Uint32 offset, Uint16 data);
+	
+	void set_Sint16(Uint32 offset, Sint16 data);
+	
+	void set_Uint32(Uint32 offset, Uint32 data);
+	
+	void set_Sint32(Uint32 offset, Sint32 data);
+	
+	void set_data_chunk(Uint32 offset, IDataChunk* data);
+	
+	void resize(Uint32 new_size);
 	
 	void erase();
 	

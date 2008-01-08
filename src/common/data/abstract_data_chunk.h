@@ -55,6 +55,7 @@ public:
 			 * @param data the string to add.
 			 */
 		void append_cstring(const char* data);
+		
 
 		
 };

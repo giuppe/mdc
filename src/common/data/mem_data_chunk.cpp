@@ -56,7 +56,7 @@ Uint32 MemDataChunk::get_lenght() const
 	return m_lenght;
 }
 
-void MemDataChunk::set_content(Uint8* data, Uint32 lenght)
+void MemDataChunk::replace_content(Uint8* data, Uint32 lenght)
 {
 	m_data = data;
 	m_real_data = m_data;
@@ -70,20 +70,100 @@ void MemDataChunk::operator +=(const MemDataChunk& data) {
 
 */
 
+void MemDataChunk::set_data(Uint32 offset, Uint32 lenght, Uint8* data)
+{
+	if(offset>this->m_lenght)
+		return;
+	
+	if(lenght == 0)
+		return;
+	
+	if(offset+lenght > this->m_lenght)
+		return;
+	
+	Uint8* data_offsetted = this->m_data + offset;
+	memcpy(data_offsetted, data, lenght);
+}
+
+void MemDataChunk::set_Uint8(Uint32 offset, Uint8 data)
+{
+	set_data(offset, 1, &data);
+}
+
+void MemDataChunk::set_Sint8(Uint32 offset, Sint8 data)
+{
+	Uint8* new_data = (Uint8*) &data;
+	set_data(offset, 1, new_data);
+}
+
+void MemDataChunk::set_Uint16(Uint32 offset, Uint16 data)
+{
+	Uint8* new_data = new Uint8[sizeof(Uint16)];
+	SDLNet_Write16(data, new_data);
+	set_data(offset, sizeof(Uint16), new_data);
+	delete[] new_data;
+}
+
+void MemDataChunk::set_Sint16(Uint32 offset, Sint16 data)
+{
+	Uint8* new_data = new Uint8[sizeof(Sint16)];
+	SDLNet_Write16((Uint16)data, new_data);
+	set_data(offset, sizeof(Sint16), new_data);
+	delete[] new_data;
+}
+
+void MemDataChunk::set_Uint32(Uint32 offset, Uint32 data)
+{
+	Uint8* new_data = new Uint8[sizeof(Uint32)];
+	SDLNet_Write32(data, new_data);
+	set_data(offset, sizeof(Uint32), new_data);
+	delete[] new_data;
+}
+
+void MemDataChunk::set_Sint32(Uint32 offset, Sint32 data)
+{
+	Uint8* new_data = new Uint8[sizeof(Sint32)];
+	SDLNet_Write32((Uint32)data, new_data);
+	set_data(offset, sizeof(Sint32), new_data);
+	delete[] new_data;
+}
+
 void MemDataChunk::append_data(Uint32 lenght, Uint8* data) {
 	if(lenght==0) 
 		return;
-	
-	Uint8* new_data = new Uint8[this->m_lenght+lenght];
-	if (this->m_lenght != 0)
-		memcpy(new_data, this->m_data, this->m_lenght);
-	Uint8* second_segment = new_data + sizeof(Uint8)*(this->m_lenght);
+	Uint32 old_lenght = this->m_lenght; 
+	resize(this->m_lenght + lenght);
+	//Uint8* new_data = new Uint8[this->m_lenght+lenght];
+	//if (this->m_lenght != 0)
+	//	memcpy(new_data, this->m_data, this->m_lenght);
+	//Uint8* second_segment = new_data + sizeof(Uint8)*(this->m_lenght);
+	Uint8* second_segment = this->m_data + sizeof(Uint8)*old_lenght;
 	memcpy(second_segment, data, lenght);
+	//if (this->m_lenght != 0)
+	//	delete []this->m_data;
+	//this->m_data = new_data;
+	//this->m_real_data = this->m_data;
+	//this->m_lenght += lenght;
+}
+
+void MemDataChunk::resize(Uint32 new_size)
+{
+	if(new_size < this->m_lenght)
+	{
+		LOG_ERROR("Cannot shrink MemDataChunk.");
+		return;
+	}
+	
+	Uint8* new_data = new Uint8[new_size];
 	if (this->m_lenght != 0)
+	{
+		memcpy(new_data, this->m_data, this->m_lenght);
 		delete []this->m_data;
+	}
+			
 	this->m_data = new_data;
 	this->m_real_data = this->m_data;
-	this->m_lenght += lenght;
+	this->m_lenght = new_size;
 }
 /*
 void MemDataChunk::append(Uint32 data)
@@ -289,6 +369,22 @@ bool MemDataChunk::extract_head(Uint32 lenght, MemDataChunk &data)
 	this->extract_head(lenght, buffer);
 	data.append_data(lenght, buffer);
 	return true;
+}
+
+void MemDataChunk::set_data_chunk(Uint32 offset, IDataChunk* data)
+{
+	DataChunkIterator it = data->get_iterator();
+	if(it.is_null())
+	{
+		LOG_ERROR("Trying to add a null data_chunk.");
+		return;	
+	}
+	Uint8* temp = new Uint8[data->get_lenght()];
+	if(it.get_data(data->get_lenght(), temp))
+	{
+		this->set_data(offset, data->get_lenght(), temp);
+	}
+	delete[] temp;
 }
 
 
