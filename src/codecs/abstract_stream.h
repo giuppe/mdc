@@ -74,7 +74,7 @@ public:
 	 * Insert data to the current stream.
 	 * @data: data to be added;
 	 */
-	virtual void set_data(MemDataChunk& data) = 0;
+	virtual void set_data(const MemDataChunk& data) = 0;
 	
 	/*
 	 * Gets data from a file.

@@ -116,7 +116,7 @@ TextStream::~TextStream() {}
 
 
 
-void TextStream::set_data (MemDataChunk& data) 
+void TextStream::set_data (const MemDataChunk& data) 
 {
 	Uint32 real_data_size = data.get_lenght();
 	m_data.resize(real_data_size);

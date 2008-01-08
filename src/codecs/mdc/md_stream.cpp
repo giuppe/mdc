@@ -190,6 +190,7 @@ bool MDStream::deserialize(const IDataChunk* data) {
 		{
 			return false;
 		}
+		delete current_descriptor;
 		set_descriptor(d);
 	}
 	return true;

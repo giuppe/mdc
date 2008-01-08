@@ -85,7 +85,7 @@ public:
 	 * Insert data to the current stream.
 	 * @data: data to be added;
 	 */
-	void set_data(MemDataChunk& data);
+	void set_data(const MemDataChunk& data);
 	
 	
 	
