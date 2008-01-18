@@ -29,6 +29,7 @@ void Application::print_usage()
 	cout << "\t--codec \t select codec type to use for coding input file.\n";
 	cout << "\t--flows \t number of output coded flows (from 1 to 64), DEFAULT 2.\n";
 	cout << "\t--payload \t preferred payload size of each descriptor, DEFAULT 1000.\n";
+	cout << "\t--daemon \t starts in server mode.\n";
 	cout << "\t--help \t\t show this help page.\n\n";
 	cout << "Examples:\n";
 	cout << "  mdc --input input_file.txt --codec text --code --flows 4 --payload 2000 --output output_file.mdc.\n";
