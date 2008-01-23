@@ -205,7 +205,7 @@ bool NetManager::receive_data(Uint32 source_socket_handle, MemDataChunk& data, N
 			
 			sender_port = packet.address.port;
 			sender = NetEndPoint(string(SDLNet_ResolveIP(&(packet.address))), sender_port);
-			SDLNet_FreePacket(&packet);
+			//SDLNet_FreePacket(&packet);
 			return true;
 		default:
 			LOG_FATAL("SDLNet error: "<<SDLNet_GetError());
