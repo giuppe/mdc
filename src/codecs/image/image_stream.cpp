@@ -188,7 +188,7 @@ void ImageStream::interpolate_pixels(pixel_container pc) {
 	Uint8 new_g;
 	Uint8 new_b;
 	for (Uint32 i=0; i<m_data.size(); i++)
-		if ((m_data[i].get_r()==pc.get_r()) && (m_data[i].get_g()==pc.get_g()) && (m_data[i].get_b()==pc.get_b())) {
+		if (((m_data[i].get_r()==pc.get_r())||(m_data[i].get_r()==0)) && ((m_data[i].get_g()==pc.get_g())||(m_data[i].get_g()==0)) && ((m_data[i].get_b()==pc.get_b())||(m_data[i].get_b()==0))) {
 			if (i%m_width == 0) { 									//pixels on extreme left
 				new_r = m_data[calculate_position(i, 3, pc)].get_r();
 				new_g = m_data[calculate_position(i, 3, pc)].get_g();
