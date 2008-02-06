@@ -1,4 +1,4 @@
-The MDC text codec function take a stream containing the image file and an empty md_stream
+The MDC image codec function take a stream containing the image file and an empty md_stream
 that must be filled up with flows and descriptors. The code() function cycles on flows and
 sequences numbers and, if the stream not is at end of file, create a new empty descriptor.
 Now fills up the descriptor with corrects value as follows: 
@@ -45,7 +45,7 @@ descriptors and flows: the product between flows number and real descriptor payl
 approximate as best as possible image file size (it's a lower bound).
 
 The payload is extracted from the stream from an initial point called "offset", pixels
-are extracted from a round robin like algorithm to fill up a payload of approssimativaly size
+are extracted from a round robin like algorithm to fill up a payload of approssimatively size
 "max_payload_size". Then, payload is added to the current descriptor. The "offset" parameter
 is used to monitorize this procedure.
 

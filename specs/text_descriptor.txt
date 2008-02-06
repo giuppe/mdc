@@ -43,7 +43,7 @@ descriptors and flows: the product between flows number and real descriptor payl
 approximate as best as possible text file size (it's a lower bound).
 
 The payload is extracted from the stream from an initial point called "offset", characters
-are extracted from a round robin algorithm to fill up a payload ofapprossimativaly size
+are extracted from a round robin algorithm to fill up a payload ofapprossimatively size
 "max_payload_size". Then, payload is added to the current descriptor. The "offset" parameter
 is used to monitorize this procedure.
 
