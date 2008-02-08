@@ -20,13 +20,11 @@
 
 enum{ASK_LIST, ASK_INFO, ASK_FILE, STOP_AND_WAIT, EXIT};
 
-void ClientTestAction::init(string server1, string server2)
+void ClientTestAction::init(string server1)
 {
 	m_state= ASK_LIST;
 	m_exited = false;
-	m_my_server1=NetEndPoint(server1, 5551);
-	m_my_server2=NetEndPoint(server2, 5551);
-		
+	m_my_server1=NetEndPoint(server1, 5551);		
 }
 
 void ClientTestAction::action()

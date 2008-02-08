@@ -1,2 +1,8 @@
-- classe Peer per rappresentare lo stato dei peer
-- buffer a finestra mobile su MDStream
+- Gestione globale dei messaggi in Python
+- Mancato supporto di AsynCore di Python su Symbian
+- Test di funzionamento del client Python su Symbian
+- Rilettura manuale
+- Beta testing generale dell'intera applicazione
+- Eliminazione della risoluzione obbligatoria del DNS per gli indirizzi e aggiunta della voce nel file di configurazione XML
+- Parametrizzazione dell'indirizzo IP del server da lina di comando e aggiunta della voce nel file di configurazione XML
+- Descrizione della configurazione tramite XML e del comportamento del sistema in mancanza dei parametri.

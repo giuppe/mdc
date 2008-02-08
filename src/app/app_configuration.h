@@ -30,6 +30,7 @@ private:
 	Uint16 m_data_port;
 	string m_repository_path;
 	XMLConfiguration* m_xml_config;
+	string m_server_address;
 	
 public:
 	/**
@@ -56,7 +57,7 @@ public:
 	 * @returns: path of shared files folder 
 	 */
 	string get_repository_path();
-	
+	string get_server_address();
 // begin Singleton stuff
 private:
     static AppConfiguration* _instance;

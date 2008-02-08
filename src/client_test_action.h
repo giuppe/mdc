@@ -38,8 +38,6 @@ private:
 	
 	NetEndPoint m_my_server1;
 	
-	NetEndPoint m_my_server2;
-	
 	void pre_action(){}
 		
 		void post_action(){}
@@ -49,7 +47,7 @@ public:
 	
 	ClientTestAction(){};
 	
-	void init(string server1, string server2);
+	void init(string server1);
 	
 	void action();
 	

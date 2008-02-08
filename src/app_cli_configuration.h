@@ -29,7 +29,7 @@ public:
 	Uint32 get_flows_number();
 	
 	Uint32 get_payload_size();
-	
+	string get_address();
 };
 
 #endif /*APP_CLI_CONFIGURATION_*/

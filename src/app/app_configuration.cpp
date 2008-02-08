@@ -42,6 +42,14 @@ void AppConfiguration::init() {
 		m_repository_path = "./shared";
 		m_xml_config->set_string(string("repository"), string("path"), m_repository_path);
 	}
+	string address;
+	if (m_xml_config->get_string(string("server"), string("address"), address))
+		m_server_address = address;
+	else {
+		m_server_address.clear();
+		address = "192.168.0.30";
+		m_xml_config->set_string(string("server"), string("address"), address);
+	}
 }
 
 void AppConfiguration::deinit() {
@@ -60,3 +68,4 @@ AppConfiguration* AppConfiguration::instance() {
 Uint16 AppConfiguration::get_control_port() {return m_control_port;}
 Uint16 AppConfiguration::get_data_port() {return m_data_port;}
 string AppConfiguration::get_repository_path() {return m_repository_path;}
+string AppConfiguration::get_server_address() {return m_server_address;}
