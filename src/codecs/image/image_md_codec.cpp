@@ -96,9 +96,9 @@ void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 						bpp = icp->get_bits_per_pixel();
 						if (bpp == 24) {
 							Uint32 k;
-							Uint32 pixels_number = payload_size/3;
+							Uint32 pixels_in_payload = payload_size/3;
 							DataChunkIterator it = payload->get_iterator();
-							for (k=0; k<pixels_number; k++) {
+							for (k=0; k<pixels_in_payload; k++) {
 								pixel_container curr_pixel;
 								Uint8 r,g,b;
 								it.get_Uint8(r);
@@ -119,8 +119,8 @@ void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 				}
 				else {
 					Uint32 k;
-					Uint32 pixels_number = payload_size/3;
-					for (k=0; k<pixels_number; k++) {
+					Uint32 pixels_in_payload = payload_size/3;
+					for (k=0; k<pixels_in_payload; k++) {
 						Uint32 locate_position = offset+i+(k*flows_number);
 						took_stream[locate_position] = m_null_pixel;
 					}
