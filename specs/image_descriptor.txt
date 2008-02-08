@@ -15,8 +15,8 @@ dimension	description
 1 byte		flow_id
 4 bytes		sequence_number
 1 byte		codec type == 2
-4 bytes		codec parameters size
-?? 			codec parameters
+4 bytes		codec parameters size == 5
+5 bytes		codec parameters
 2 bytes		payload size
 ??			payload
 

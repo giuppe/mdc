@@ -35,3 +35,13 @@ h=(string)+";" // stream id
 fn=(string)+";" // flows number
 dn=(string)+";" // descriptors number
 (null)
+
+PEER
+(null)
+
+ALST
+{
+a=(string)+";" // address
+p=(string)+";" // port
+(null)
+}+
