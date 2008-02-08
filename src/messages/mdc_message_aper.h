@@ -16,6 +16,8 @@
 
 #include "defs.h"
 #include "mdc_message_vector.h"
+#include "../common/net_end_point.h"
+#include <cmath>
 
 
 
@@ -36,6 +38,38 @@ public:
 		
 
 	}
+	
+	Uint32 get_num_entries() const {return get_num_rows();}
+	
+	void append_entry(NetEndPoint peer)
+	{
+		
+		string entry = "a=";
+		entry += peer.get_ip();
+		entry += ";&";
+		entry += "p=";
+		entry += peer.get_port();
+		entry += ";";
+		m_rows.push_back(entry);
+	}
+	
+	NetEndPoint get_peer(Uint32 num_entry) const
+	{
+		if(num_entry>m_rows.size())
+		{
+			LOG_ERROR("Trying to get a parameter outside range.")
+			return NetEndPoint();
+		}
+		
+		string ip = get_parameter_part(num_entry, "a");
+		
+		Uint16 port = atoi(get_parameter_part(num_entry, "p").c_str());
+		
+		return NetEndPoint(ip, port);
+	}
+	
+
+	
 	
 	
 };
