@@ -44,6 +44,16 @@ void ClientManager::request_stream(NetEndPoint peer, string stream_id, Uint8 flo
 	udp_msg.send();
 }
 
+void ClientManager::get_peer_of_peer(NetEndPoint peer) const
+{
+	MDCMessagePeer msg;
+	UDPMessage udp_msg;
+	udp_msg.set_destination(peer);
+	udp_msg.set_payload(msg.serialize());
+	udp_msg.send();
+}
+
+
 
 MDStreamInfo ClientManager::get_last_stream_info() const
 {

@@ -52,6 +52,8 @@ public:
 	
 	void set_last_stream_info(MDStreamInfo stream_info);
 	
+	void get_peer_of_peer(NetEndPoint peer) const;
+	
 	// begin Singleton stuff
 
 private:
