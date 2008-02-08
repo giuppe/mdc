@@ -4,6 +4,7 @@
 #include "../common/net_manager.h"
 #include "stream_repository.h"
 #include "stream_info_cache_manager.h"
+#include "peer_info_cache_manager.h"
 #include "../common/udp_message.h"
 #include "descriptors_send_list.h"
 #include "client_manager.h"
@@ -40,33 +41,27 @@ void ControlManager::handle_LIST(const NetEndPoint& sender, const MDCMessageList
 
 void ControlManager::handle_PEER(const NetEndPoint& sender, const MDCMessagePeer& msg)
 {
-	assert(!"This function is a stub");
-#if 0
 
-	LOG_INFO("Requested name is "<<msg.get_name());
-	vector<MDStream*> stream_list;
-
-	stream_list = StreamRepository::instance()->find_by_name(msg.get_name());
-
-	MDCMessageAlst response;
-
-	for(Uint32 i=0; i<stream_list.size(); i++)
-	{
-		response.append_entry(stream_list[i]->get_name(),stream_list[i]->get_hash());
-
+	PeerInfoCacheManager* peer_cache = PeerInfoCacheManager::instance();
+	
+	PeerList peers = peer_cache->get_peers();
+	
+	MDCMessageAper response;
+	
+	for(Uint32 i=0; i< peers.size(); i++){
+		response.append_entry(peers[i].peer);
 	}
-
-
+	
 	UDPMessage udp_msg;
 
-
+	//FIXME destination port is embedded on code, to resolve with peer manager
 	udp_msg.set_destination(NetEndPoint(sender.get_ip(), 5551));
 
 	udp_msg.set_payload(response.serialize());
 
 	udp_msg.send();
-
-#endif
+	
+	
 }
 
 
@@ -87,12 +82,12 @@ void ControlManager::handle_SINF(const NetEndPoint& sender, const MDCMessageSinf
 		response.set_descriptors_number(info.descriptors_number);
 		UDPMessage udp_msg;
 
-			//FIXME destination port is embedded on code, to resolve with peer manager
-			udp_msg.set_destination(NetEndPoint(sender.get_ip(), 5551));
+		//FIXME destination port is embedded on code, to resolve with peer manager
+		udp_msg.set_destination(NetEndPoint(sender.get_ip(), 5551));
 
-			udp_msg.set_payload(response.serialize());
+		udp_msg.set_payload(response.serialize());
 
-			udp_msg.send();
+		udp_msg.send();
 		
 	}
 	else
@@ -176,33 +171,14 @@ void ControlManager::handle_ALST(const NetEndPoint& sender, const MDCMessageAlst
 
 void ControlManager::handle_APER(const NetEndPoint& sender, const MDCMessageAper& msg)
 {
-	assert(!"This function is a stub");
-#if 0
 
-	LOG_INFO("Requested name is "<<msg.get_name());
-	vector<MDStream*> stream_list;
 
-	stream_list = StreamRepository::instance()->find_by_name(msg.get_name());
-
-	MDCMessageAlst response;
-
-	for(Uint32 i=0; i<stream_list.size(); i++)
-	{
-		response.append_entry(stream_list[i]->get_name(),stream_list[i]->get_hash());
-
+	for(Uint32 i=0; i<msg.get_num_entries(); i++){
+		NetEndPoint current_peer = msg.get_peer(i);
+		PeerInfoCacheManager::instance()->add_peer(current_peer.get_ip(), current_peer);
+		LOG_INFO("Adding peer "<<current_peer.get_ip());
 	}
-
-
-	UDPMessage udp_msg;
-
-
-	udp_msg.set_destination(NetEndPoint(sender.get_ip(), 5551));
-
-	udp_msg.set_payload(response.serialize());
-
-	udp_msg.send();
-
-#endif
+	
 }
 
 

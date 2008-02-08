@@ -30,3 +30,15 @@ void PeerInfoCacheManager::add_peer(string ip_address, NetEndPoint peer)
 {
 	m_stream_names[ip_address].peer= peer;
 }
+
+PeerInfoCacheManager* PeerInfoCacheManager::_instance = 0;
+
+PeerInfoCacheManager* PeerInfoCacheManager::instance()
+{
+	if(_instance==0)
+	{
+		_instance=new PeerInfoCacheManager();
+	}
+	return _instance;
+}
+
