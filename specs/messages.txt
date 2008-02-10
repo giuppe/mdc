@@ -5,6 +5,7 @@ n=(string)+";" // name
 (null)
 
 ALST
+4 bytes        // rows number
 {
 n=(string)+";" // name
 h=(string)+";" // stream id
@@ -39,7 +40,8 @@ dn=(string)+";" // descriptors number
 PEER
 (null)
 
-ALST
+APER
+4 bytes        // rows number
 {
 a=(string)+";" // address
 p=(string)+";" // port
