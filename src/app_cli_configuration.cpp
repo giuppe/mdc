@@ -116,7 +116,5 @@ string AppCliConfiguration::get_address() {
 	string address;
 	address.resize(0);
 	get_string("", "connect", address);
-	if ((address!="") || (address!=" "))
-		return address;
-	else return "";
+	return address;
 }

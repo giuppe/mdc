@@ -4,5 +4,3 @@
 - Rilettura manuale
 - Beta testing generale dell'intera applicazione
 - Eliminazione della risoluzione obbligatoria del DNS per gli indirizzi e aggiunta della voce nel file di configurazione XML
-- Parametrizzazione dell'indirizzo IP del server da lina di comando e aggiunta della voce nel file di configurazione XML
-- Descrizione della configurazione tramite XML e del comportamento del sistema in mancanza dei parametri.
