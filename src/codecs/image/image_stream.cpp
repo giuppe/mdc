@@ -112,6 +112,7 @@ MemDataChunk& ImageStream::get_data(Uint64 offset, Uint64 size) const {
 	return *d;
 }
 
+
 MemDataChunk& ImageStream::fill_up_DataChunk (MemDataChunk* d, pixel_container* buffer) const {
 	d->append_Uint8(buffer->get_r());
 	d->append_Uint8(buffer->get_g());
