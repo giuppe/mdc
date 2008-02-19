@@ -108,19 +108,8 @@ void Application::start_coder()
 void Application::start_scheduler() {
 	Scheduler* sched = new Scheduler();
 	ClientTestAction* client = new ClientTestAction();
-	string address = m_cli_config->get_address();
-	if (address == "") {
-		if (AppConfiguration::instance()->get_server_address().size() == 0) {
-			cout<<"\nServer address parameter is missing, default IP 192.168.0.30 created, retype command.\n\n";
-			return;
-		}
-		else address = AppConfiguration::instance()->get_server_address();
-	}
-	if (address.size() < 7) {
-		cout<<"\nServer address parameter is not an IPv4 address.\n\n";
-		return;
-	}
-	client->init(address);
+
+	
 	SiteManager* site_manager = new SiteManager();
 	Receiver* receiver = new Receiver();
 	SenderAction* sender_action = new SenderAction();
@@ -146,6 +135,19 @@ void Application::start_scheduler() {
 	}
 	else
 	{
+		string address = m_cli_config->get_address();
+		if (address == "") {
+			if (AppConfiguration::instance()->get_server_address().size() == 0) {
+				LOG_WARN("Server address parameter is missing, default IP 192.168.0.30 created, retype command.");
+				return;
+			}
+			else address = AppConfiguration::instance()->get_server_address();
+		}
+		if (address.size() < 7) {
+			LOG_ERROR("Server address parameter is not an IPv4 address.");
+			return;
+		}
+		client->init(address);
 		client->start();
 		while (!client->is_action_exited()) 
 		{
