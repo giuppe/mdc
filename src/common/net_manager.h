@@ -35,6 +35,7 @@ private:
 	vector<IPaddress> m_addresses;
 	
 	UDPsocket get_socket(Uint32 socket_handle);
+	static string resolve_address(IPaddress* numeric_address);
 	
 public:
 	void init();
@@ -98,3 +99,4 @@ public:
 };
 
 #endif /*NET_MANAGER_H_*/
+

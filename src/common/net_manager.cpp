@@ -21,6 +21,7 @@
 #include <cassert>
 #include <cstring>
 #include "net_manager.h"
+#include <cstdio>
 
 
 Uint32 NetManager::create_UDP_listen_socket(const string& address, Uint16 port)
@@ -153,7 +154,7 @@ void NetManager::send_data(NetEndPoint destination,  const MemDataChunk& data)
 	   
 		packet->address = m_addresses[dest_socket];
 		
-		LOG_INFO("Sending packet to "<< SDLNet_ResolveIP(&packet->address)<<":"<<packet->address.port);
+		LOG_INFO("Sending packet to "<< resolve_address(&packet->address)<<":"<<packet->address.port);
 		
 		if(SDLNet_UDP_Send(sd, -1, packet)==0)
 		{
@@ -199,12 +200,12 @@ bool NetManager::receive_data(Uint32 source_socket_handle, MemDataChunk& data, N
 			return false;
 			break;
 		case 1:
-			LOG_INFO("Received packet from "<<SDLNet_ResolveIP(&packet.address));
+			LOG_INFO("Received packet from "<<resolve_address(&(packet.address)));
 			data.erase();
 			data.append_data(packet.len, packet.data);
 			
 			sender_port = packet.address.port;
-			sender = NetEndPoint(string(SDLNet_ResolveIP(&(packet.address))), sender_port);
+			sender = NetEndPoint(string(resolve_address(&(packet.address))), sender_port);
 			//SDLNet_FreePacket(&packet);
 			return true;
 		default:
@@ -243,6 +244,18 @@ NetManager* NetManager::instance()
 		_instance=new NetManager();
 	}
 	return _instance;
+}
+
+string NetManager::resolve_address(IPaddress* numeric_address) {
+	Uint8 first = (numeric_address->host<<24)>>24;
+	Uint8 second = (numeric_address->host<<16)>>24;
+	Uint8 third = (numeric_address->host<<8)>>24;
+	Uint8 fourth = numeric_address->host>>24;
+	char* destination = new char[15];
+	sprintf(destination, "%d.%d.%d.%d", first, second, third, fourth);
+	string dotted_address = destination;
+	delete[] destination;
+	return dotted_address;
 }
 
 

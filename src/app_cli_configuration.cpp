@@ -47,7 +47,6 @@ bool AppCliConfiguration::get_is_daemon()
 string AppCliConfiguration::get_input_file()
 {
 	string input_filename;
-	input_filename.resize(0);
 	get_string("", "input", input_filename);
 	if ((input_filename=="true") || (input_filename=="false") || (input_filename==""))
 	{
@@ -63,9 +62,6 @@ string AppCliConfiguration::get_input_file()
 string AppCliConfiguration::get_output_file()
 {
 	string output_filename;
-
-	output_filename.resize(0);
-
 	get_string("", "output", output_filename);
 
 	if((output_filename=="true") || (output_filename=="false") || (output_filename==""))
@@ -114,7 +110,7 @@ Uint32 AppCliConfiguration::get_payload_size()
 
 string AppCliConfiguration::get_address() {
 	string address;
-	address.resize(0);
 	get_string("", "connect", address);
 	return address;
 }
+
