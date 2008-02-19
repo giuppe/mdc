@@ -45,7 +45,7 @@ public:
 		
 		string entry = "n=";
 		entry += name;
-		entry += ";&";
+		entry += ";";
 		entry += "h=";
 		entry += hash;
 		entry += ";";

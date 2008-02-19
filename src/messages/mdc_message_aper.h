@@ -46,7 +46,7 @@ public:
 		
 		string entry = "a=";
 		entry += peer.get_ip();
-		entry += ";&";
+		entry += ";";
 		entry += "p=";
 		entry += peer.get_port();
 		entry += ";";
