@@ -143,7 +143,7 @@ void Application::start_scheduler() {
 			}
 			else address = AppConfiguration::instance()->get_server_address();
 		}
-		if (address.size() < 7) {
+		if ((address.size()<7) || (address.size()>15)){
 			LOG_ERROR("Server address parameter is not an IPv4 address.");
 			return;
 		}
