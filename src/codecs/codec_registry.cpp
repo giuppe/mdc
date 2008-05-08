@@ -16,12 +16,10 @@
 
 #include "defs.h"
 #include "codec_registry.h"
-
+#include "video/video_md_codec.h"
 #include "image/image_md_codec.h"
 #include "abstract_md_codec.h"
 #include "text/text_md_codec.h"
-
-
 
 void CodecRegistry::register_codec(AbstractMDCodec* codec)
 {

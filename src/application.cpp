@@ -200,10 +200,10 @@ void Application::stream_converter(string output_filename, string input_filename
 	}
 	else if (is_decoding) {
 		mdstream.load_from_disk(input_filename);
-		if (codec_name == "image")
+		if ((codec_name=="image") || (codec_name=="video"))
 			dynamic_cast<ImageMDCodec*>(codec)->set_null_pixel_colors(0, 255, 0);
 		codec->decode(&mdstream, stream);
-		if ((codec_name=="image") && (dynamic_cast<ImageStream*>(stream)->get_null_pixel_presence()))
+		if (((codec_name=="image") || (codec_name=="video")) && (dynamic_cast<ImageStream*>(stream)->get_null_pixel_presence()))
 			dynamic_cast<ImageStream*>(stream)->interpolate_pixels(dynamic_cast<ImageMDCodec*>(codec)->get_null_pixel_colors());
 		stream->save_to_disk(output_filename);
 	}
