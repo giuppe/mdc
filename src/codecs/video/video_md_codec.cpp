@@ -49,7 +49,7 @@ void VideoMDCodec::code_frame(AbstractStream* stream, MDStream* md_stream) const
 				vcp->set_width(dynamic_cast<VideoStream*>(stream)->get_width());
 				vcp->set_height(dynamic_cast<VideoStream*>(stream)->get_height());
 				vcp->set_bits_per_pixel(dynamic_cast<VideoStream*>(stream)->get_bits_per_pixel());
-				MemDataChunk* temp_codec_parameters= &(vcp->serialize());
+				MemDataChunk* temp_codec_parameters = &(vcp->serialize());
 				descriptor->set_codec_parameter(vcp);
 				delete temp_codec_parameters;
 				MemDataChunk payload;
@@ -71,12 +71,10 @@ void VideoMDCodec::code_frame(AbstractStream* stream, MDStream* md_stream) const
 
 void VideoMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const {
 	if (!md_stream->is_empty()) {
-
-		
 		vector<pixel_container> took_stream;
 		Uint8 flows_number = md_stream->get_flows_number();
 		Uint32 sequences_number = md_stream->get_sequences_number();
-		Uint16 image_width, image_height;
+		Uint16 frame_width, frame_height;
 		Uint8 bpp = 0;
 		bool null_pixel_present = false;
 		for (Uint8 i=0; i<flows_number; i++) {
@@ -88,13 +86,11 @@ void VideoMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 					payload_size = descriptor->get_payload_size();
 					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) {
 						MemDataChunk* payload = descriptor->get_payload();
-
-						
 						took_stream.resize(flows_number*sequences_number*(payload_size+1));
-						ImageCodecParameters* icp = dynamic_cast<ImageCodecParameters*>(descriptor->get_codec_parameter());
-						image_width = icp->get_width();
-						image_height = icp->get_height();
-						bpp = icp->get_bits_per_pixel();
+						VideoCodecParameters* vcp = dynamic_cast<VideoCodecParameters*>(descriptor->get_codec_parameter());
+						frame_width = vcp->get_width();
+						frame_height = vcp->get_height();
+						bpp = vcp->get_bits_per_pixel();
 						if (bpp == 24) {
 							Uint32 k;
 							Uint32 pixels_in_payload = payload_size/3;
@@ -105,13 +101,11 @@ void VideoMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 								it.get_Uint8(r);
 								it.get_Uint8(g);
 								it.get_Uint8(b);
-								
 								curr_pixel.set_r(r);
 								curr_pixel.set_g(g);
 								curr_pixel.set_b(b);
 								Uint32 locate_position = offset+i+(k*flows_number);
 								took_stream[locate_position] = curr_pixel;
-								
 							}
 							offset += flows_number*k;
 						}
@@ -130,21 +124,18 @@ void VideoMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 				}
 			}
 		}
-
-		Uint32 pixel_number = image_width*image_height;
+		Uint32 pixel_number = frame_width*frame_height;
 		MemDataChunk* final_pixels= new MemDataChunk();
 		final_pixels->resize(pixel_number*3);
 		for (Uint32 i=0; i<pixel_number; i++) {
 			MemDataChunk* pixel = &(took_stream[i].serialize());
-
 			final_pixels->set_data_chunk(i*3, pixel);
 			delete pixel;
 		}
-		dynamic_cast<ImageStream*>(stream)->set_width(image_width);
-		dynamic_cast<ImageStream*>(stream)->set_height(image_height);
-		dynamic_cast<ImageStream*>(stream)->set_bits_per_pixel(bpp);
-		dynamic_cast<ImageStream*>(stream)->set_null_pixel_presence(null_pixel_present);
-
+		dynamic_cast<VideoStream*>(stream)->set_width(frame_width);
+		dynamic_cast<VideoStream*>(stream)->set_height(frame_height);
+		dynamic_cast<VideoStream*>(stream)->set_bits_per_pixel(bpp);
+		dynamic_cast<VideoStream*>(stream)->set_null_pixel_presence(null_pixel_present);
 		stream->set_data(*final_pixels);
 		delete final_pixels;
 	}

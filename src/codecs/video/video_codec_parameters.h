@@ -81,7 +81,7 @@ public:
 	/*
 	 * Initialize image codec parameters.
 	 */
-	ImageCodecParameters();
+	VideoCodecParameters();
 
 	/*
 	 * Serialize a data chunk.

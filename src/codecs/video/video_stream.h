@@ -19,6 +19,8 @@
 #include "../abstract_stream.h"
 #include "../../common/data/mem_data_chunk.h"
 #include "../image/pixel_container.h"
+#include "ffmpeg/avcodec.h"
+#include "ffmpeg/avformat.h"
 
 #ifndef VIDEO_STREAM_H_
 #define VIDEO_STREAM_H_
@@ -35,7 +37,7 @@ private:
 	Uint16 m_height;
 	Uint8 m_bpp;
 	bool m_null_pixel_present;
-	vector<m_data> m_flow;
+	vector<vector<pixel_container> > m_flow;
 	Uint32 m_frame_number;
 	
 	/*
@@ -87,8 +89,24 @@ private:
 	 */
 	void set_pixel_in_data(Uint32 position, Uint8 r, Uint8 g, Uint8 b);
 	
+	/*
+	 * Read a video stream from a file.
+	 * @path: file's path.
+	 */
+	void get_video_stream(string path);
+	
+	/*
+	 * Get next video frame.
+	 * @*pFormatCtx: pointer to video format context.
+	 * @*pCodecCtx: pointer to video codec context.
+	 * @videoStream: number of video stream in file.
+	 * @*pFrame: pointer to the current video frame.
+	 * @returns: true if operation is succesful
+	 */
+	bool get_next_frame(AVFormatContext* pFormatCtx, AVCodecContext* pCodecCtx, Uint8 videoStream, AVFrame* pFrame);
+	
 public:
-	ImageStream();
+	VideoStream();
 
 	/*
 	 * Get a data set from a file.
