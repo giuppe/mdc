@@ -14,13 +14,12 @@
  *                                                                                                                 
  ***************************************************************************/
 
-
-
 #ifndef MEM_DATA_CHUNK_H_
 #define MEM_DATA_CHUNK_H_
 
 #include "defs.h"
 #include "abstract_data_chunk.h"
+#include "/usr/include/lzo/lzo1x.h"
 
 /**
  * Represents a stream of bytes in memory.
@@ -33,12 +32,9 @@ class MemDataChunk : public AbstractDataChunk
 protected:
 	
 	Uint8* m_data;
-	
+	lzo_uint compressed_size;
 	Uint8* m_real_data;
-	
 	Uint32 m_lenght;
-	
-	//bool m_initialized;
 	
 	MemDataChunk(const MemDataChunk&){};
 	
@@ -136,7 +132,6 @@ public:
 	 */ 
 	bool extract_head(char* &data);
 	
-	
 	void append_data(Uint32 lenght, Uint8* data);
 	
 	bool extract_head(Uint32 lenght, Uint8* &data);
@@ -163,6 +158,15 @@ public:
 	
 	const char* compute_hash_md5() const;
 	
+	/**
+	 * @returns the inner data stream compressed, as a pointer to "char"s
+	 */
+	Uint8* get_compressed_data();
+	
+	/**
+	 * @returns compressed data's size.
+	 */
+	Uint32 get_compressed_size();
 };
 
 #endif /*MEM_DATA_CHUNK_H_*/

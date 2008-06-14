@@ -64,9 +64,6 @@ void MDStream::set_descriptor(Descriptor* descriptor) {
 	m_valid_descriptor[flow][sequence] = true;
 }
 
-//string MDStream::get_name() const {return m_name;}
-
-
 string MDStream::get_stream_id() const {return m_stream_id;}
 
 MDStream::~MDStream() {

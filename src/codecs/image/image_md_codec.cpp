@@ -22,6 +22,7 @@
 #include "../../common/data/mem_data_chunk.h"
 #include "image_codec_parameters.h"
 #include <cmath>
+#include "/usr/include/lzo/lzo1x.h"
 
 ImageMDCodec::ImageMDCodec() {
 	m_seq_counter.push_back(0);
@@ -48,20 +49,21 @@ void ImageMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 				icp->set_width(dynamic_cast<ImageStream*>(stream)->get_width());
 				icp->set_height(dynamic_cast<ImageStream*>(stream)->get_height());
 				icp->set_bits_per_pixel(dynamic_cast<ImageStream*>(stream)->get_bits_per_pixel());
-				MemDataChunk* temp_codec_parameters= &(icp->serialize());
+				MemDataChunk* temp_codec_parameters = &(icp->serialize());
 				descriptor->set_codec_parameter(icp);
 				delete temp_codec_parameters;
 				MemDataChunk payload;
-				Uint64 k;
+				Uint16 k;
 				for (k=0; k<max_payload_size; k++)
-					if (offset+i+(k*m_flows_number) < stream_size)
-					{
+					if (offset+i+(k*m_flows_number) < stream_size) {
 						MemDataChunk* stream_data = &(stream->get_data(offset+i+(k*m_flows_number), 1)); 
 						payload += stream_data;
 						delete stream_data;
 					}
 				offset += m_flows_number*k;
-				descriptor->set_payload(payload);
+				MemDataChunk compressed_payload;
+				compressed_payload.append_data(payload.get_compressed_size(), payload.get_compressed_data());
+				descriptor->set_payload(compressed_payload);
 				md_stream->set_descriptor(descriptor);
 			}
 		}
@@ -70,8 +72,6 @@ void ImageMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 
 void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) const {
 	if (!md_stream->is_empty()) {
-
-		
 		vector<pixel_container> took_stream;
 		Uint8 flows_number = md_stream->get_flows_number();
 		Uint32 sequences_number = md_stream->get_sequences_number();
@@ -86,9 +86,8 @@ void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 				if (md_stream->get_descriptor(i, j, descriptor) && (descriptor->get_codec_name()=="image")) {
 					payload_size = descriptor->get_payload_size();
 					if (md_stream->is_valid(descriptor->get_flow_id(), descriptor->get_sequence_number())) {
-						MemDataChunk* payload = descriptor->get_payload();
-
-						
+						MemDataChunk* payload = decompression(descriptor->get_payload(), payload_size);
+						payload_size = payload->get_lenght();
 						took_stream.resize(flows_number*sequences_number*(payload_size+1));
 						ImageCodecParameters* icp = dynamic_cast<ImageCodecParameters*>(descriptor->get_codec_parameter());
 						image_width = icp->get_width();
@@ -104,13 +103,11 @@ void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 								it.get_Uint8(r);
 								it.get_Uint8(g);
 								it.get_Uint8(b);
-								
 								curr_pixel.set_r(r);
 								curr_pixel.set_g(g);
 								curr_pixel.set_b(b);
 								Uint32 locate_position = offset+i+(k*flows_number);
 								took_stream[locate_position] = curr_pixel;
-								
 							}
 							offset += flows_number*k;
 						}
@@ -135,7 +132,6 @@ void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 		final_pixels->resize(pixel_number*3);
 		for (Uint32 i=0; i<pixel_number; i++) {
 			MemDataChunk* pixel = &(took_stream[i].serialize());
-
 			final_pixels->set_data_chunk(i*3, pixel);
 			delete pixel;
 		}
@@ -143,10 +139,23 @@ void ImageMDCodec::decode(const MDStream* md_stream, AbstractStream* stream) con
 		dynamic_cast<ImageStream*>(stream)->set_height(image_height);
 		dynamic_cast<ImageStream*>(stream)->set_bits_per_pixel(bpp);
 		dynamic_cast<ImageStream*>(stream)->set_null_pixel_presence(null_pixel_present);
-
 		stream->set_data(*final_pixels);
 		delete final_pixels;
 	}
+}
+
+MemDataChunk* ImageMDCodec::decompression(MemDataChunk* compressed_payload, Uint16 payload_size) const {
+	if (lzo_init() != LZO_E_OK) {
+		LOG_ERROR("LZO initialization failed for decompression procedure!\n");
+		return 0;
+	}
+	lzo_uint data_size;
+	Uint8* output_data = new Uint8[65535];
+	lzo1x_decompress(compressed_payload->get_data(), payload_size, output_data, &data_size, NULL);
+	MemDataChunk* decompressed_payload = new MemDataChunk();
+	decompressed_payload->append_data((Uint32)data_size, output_data);
+	delete [] output_data;
+	return decompressed_payload;
 }
 
 ImageMDCodec::~ImageMDCodec() {}

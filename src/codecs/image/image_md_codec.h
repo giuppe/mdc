@@ -27,9 +27,17 @@
 
 class ImageMDCodec : public AbstractMDCodec{
 private:
-	vector<Uint8> m_flows_id;
 	vector<Uint32> m_seq_counter;
 	pixel_container m_null_pixel;
+	
+	/*
+	 * Execute decompression of a compressed payload.
+	 * @compressed_payload: compressed payload
+	 * @payload_size: compressed payload dimension
+	 * @returns: a pointer to the decompressed data contained in compressed payload
+	 */
+	MemDataChunk* decompression(MemDataChunk* compressed_payload, Uint16 payload_size) const;
+	
 public:
 	/*
 	 * Initialize parameter of a text mdcodec.

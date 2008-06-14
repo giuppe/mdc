@@ -22,7 +22,7 @@
 #include "../../common/hash/hash.h"
 #include "../image/pixel_container.h"
 #include "ffmpeg/avcodec.h"
-#include "ffmpeg/allformats.h"
+#include "ffmpeg/avformat.h"
 
 VideoStream::VideoStream() {
 	m_data.resize(0);
@@ -56,8 +56,8 @@ bool VideoStream::load_from_disk(const string& path) {
 	m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of("."));
 	m_flow.clear();
 	get_video_stream(path);
-	//TODO prima di proseguire è necessaria la traduzione di MPEG in immagini
-	//se possibile, si devono estrarre m_pixel_format, m_bpp, m_width e m_height solo dal primo frame
+	//TODO prima di proseguire è necessaria la traduzione di MPEG in immagini:
+	//estraggo m_current_frame, m_width e m_height, magari solo dal primo frame
 	//si deve estrarre anche il frame_number e inserirlo in m_frame_number
 	//poi ciclo su tutti i frames del filmato
 	m_current_frame = SDL_LoadBMP(path.c_str());
@@ -103,7 +103,7 @@ bool VideoStream::save_to_disk(const string& path) const {
 			SDL_FreeSurface(unit_test_pixel);
 			return true;
 		}
-		else LOG_ERROR("SDL_SaveBMP failed:" << SDL_GetError());//modificare per MPEG
+		else LOG_ERROR("SDL_SaveBMP failed:" << SDL_GetError());//TODO modificare per MPEG
 	}
 	return false;
 }
@@ -193,10 +193,9 @@ Uint8 VideoStream::get_bits_per_pixel() {return m_pixel_format->BitsPerPixel;}
 Uint16 VideoStream::get_width() {return m_width;}
 Uint16 VideoStream::get_height() {return m_height;}
 void VideoStream::set_width(Uint16 width) {m_width = width;}
-void VideoStream::set_height(Uint16 height) {m_height = height;}
 Uint32 VideoStream::get_frame_number() {return m_frame_number;}
+void VideoStream::set_height(Uint16 height) {m_height = height;}
 void VideoStream::set_frame_number(Uint32 number) {m_frame_number = number;}
-
 
 void VideoStream::set_bits_per_pixel(Uint8 bpp) {m_bpp = bpp;}
 
@@ -282,10 +281,14 @@ void VideoStream::set_pixel_in_data(Uint32 position, Uint8 r, Uint8 g, Uint8 b) 
 
 void VideoStream::get_video_stream(string path) {
 	AVFormatContext* pFormatCtx;
-	if (av_open_input_file(&pFormatCtx, path.c_str(), NULL, 0, NULL) != 0)
+	if (av_open_input_file(&pFormatCtx, path.c_str(), NULL, 0, NULL) != 0) {
 		LOG_ERROR("Couldn't open file "+path);
-	if (av_find_stream_info(pFormatCtx) < 0)
+		return;
+	}
+	if (av_find_stream_info(pFormatCtx) < 0) {
 		LOG_ERROR("Couldn't find stream information.");
+		return;
+	}
 	Uint8 videoStream;
 	bool foundVideoStream = false;
 	for (Uint8 i=0; i<pFormatCtx->nb_streams; i++)
@@ -294,86 +297,113 @@ void VideoStream::get_video_stream(string path) {
 			videoStream = i;
 			break;
 		}
-	if (foundVideoStream)
+	if (!foundVideoStream) {
 		LOG_ERROR("Didn't find a video stream.");
+		return;
+	}
 	AVCodecContext* pCodecCtx = pFormatCtx->streams[videoStream]->codec;
 	AVCodec* pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
-	if (pCodec == NULL)
+	if (pCodec == NULL) {
 		LOG_ERROR("Codec not found.");
-	if (pCodec->capabilities & CODEC_CAP_TRUNCATED)
-		pCodecCtx->flags |= CODEC_FLAG_TRUNCATED;
-	if (avcodec_open(pCodecCtx, pCodec) < 0)
+		return;
+	}
+	if (avcodec_open(pCodecCtx, pCodec) < 0) {
 		LOG_ERROR("Could not open codec.");
-	AVFrame* pFrame = avcodec_alloc_frame();//must be externally private declarated?
+		return;
+	}
+	AVFrame* pFrame = avcodec_alloc_frame();
+	AVFrame* pFrameRGB = avcodec_alloc_frame();
+	if (pFrameRGB == NULL) {
+		LOG_ERROR("Could not create an RGB frame.");
+		return;
+	}
+	m_width = pCodecCtx->width;
+	m_height = pCodecCtx->height;
+	Uint16 numBytes = avpicture_get_size(PIX_FMT_RGB24, pCodecCtx->width, pCodecCtx->height);
+	Uint8* buffer = (Uint8*)av_malloc(numBytes*sizeof(Uint8));
+	avpicture_fill((AVPicture*)pFrameRGB, buffer, PIX_FMT_RGB24, pCodecCtx->width, pCodecCtx->height);
+	int frameFinished;
+	AVPacket packet;
+	while (av_read_frame(pFormatCtx, &packet) >= 0)
+		if (packet.stream_index == videoStream) {
+			avcodec_decode_video(pCodecCtx, pFrame, &frameFinished, packet.data, packet.size);
+			if (frameFinished) {
+				img_convert((AVPicture*)pFrameRGB, PIX_FMT_RGB24, (AVPicture*)pFrame, pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
+				//si deve convertire l'immagine e metterla dentro m_current_frame che è di
+				//tipo SDL_Surface*
+				//must to be extracted pixels and passed to MDC engine.
+				//First step: try to save this frame to a file.
+			}
+		}
 }
 
 bool VideoStream::get_next_frame(AVFormatContext* pFormatCtx, AVCodecContext* pCodecCtx, Uint8 videoStream, AVFrame* pFrame) {
-    static AVPacket packet;
-    static int      bytesRemaining=0;
-    static uint8_t  *rawData;
-    static bool     fFirstTime=true;
-    int             bytesDecoded;
-    int             frameFinished;
+	static AVPacket packet;
+	static int      bytesRemaining=0;
+	static uint8_t  *rawData;
+	static bool     fFirstTime=true;
+	int             bytesDecoded;
+	int             frameFinished;
 
-    // First time we're called, set packet.data to NULL to indicate it
-    // doesn't have to be freed
-    if(fFirstTime)
-    {
-        fFirstTime=false;
-        packet.data=NULL;
-    }
+	// First time we're called, set packet.data to NULL to indicate it
+	// doesn't have to be freed
+	if(fFirstTime)
+	{
+		fFirstTime=false;
+		packet.data=NULL;
+	}
 
-    // Decode packets until we have decoded a complete frame
-    while(true)
-    {
-        // Work on the current packet until we have decoded all of it
-        while(bytesRemaining > 0)
-        {
-            // Decode the next chunk of data
-            bytesDecoded=avcodec_decode_video(pCodecCtx, pFrame,
-                &frameFinished, rawData, bytesRemaining);
+	// Decode packets until we have decoded a complete frame
+	while(true)
+	{
+		// Work on the current packet until we have decoded all of it
+		while(bytesRemaining > 0)
+		{
+			// Decode the next chunk of data
+			bytesDecoded=avcodec_decode_video(pCodecCtx, pFrame,
+					&frameFinished, rawData, bytesRemaining);
 
-            // Was there an error?
-            if(bytesDecoded < 0)
-            {
-                fprintf(stderr, "Error while decoding frame\n");
-                return false;
-            }
+			// Was there an error?
+			if(bytesDecoded < 0)
+			{
+				fprintf(stderr, "Error while decoding frame\n");
+				return false;
+			}
 
-            bytesRemaining-=bytesDecoded;
-            rawData+=bytesDecoded;
+			bytesRemaining-=bytesDecoded;
+			rawData+=bytesDecoded;
 
-            // Did we finish the current frame? Then we can return
-            if(frameFinished)
-                return true;
-        }
+			// Did we finish the current frame? Then we can return
+			if(frameFinished)
+				return true;
+		}
 
-        // Read the next packet, skipping all packets that aren't for this
-        // stream
-        do
-        {
-            // Free old packet
-            if(packet.data!=NULL)
-                av_free_packet(&packet);
+		// Read the next packet, skipping all packets that aren't for this
+		// stream
+		do
+		{
+			// Free old packet
+			if(packet.data!=NULL)
+				av_free_packet(&packet);
 
-            // Read new packet
-            if(av_read_packet(pFormatCtx, &packet)<0)
-                goto loop_exit;
-        } while(packet.stream_index!=videoStream);
+			// Read new packet
+			if(av_read_packet(pFormatCtx, &packet)<0)
+				goto loop_exit;
+		} while(packet.stream_index!=videoStream);
 
-        bytesRemaining=packet.size;
-        rawData=packet.data;
-    }
+		bytesRemaining=packet.size;
+		rawData=packet.data;
+	}
 
-loop_exit:
+	loop_exit:
 
-    // Decode the rest of the last frame
-    bytesDecoded=avcodec_decode_video(pCodecCtx, pFrame, &frameFinished, 
-        rawData, bytesRemaining);
+	// Decode the rest of the last frame
+	bytesDecoded=avcodec_decode_video(pCodecCtx, pFrame, &frameFinished, 
+			rawData, bytesRemaining);
 
-    // Free last packet
-    if(packet.data!=NULL)
-        av_free_packet(&packet);
+	// Free last packet
+	if(packet.data!=NULL)
+		av_free_packet(&packet);
 
-    return frameFinished!=0;
+	return frameFinished!=0;
 }

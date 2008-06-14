@@ -1,5 +1,5 @@
 /***************************************************************************
-                          data_chunk.cpp  -  DataChunk class
+                  mem_data_chunk.cpp  -  MemDataChunk class
                              -------------------
     begin                : Jul 13 2007
     copyright            : (C) 2007 by Giuseppe D'Aqui'
@@ -20,6 +20,8 @@
 #include <cassert>
 #include <SDL/SDL_net.h>
 #include "../hash/hash.h"
+#include "/usr/include/lzo/lzo1x.h"
+#include <cmath>
 
 Uint8* MemDataChunk::get_data() const
 {
@@ -412,6 +414,17 @@ bool MemDataChunk::find_null(Uint32 offset, Uint32& position) const
 	return true;
 }
 
+Uint8* MemDataChunk::get_compressed_data() {
+	if (lzo_init() != LZO_E_OK) {
+		LOG_ERROR("LZO initialization failed for compression procedure!\n");
+	    return 0;
+	}
+	Uint8* working_memory = new Uint8[LZO1X_999_MEM_COMPRESS];
+	Uint64 dest_size = ((Uint32)ceil(((m_lenght/1024))+1)*16)+m_lenght;
+	Uint8* output_data = new Uint8[dest_size];
+	lzo1x_999_compress(m_data, m_lenght, output_data, &compressed_size, working_memory);
+	delete [] working_memory;
+	return output_data;
+}
 
-
-
+Uint32 MemDataChunk::get_compressed_size() {return (Uint32)compressed_size;}
