@@ -70,9 +70,9 @@ bool CodecRegistry::get_codec(Uint8 codec_code, AbstractMDCodec*& codec) const
 
 
 void CodecRegistry::init() {
-	this->register_codec(new TextMDCodec());
-
+	register_codec(new TextMDCodec());
 	register_codec(new ImageMDCodec());
+	register_codec(new VideoMDCodec());
 }
 
 void CodecRegistry::deinit()

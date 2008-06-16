@@ -55,7 +55,7 @@ private:
 	 * @y: vertical position.
 	 * @pixel: contains pixel color components.
 	 */
-	void SetPixel (SDL_PixelFormat* pixel_format, void* position, Uint16 pitch, Uint16 x, Uint16 y, pixel_container pixel) const;
+	void set_pixel (SDL_PixelFormat* pixel_format, void* position, Uint16 pitch, Uint16 x, Uint16 y, pixel_container pixel) const;
 	
 	/*
 	 * Gets a pixel from a surface.

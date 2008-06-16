@@ -76,7 +76,7 @@ bool ImageStream::save_to_disk(const string& path) const {
 		Uint32 cont = 0;
 		for (Uint16 i=0; i<m_height; i++)
 			for (Uint16 j=0; j<m_width; j++) {
-				SetPixel(temp_surface->format, temp_surface->pixels, pitch, j, i, m_data[cont]);
+				set_pixel(temp_surface->format, temp_surface->pixels, pitch, j, i, m_data[cont]);
 				cont++;
 			}
 		SDL_UnlockSurface(temp_surface);
@@ -92,7 +92,7 @@ bool ImageStream::save_to_disk(const string& path) const {
 	return false;
 }
 
-void ImageStream::SetPixel (SDL_PixelFormat* pixel_format, void* position, Uint16 pitch, Uint16 x, Uint16 y, pixel_container pixel) const {
+void ImageStream::set_pixel (SDL_PixelFormat* pixel_format, void* position, Uint16 pitch, Uint16 x, Uint16 y, pixel_container pixel) const {
 	Uint32 col = SDL_MapRGB(pixel_format, pixel.get_r(), pixel.get_g(), pixel.get_b());
 	Uint8* pPosition = (Uint8*)position;
 	pPosition += (pitch*y);	//vertical shift

@@ -196,7 +196,7 @@ void Application::stream_converter(string output_filename, string input_filename
 		if ((payload_size>1) && (payload_size<64000))
 			codec->set_preferred_payload_size(payload_size);
 		codec->code(stream, &mdstream);
-		mdstream.save_to_disk(output_filename);
+		//mdstream.save_to_disk(output_filename);
 	}
 	else if (is_decoding) {
 		mdstream.load_from_disk(input_filename);

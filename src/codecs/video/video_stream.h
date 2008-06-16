@@ -57,7 +57,7 @@ private:
 	 * @y: vertical position.
 	 * @pixel: contains pixel color components.
 	 */
-	void SetPixel (SDL_PixelFormat* pixel_format, void* position, Uint16 pitch, Uint16 x, Uint16 y, pixel_container pixel) const;
+	void set_pixel (SDL_PixelFormat* pixel_format, void* position, Uint16 pitch, Uint16 x, Uint16 y, pixel_container pixel) const;
 	
 	/*
 	 * Gets a pixel from a surface.
@@ -93,7 +93,7 @@ private:
 	 * Read a video stream from a file.
 	 * @path: file's path.
 	 */
-	void get_video_stream(string path);
+	void get_video_stream(std::string path);
 	
 	/*
 	 * Get next video frame.
@@ -103,7 +103,14 @@ private:
 	 * @*pFrame: pointer to the current video frame.
 	 * @returns: true if operation is succesful
 	 */
-	bool get_next_frame(AVFormatContext* pFormatCtx, AVCodecContext* pCodecCtx, Uint8 videoStream, AVFrame* pFrame);
+	bool get_next_frame(AVFormatContext* p_format_ctx, AVCodecContext* p_codec_ctx, Uint8 video_stream, AVFrame* p_frame);
+	
+	/*
+	 * Save a single frame.
+	 * @p_frame: pointer to a video frame.
+	 * @i_frame: frame number.
+	 */
+	void save_frame(AVFrame* p_frame, int i_frame);
 	
 public:
 	VideoStream();

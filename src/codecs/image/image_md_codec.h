@@ -25,7 +25,7 @@
 #define IMAGE_CODEC_TYPE_CODE 2
 #define IMAGE_CODEC_TYPE_STRING "image"
 
-class ImageMDCodec : public AbstractMDCodec{
+class ImageMDCodec : public AbstractMDCodec {
 private:
 	vector<Uint32> m_seq_counter;
 	pixel_container m_null_pixel;
@@ -40,7 +40,7 @@ private:
 	
 public:
 	/*
-	 * Initialize parameter of a text mdcodec.
+	 * Initialize parameter of an image mdcodec.
 	 */
 	ImageMDCodec();
 	

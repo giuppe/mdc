@@ -25,14 +25,15 @@
 #define VIDEO_CODEC_TYPE_CODE 3
 #define VIDEO_CODEC_TYPE_STRING "video"
 
-class VideoMDCodec : public AbstractMDCodec{
+class VideoMDCodec : public AbstractMDCodec {
 private:
 	vector<Uint8> m_flows_id;
 	vector<Uint32> m_seq_counter;
 	pixel_container m_null_pixel;
+	
 public:
 	/*
-	 * Initialize parameter of a text mdcodec.
+	 * Initialize parameter of a video mdcodec.
 	 */
 	VideoMDCodec();
 	
@@ -41,7 +42,7 @@ public:
 	 * @stream: abstract stream to be coded
 	 * @md_stream: flow group
 	 */
-	void code_frame(AbstractStream* stream, MDStream* md_stream) const;
+	void code(AbstractStream* stream, MDStream* md_stream) const;
 	
 	/*
 	 * Decode the received stream.

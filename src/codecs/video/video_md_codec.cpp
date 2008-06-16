@@ -26,10 +26,10 @@
 VideoMDCodec::VideoMDCodec() {
 	m_seq_counter.push_back(0);
 	m_flows_number = 2;
-	m_preferred_payload_size = 18000; //pixel
+	m_preferred_payload_size = 18330; //pixel
 }
 
-void VideoMDCodec::code_frame(AbstractStream* stream, MDStream* md_stream) const {
+void VideoMDCodec::code(AbstractStream* stream, MDStream* md_stream) const {
 	Uint32 stream_size = stream->get_data_dim();
 	Uint32 flow_dimension = (stream_size/m_flows_number)+1;
 	Uint32 descriptors_number = (Uint32)ceil(((double)flow_dimension)/((double)m_preferred_payload_size));
@@ -62,7 +62,9 @@ void VideoMDCodec::code_frame(AbstractStream* stream, MDStream* md_stream) const
 						delete stream_data;
 					}
 				offset += m_flows_number*k;
-				descriptor->set_payload(payload);
+				MemDataChunk compressed_payload;
+				compressed_payload.append_data(payload.get_compressed_size(), payload.get_compressed_data());
+				descriptor->set_payload(compressed_payload);
 				md_stream->set_descriptor(descriptor);
 			}
 		}
