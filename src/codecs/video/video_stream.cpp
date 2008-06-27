@@ -268,15 +268,15 @@ void VideoStream::get_video_stream(std::string path) {
 	char* char_path = new char[path.max_size()];
 	path.copy(char_path, path.size());
 	AVFormatContext* p_format_ctx;
-	if (av_open_input_file(&p_format_ctx, char_path, NULL, 0, NULL)!=0) {
+	if (av_open_input_file(&p_format_ctx, char_path, NULL, 0, NULL) != 0) {
 		LOG_ERROR("Could not open file: "+path);
 		return;
 	}
-	if(av_find_stream_info(p_format_ctx)<0) {
+	if (av_find_stream_info(p_format_ctx) < 0) {
 		LOG_ERROR("Couldn't find stream information.");
 		return;
 	}
-	dump_format(p_format_ctx, 0, char_path, false); //Print file content informations
+	//dump_format(p_format_ctx, 0, char_path, false); //Print file content informations
 	delete [] char_path;
 	bool found_video_stream = false;
 	Uint8 video_stream;
@@ -310,10 +310,12 @@ void VideoStream::get_video_stream(std::string path) {
 	Uint16 num_bytes = avpicture_get_size(PIX_FMT_RGB24, m_width, m_height);
 	Uint8* buffer = new Uint8[num_bytes];	
 	avpicture_fill((AVPicture*)p_frame_rgb, buffer, PIX_FMT_RGB24, m_width, m_height);
-	Uint64 j=0;
-	while(get_next_frame(p_format_ctx, p_codec_ctx, video_stream, p_frame)) {
+	Uint16 j = 0, secs = 0;
+	if (p_format_ctx->duration > 0)
+		secs = p_format_ctx->duration/AV_TIME_BASE;
+	while (get_next_frame(p_format_ctx, p_codec_ctx, video_stream, p_frame)) {
 		img_convert((AVPicture*)p_frame_rgb, PIX_FMT_RGB24, (AVPicture*)p_frame, p_codec_ctx->pix_fmt, m_width, m_height);
-		if (++j <= 1) save_frame(p_frame_rgb, j);
+		if (++j <= secs*25) save_frame(p_frame_rgb, j);
 	}
 	delete [] buffer;
 	av_free(p_frame_rgb);
@@ -341,69 +343,35 @@ void VideoStream::save_frame(AVFrame* p_frame, int i_frame) {
 
 bool VideoStream::get_next_frame(AVFormatContext* p_format_ctx, AVCodecContext* p_codec_ctx, Uint8 video_stream, AVFrame* p_frame) {
 	static AVPacket packet;
-	static int      bytesRemaining=0;
-	static uint8_t  *rawData;
-	static bool     fFirstTime=true;
-	int             bytesDecoded;
-	int             frameFinished;
-
-	// First time we're called, set packet.data to NULL to indicate it
-	// doesn't have to be freed
-	if(fFirstTime)
-	{
-		fFirstTime=false;
-		packet.data=NULL;
+	static Uint64 bytes_remaining = 0;
+	static Uint8* raw_data;
+	static bool f_first_time = true;
+	Uint32 bytes_decoded;
+	int frame_finished;
+	if (f_first_time) {
+		f_first_time = false;
+		packet.data = NULL;
 	}
-
-	// Decode packets until we have decoded a complete frame
-	while(true)
-	{
-		// Work on the current packet until we have decoded all of it
-		while(bytesRemaining > 0)
-		{
-			// Decode the next chunk of data
-			bytesDecoded=avcodec_decode_video(p_codec_ctx, p_frame, &frameFinished, rawData, bytesRemaining);
-
-			// Was there an error?
-			if(bytesDecoded < 0)
-			{
-				fprintf(stderr, "Error while decoding frame\n");
+	while (true) {
+		while (bytes_remaining > 0) {
+			bytes_decoded = avcodec_decode_video(p_codec_ctx, p_frame, &frame_finished, raw_data, bytes_remaining);
+			if (bytes_decoded < 0) {
+				LOG_ERROR("Error while decoding frame.\n");
 				return false;
 			}
-
-			bytesRemaining-=bytesDecoded;
-			rawData+=bytesDecoded;
-
-			// Did we finish the current frame? Then we can return
-			if(frameFinished)
-				return true;
+			bytes_remaining -= bytes_decoded;
+			raw_data += bytes_decoded;
+			if (frame_finished) return true;
 		}
-
-		// Read the next packet, skipping all packets that aren't for this
-		// stream
-		do
-		{
-			// Free old packet
-			if(packet.data!=NULL)
-				av_free_packet(&packet);
-
-			// Read new packet
-			if(av_read_packet(p_format_ctx, &packet)<0)
-				goto loop_exit;
-		} while(packet.stream_index!=video_stream);
-
-		bytesRemaining=packet.size;
-		rawData=packet.data;
+		do {
+			if (packet.data != NULL) av_free_packet(&packet);
+			if (av_read_packet(p_format_ctx, &packet) < 0) goto loop_exit;
+		} while(packet.stream_index != video_stream);
+		bytes_remaining = packet.size;
+		raw_data = packet.data;
 	}
-
 	loop_exit:
-
-	// Decode the rest of the last frame
-	bytesDecoded=avcodec_decode_video(p_codec_ctx, p_frame, &frameFinished, rawData, bytesRemaining);
-
-	// Free last packet
-	if(packet.data!=NULL)
-		av_free_packet(&packet);
-
-	return frameFinished!=0;
+	bytes_decoded = avcodec_decode_video(p_codec_ctx, p_frame, &frame_finished, raw_data, bytes_remaining);
+	if (packet.data != NULL) av_free_packet(&packet);
+	return (frame_finished != 0);
 }
