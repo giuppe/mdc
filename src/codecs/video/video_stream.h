@@ -31,14 +31,14 @@ private:
 	vector<pixel_container> m_data;
 	string m_stream_name;
 	string m_hash;
-	SDL_Surface* m_current_frame;
+	AVPicture* m_current_frame;//alla fine controllare se serve realmente
 	SDL_PixelFormat* m_pixel_format;
 	Uint16 m_width;
 	Uint16 m_height;
 	Uint8 m_bpp;
 	bool m_null_pixel_present;
 	vector<vector<pixel_container> > m_flow;
-	Uint32 m_frame_number;
+	Uint32 m_last_frame_number;
 	
 	/*
 	 * Takes pixels contained in an RGB container and fills up a DataChunk with them.
@@ -60,12 +60,13 @@ private:
 	void set_pixel (SDL_PixelFormat* pixel_format, void* position, Uint16 pitch, Uint16 x, Uint16 y, pixel_container pixel) const;
 	
 	/*
-	 * Gets a pixel from a surface.
+	 * Gets a pixel from a video frame.
+	 * @frame: video frame.
 	 * @x: orizontal position.
 	 * @y: vertical position.
 	 * @returns: pixel container containing color components.
 	 */
-	pixel_container get_pixel(Uint16 x, Uint16 y);
+	pixel_container get_pixel(AVFrame* frame, Uint16 x, Uint16 y);
 	
 	/*
 	 * Calculates a position by an initial point in stream and a reference direction.
@@ -244,7 +245,7 @@ public:
 	 * Gets frames number in stream.
 	 * @returns: frames number.
 	 */
-	Uint32 get_frame_number();
+	Uint32 get_last_frame_number();
 	
 	/*
 	 * Sets null pixel presence in stream.

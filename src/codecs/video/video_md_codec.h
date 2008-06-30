@@ -31,26 +31,39 @@ private:
 	vector<Uint32> m_seq_counter;
 	pixel_container m_null_pixel;
 	
+	/*
+	 * Code a single frame of a stream that to be sent.
+	 * @stream: abstract stream to be coded (contains stream description)
+	 * @stream_frame: contains data corresponding to a single frame of a stream
+	 * @md_stream: flow group
+	 * @descriptors_number: total descriptors number
+	 * @i: flow number index
+	 * @frame_number: current frame number
+	 * @max_payload_size: maximum payload size
+	 * @offset: data stream offset
+	 */
+	void code_single_frame(AbstractStream* stream, MemDataChunk* stream_frame, MDStream* md_stream, Uint32 descriptors_number, Uint8 i, Uint32 frame_number, Uint16 max_payload_size, Uint64 offset, Uint8* current_frame) const;
+
 public:
 	/*
 	 * Initialize parameter of a video mdcodec.
 	 */
 	VideoMDCodec();
-	
+
 	/*
-	 * Code a single frame of a stream that to be sent.
+	 * Code a stream that to be sent.
 	 * @stream: abstract stream to be coded
 	 * @md_stream: flow group
 	 */
 	void code(AbstractStream* stream, MDStream* md_stream) const;
-	
+
 	/*
 	 * Decode the received stream.
 	 * @md_stream: flow group
 	 * @stream: abstract stream to be decoded
 	 */
 	void decode(const MDStream* md_stream, AbstractStream* stream) const;
-	
+
 	~VideoMDCodec();
 
 	/*
@@ -65,19 +78,19 @@ public:
 	 * @size: desidered size of each descriptor
 	 */
 	void set_preferred_payload_size (Uint16 size);
-	
+
 	/*
 	 * Sets null pixel color components.
 	 * @size: desidered size of each descriptor
 	 */
 	void set_null_pixel_colors(Uint8 r, Uint8 g, Uint8 b);
-	
+
 	/*
 	 * Gets null pixel color components.
 	 * @returns: pixel color components
 	 */
 	pixel_container get_null_pixel_colors();
-	
+
 	std::string get_codec_type_string(){return std::string(VIDEO_CODEC_TYPE_STRING);}
 	Uint8 get_codec_type_code(){return VIDEO_CODEC_TYPE_CODE;}
 };

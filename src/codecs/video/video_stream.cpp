@@ -31,12 +31,12 @@ VideoStream::VideoStream() {
 	m_height = 0;
 	m_null_pixel_present = false;
 	m_current_frame = NULL;
-	m_frame_number = 0;
+	m_last_frame_number = 0;
 	av_register_all();
 }
 
-pixel_container VideoStream::get_pixel(Uint16 x, Uint16 y) {
-	Uint8* p = (Uint8 *)m_current_frame->pixels+(y*m_current_frame->pitch)+(x*3);
+pixel_container VideoStream::get_pixel(AVFrame* frame, Uint16 x, Uint16 y) {
+	Uint8* p = (Uint8*)frame->data[0]+(y*frame->linesize[0])+(x*3);
 	pixel_container pc;
 	if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
 		pc.set_r(p[0]);
@@ -51,17 +51,12 @@ pixel_container VideoStream::get_pixel(Uint16 x, Uint16 y) {
 	return pc;
 }
 
-bool VideoStream::load_from_disk(const string& path) {//funziona solo sul primo frame
+bool VideoStream::load_from_disk(const string& path) {
 	if (path.size() <= 0) return false;
 	m_stream_name = path.substr(path.find_last_of("/")+1, path.find_last_of("."));
-	m_bpp = 24;
 	m_path = path;
-	get_video_stream(path);
-	/*m_current_frame = SDL_LoadBMP(path.c_str());
 	m_data.clear();
-	for (Uint16 y=0; y<m_height; y++)
-		for (Uint16 x=0; x<m_width; x++)
-			m_data.push_back(get_pixel(x, y));*/
+	get_video_stream(path);
 	return true;
 }
 
@@ -162,7 +157,7 @@ string VideoStream::compute_hash_md5() const {
 }
 
 VideoStream::~VideoStream() {
-	if (m_current_frame != NULL) SDL_FreeSurface(m_current_frame);
+	if (m_current_frame != NULL) av_free(m_current_frame);
 }
 
 void VideoStream::set_data (const MemDataChunk& data) {
@@ -171,17 +166,13 @@ void VideoStream::set_data (const MemDataChunk& data) {
 	deserialize(&data);
 }
 
-Uint8 VideoStream::get_bits_per_pixel() {
-	//return m_pixel_format->BitsPerPixel;
-	return 24;
-}
-
+Uint8 VideoStream::get_bits_per_pixel() {return 24;}
 Uint16 VideoStream::get_width() {return m_width;}
 Uint16 VideoStream::get_height() {return m_height;}
 void VideoStream::set_width(Uint16 width) {m_width = width;}
-Uint32 VideoStream::get_frame_number() {return m_frame_number;}
+Uint32 VideoStream::get_last_frame_number() {return m_last_frame_number;}
 void VideoStream::set_height(Uint16 height) {m_height = height;}
-void VideoStream::set_frame_number(Uint32 number) {m_frame_number = number;}
+void VideoStream::set_frame_number(Uint32 number) {m_last_frame_number = number;}
 void VideoStream::set_bits_per_pixel(Uint8 bpp) {m_bpp = bpp;}
 
 void VideoStream::interpolate_pixels(pixel_container pc) {
@@ -310,12 +301,19 @@ void VideoStream::get_video_stream(std::string path) {
 	Uint16 num_bytes = avpicture_get_size(PIX_FMT_RGB24, m_width, m_height);
 	Uint8* buffer = new Uint8[num_bytes];	
 	avpicture_fill((AVPicture*)p_frame_rgb, buffer, PIX_FMT_RGB24, m_width, m_height);
-	Uint16 j = 0, secs = 0;
+	Uint16 secs = 0;
 	if (p_format_ctx->duration > 0)
 		secs = p_format_ctx->duration/AV_TIME_BASE;
 	while (get_next_frame(p_format_ctx, p_codec_ctx, video_stream, p_frame)) {
 		img_convert((AVPicture*)p_frame_rgb, PIX_FMT_RGB24, (AVPicture*)p_frame, p_codec_ctx->pix_fmt, m_width, m_height);
-		if (++j <= secs*25) save_frame(p_frame_rgb, j);
+		if (++m_last_frame_number <= secs*25) {//must be secs*25
+			LOG_INFO("Reading frame "<<m_last_frame_number<<" from disk.");
+			//save_frame(p_frame_rgb, m_last_frame_number);
+			for (Uint16 y=0; y<m_height; y++)
+				for (Uint16 x=0; x<m_width; x++)
+					m_data.push_back(get_pixel(p_frame_rgb, x, y));
+		}
+		else break;
 	}
 	delete [] buffer;
 	av_free(p_frame_rgb);
