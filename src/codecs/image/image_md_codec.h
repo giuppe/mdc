@@ -27,7 +27,6 @@
 
 class ImageMDCodec : public AbstractMDCodec {
 private:
-	vector<Uint32> m_seq_counter;
 	pixel_container m_null_pixel;
 	
 	/*

@@ -27,8 +27,6 @@
 
 class VideoMDCodec : public AbstractMDCodec {
 private:
-	vector<Uint8> m_flows_id;
-	vector<Uint32> m_seq_counter;
 	pixel_container m_null_pixel;
 	
 	/*
@@ -42,7 +40,7 @@ private:
 	 * @max_payload_size: maximum payload size
 	 * @offset: data stream offset
 	 */
-	void code_single_frame(AbstractStream* stream, MemDataChunk* stream_frame, MDStream* md_stream, Uint32 descriptors_number, Uint8 i, Uint32 frame_number, Uint16 max_payload_size, Uint64 offset, Uint8* current_frame) const;
+	void extract_frame_description(AbstractStream* stream, MDStream* md_stream, MemDataChunk* stream_frame, Uint32 descriptors_number, Uint8 i, Uint32 frame_number, Uint8* current_frame) const;
 
 public:
 	/*

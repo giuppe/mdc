@@ -27,10 +27,6 @@
 
 
 class TextMDCodec : public AbstractMDCodec{
-private:
-	vector<Uint8> m_flows_id;
-	vector<Uint32> m_seq_counter;
-
 public:
 	/*
 	 * Initialize parameter of a text mdcodec.

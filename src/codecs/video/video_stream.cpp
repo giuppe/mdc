@@ -30,9 +30,10 @@ VideoStream::VideoStream() {
 	m_width = 0;
 	m_height = 0;
 	m_null_pixel_present = false;
-	m_current_frame = NULL;
 	m_last_frame_number = 0;
 	av_register_all();
+	m_bitrate = 0;
+	m_gop_size = 0;
 }
 
 pixel_container VideoStream::get_pixel(AVFrame* frame, Uint16 x, Uint16 y) {
@@ -59,6 +60,9 @@ bool VideoStream::load_from_disk(const string& path) {
 	get_video_stream(path);
 	return true;
 }
+
+std::string VideoStream::get_path() {return m_path;}
+Uint32 VideoStream::get_bitrate() {return m_bitrate;}
 
 bool VideoStream::save_to_disk(const string& path) const {
 	/*if (path.size()>0 && m_flow.size()>0) {
@@ -156,9 +160,7 @@ string VideoStream::compute_hash_md5() const {
 	return Hash::md5_from_file(m_path);
 }
 
-VideoStream::~VideoStream() {
-	if (m_current_frame != NULL) av_free(m_current_frame);
-}
+VideoStream::~VideoStream() {}
 
 void VideoStream::set_data (const MemDataChunk& data) {
 	Uint32 real_data_size = data.get_lenght();
@@ -255,6 +257,8 @@ void VideoStream::set_pixel_in_data(Uint32 position, Uint8 r, Uint8 g, Uint8 b) 
 	m_data[position].set_b(b);
 }
 
+Uint8 VideoStream::get_gop_size() {return m_gop_size;}
+
 void VideoStream::get_video_stream(std::string path) {
 	char* char_path = new char[path.max_size()];
 	path.copy(char_path, path.size());
@@ -281,6 +285,8 @@ void VideoStream::get_video_stream(std::string path) {
 		return;
 	}
 	AVCodecContext* p_codec_ctx = p_format_ctx->streams[video_stream]->codec;
+	m_bitrate = p_codec_ctx->bit_rate;
+	m_gop_size = p_codec_ctx->gop_size;
 	AVCodec* p_codec = avcodec_find_decoder(p_codec_ctx->codec_id);
 	if (p_codec == NULL) {
 		LOG_ERROR("Codec not found.");
@@ -306,7 +312,7 @@ void VideoStream::get_video_stream(std::string path) {
 		secs = p_format_ctx->duration/AV_TIME_BASE;
 	while (get_next_frame(p_format_ctx, p_codec_ctx, video_stream, p_frame)) {
 		img_convert((AVPicture*)p_frame_rgb, PIX_FMT_RGB24, (AVPicture*)p_frame, p_codec_ctx->pix_fmt, m_width, m_height);
-		if (++m_last_frame_number <= secs*25) {//must be secs*25
+		if (++m_last_frame_number <= 25) {//must be secs*25
 			LOG_INFO("Reading frame "<<m_last_frame_number<<" from disk.");
 			//save_frame(p_frame_rgb, m_last_frame_number);
 			for (Uint16 y=0; y<m_height; y++)
