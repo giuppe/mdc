@@ -26,9 +26,7 @@ Stream hash is an hash extracted from the stream's file name. Subsequently, ther
 real file name ending ".mdc".
 
 Flow id is an identifier of a single flow in a MDC text stream. Is strongly reccomended to 
-set this value to a base 2 multiple between 2 and 64 value. But is also possible to set this
-value at any integer value from 1 to 64 flows. Coded file will contain the exact flows
-number indicated.
+set this value to 1, 2 or 4 value. Coded file will contain the exact flows number indicated.
 
 Sequence number is a value that takes count of single descriptors, but it's used by
 algorithm as a user independent parameter.
@@ -37,10 +35,11 @@ Codec name is the name of codec: in this case it's "video".
 
 For video codec the "codec parameter" and has been added with 9 bytes size. These bytes
 represents the frame number (4 bytes), image width (2 bytes), height (2 bytes) and number of
-bits used for coding colours for each pixel (1 byte).
+bits used for coding colours for each pixel (1 byte). Only first descriptor has codec
+parameters.
 
 Payload size is the size of payload of a single descriptor and contains a value, for video
-implementation, between 10 and 18.330 pixels. This value represents the user preferred
+implementation, between 10 and 19.200 pixels. This value represents the user preferred
 payload size. The algorithm can vary it if it's necessary for load balacing between
 descriptors and flows: the product between flows number and real descriptor payload must
 approximate as best as possible image file size (it's a lower bound).

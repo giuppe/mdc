@@ -28,19 +28,15 @@
 class VideoMDCodec : public AbstractMDCodec {
 private:
 	pixel_container m_null_pixel;
-	
+
 	/*
-	 * Code a single frame of a stream that to be sent.
-	 * @stream: abstract stream to be coded (contains stream description)
+	 * Select a single sub-frame of original stream that to be coded.
 	 * @stream_frame: contains data corresponding to a single frame of a stream
-	 * @md_stream: flow group
-	 * @descriptors_number: total descriptors number
 	 * @i: flow number index
-	 * @frame_number: current frame number
-	 * @max_payload_size: maximum payload size
-	 * @offset: data stream offset
+	 * @frame_dimension: current frame dimension in pixel
+	 * @returns: pointer to a frame descriptor
 	 */
-	void extract_frame_description(AbstractStream* stream, MDStream* md_stream, MemDataChunk* stream_frame, Uint32 descriptors_number, Uint8 i, Uint32 frame_number, Uint8* current_frame) const;
+	Uint8* extract_frame_descriptor(MemDataChunk* stream_frame, Uint8 i, Uint32 frame_dimension) const;
 
 public:
 	/*

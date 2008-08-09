@@ -63,7 +63,7 @@ int Application::main(int argc, char** argv)
 		print_usage();
 		return 0;
 	}
-	
+
 	if (m_cli_config->get_is_converter()) 
 	{
 		start_coder();
@@ -85,7 +85,7 @@ void Application::start_coder()
 	string codec_name = m_cli_config->get_codec();
 	Uint32 flows_number = m_cli_config->get_flows_number();
 	Uint32 payload_size = m_cli_config->get_payload_size();
-	
+
 	if (input_filename=="") {
 		cout<<"Input file parameter is missing.\n\n";
 		return;
@@ -109,7 +109,7 @@ void Application::start_scheduler() {
 	Scheduler* sched = new Scheduler();
 	ClientTestAction* client = new ClientTestAction();
 
-	
+
 	SiteManager* site_manager = new SiteManager();
 	Receiver* receiver = new Receiver();
 	SenderAction* sender_action = new SenderAction();
@@ -175,7 +175,7 @@ void Application::deinit_all() {
 void Application::stream_converter(string output_filename, string input_filename, string codec_name, Uint32 flows_number, Uint32 payload_size) {
 	bool is_coding = m_cli_config->get_is_coding();
 	bool is_decoding = m_cli_config->get_is_decoding();
-	
+
 	DEBUG_OUT("converting "<<input_filename<<" to "<<output_filename<<"\n");
 	DEBUG_OUT("\t using "<<codec_name<<" as codec\n");
 	CodecRegistry* codecReg = CodecRegistry::instance();
@@ -196,16 +196,17 @@ void Application::stream_converter(string output_filename, string input_filename
 		if ((payload_size>1) && (payload_size<64000))
 			codec->set_preferred_payload_size(payload_size);
 		codec->code(stream, &mdstream);
-		mdstream.save_to_disk(output_filename);
+		if (codec_name != "video")
+			mdstream.save_to_disk(output_filename);
 	}
 	else if (is_decoding) {
 		mdstream.load_from_disk(input_filename);
 		if ((codec_name=="image") || (codec_name=="video"))
 			dynamic_cast<ImageMDCodec*>(codec)->set_null_pixel_colors(0, 255, 0);
-		codec->decode(&mdstream, stream);
-		if (((codec_name=="image") || (codec_name=="video")) && (dynamic_cast<ImageStream*>(stream)->get_null_pixel_presence()))
-			dynamic_cast<ImageStream*>(stream)->interpolate_pixels(dynamic_cast<ImageMDCodec*>(codec)->get_null_pixel_colors());
-		stream->save_to_disk(output_filename);
+			codec->decode(&mdstream, stream);
+			if (((codec_name=="image") || (codec_name=="video")) && (dynamic_cast<ImageStream*>(stream)->get_null_pixel_presence()))
+				dynamic_cast<ImageStream*>(stream)->interpolate_pixels(dynamic_cast<ImageMDCodec*>(codec)->get_null_pixel_colors());
+				stream->save_to_disk(output_filename);
 	}
 	delete stream;
 }

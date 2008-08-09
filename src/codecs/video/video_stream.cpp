@@ -23,6 +23,7 @@
 #include "../image/pixel_container.h"
 #include "ffmpeg/avcodec.h"
 #include "ffmpeg/avformat.h"
+#include <cmath>
 
 VideoStream::VideoStream() {
 	m_data.resize(0);
@@ -40,14 +41,14 @@ pixel_container VideoStream::get_pixel(AVFrame* frame, Uint16 x, Uint16 y) {
 	Uint8* p = (Uint8*)frame->data[0]+(y*frame->linesize[0])+(x*3);
 	pixel_container pc;
 	if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-		pc.set_r(p[0]);
-		pc.set_g(p[1]);
-		pc.set_b(p[2]);
-	}
-	else {
 		pc.set_r(p[2]);
 		pc.set_g(p[1]);
 		pc.set_b(p[0]);
+	}
+	else {
+		pc.set_r(p[0]);
+		pc.set_g(p[1]);
+		pc.set_b(p[2]);
 	}
 	return pc;
 }
@@ -61,45 +62,8 @@ bool VideoStream::load_from_disk(const string& path) {
 	return true;
 }
 
-std::string VideoStream::get_path() {return m_path;}
-Uint32 VideoStream::get_bitrate() {return m_bitrate;}
-
-bool VideoStream::save_to_disk(const string& path) const {
-	/*if (path.size()>0 && m_flow.size()>0) {
-		SDL_Surface* unit_test_pixel = SDL_LoadBMP("true_color.bmp");
-		Uint16 pitch = m_width*(m_bpp/8);
-		SDL_PixelFormat* pf = unit_test_pixel->format;
-		//TODO ciclo (indice k) su tutti i frames contenuti in m_flow
-		SDL_Surface* temp_frame = SDL_CreateRGBSurface(SDL_SWSURFACE, m_width, m_height, m_bpp, pf->Rmask, pf->Gmask, pf->Bmask, pf->Amask);
-		SDL_LockSurface(temp_frame);
-		Uint32 cont = 0;
-		for (Uint16 i=0; i<m_height; i++)
-			for (Uint16 j=0; j<m_width; j++) {
-				set_pixel(temp_frame->format, temp_frame->pixels, pitch, j, i, m_data[cont]); //sostituire m_data con m_flow
-				cont++;
-			}
-		SDL_UnlockSurface(temp_frame);
-		SDL_Surface* final_frame = SDL_CreateRGBSurfaceFrom(temp_frame->pixels, m_width, m_height, m_bpp, pitch, temp_frame->format->Rmask, temp_frame->format->Gmask, temp_frame->format->Bmask, temp_frame->format->Amask);
-		//controllare il formato dati richiesto dalle librerie per la codifica
-		//salvataggio di flow in MPEG
-		if (SDL_SaveBMP (final_frame, path.c_str()) == 0) {
-			SDL_FreeSurface(temp_frame);
-			SDL_FreeSurface(final_frame);
-			SDL_FreeSurface(unit_test_pixel);
-			return true;
-		}
-		else LOG_ERROR("SDL_SaveBMP failed:" << SDL_GetError());//TODO modificare per MPEG
-	}
-	return false;*/
-}
-
-void VideoStream::set_pixel (SDL_PixelFormat* pixel_format, void* position, Uint16 pitch, Uint16 x, Uint16 y, pixel_container pixel) const {
-	Uint32 col = SDL_MapRGB(pixel_format, pixel.get_r(), pixel.get_g(), pixel.get_b());
-	Uint8* pPosition = (Uint8*)position;
-	pPosition += (pitch*y);	//vertical shift
-	pPosition += (3*x);		//orizontal shift
-	memcpy (pPosition, &col, 3);
-}
+bool VideoStream::save_to_disk(const string& path) const {}
+void VideoStream::set_pixel (SDL_PixelFormat* pixel_format, void* position, Uint16 pitch, Uint16 x, Uint16 y, pixel_container pixel) const {}
 
 MemDataChunk& VideoStream::get_data(Uint64 offset, Uint64 size) const {
 	MemDataChunk* d = new MemDataChunk();
@@ -113,151 +77,32 @@ MemDataChunk& VideoStream::get_data(Uint64 offset, Uint64 size) const {
 	return *d;
 }
 
-
-MemDataChunk& VideoStream::fill_up_DataChunk (MemDataChunk* d, pixel_container* buffer) const {
-	d->append_Uint8(buffer->get_r());
-	d->append_Uint8(buffer->get_g());
-	d->append_Uint8(buffer->get_b());
-	return *d;
-}
-
-Uint32 VideoStream::get_data_dim() const {return m_data.size();}
-
-void VideoStream::set_stream_name(string& name) {
-	if (name.size() > 0)
-		m_stream_name = name;
-}
-
+MemDataChunk& VideoStream::fill_up_DataChunk (MemDataChunk* d, pixel_container* buffer) const {}
+Uint32 VideoStream::get_data_dim() const {}
+void VideoStream::set_stream_name(string& name) {}
 string VideoStream::get_stream_name() const {return m_stream_name;}
 
 MemDataChunk& VideoStream::serialize() const {
 	MemDataChunk* dc = new MemDataChunk();
 	pixel_container buffer;
 	for (Uint32 i=0; i<m_data.size(); i++)
-		(*dc)+=&(m_data[i].serialize());
-	return *dc;			
+		(*dc) += &(m_data[i].serialize());
+	return *dc;
 }
 
-bool VideoStream::deserialize(const IDataChunk* datachunk) {
-	Uint32 i = 0;
-	DataChunkIterator it = datachunk->get_iterator();
-	pixel_container curr_pixel;
-	Uint8 r,g,b;
-	while (it.has_next()) {
-		it.get_Uint8(r);
-		it.get_Uint8(g);
-		it.get_Uint8(b);	
-		curr_pixel.set_r(r);
-		curr_pixel.set_g(g);
-		curr_pixel.set_b(b);
-		m_data[i] = curr_pixel;
-		i++;
-	}
-	return true;
-}
-
-string VideoStream::compute_hash_md5() const {
-	return Hash::md5_from_file(m_path);
-}
-
+bool VideoStream::deserialize(const IDataChunk* datachunk) {}
+string VideoStream::compute_hash_md5() const {}
 VideoStream::~VideoStream() {}
-
-void VideoStream::set_data (const MemDataChunk& data) {
-	Uint32 real_data_size = data.get_lenght();
-	m_data.resize(real_data_size/3);
-	deserialize(&data);
-}
-
+void VideoStream::set_data (const MemDataChunk& data) {}
 Uint8 VideoStream::get_bits_per_pixel() {return 24;}
 Uint16 VideoStream::get_width() {return m_width;}
 Uint16 VideoStream::get_height() {return m_height;}
 void VideoStream::set_width(Uint16 width) {m_width = width;}
 Uint32 VideoStream::get_last_frame_number() {return m_last_frame_number;}
 void VideoStream::set_height(Uint16 height) {m_height = height;}
-void VideoStream::set_frame_number(Uint32 number) {m_last_frame_number = number;}
 void VideoStream::set_bits_per_pixel(Uint8 bpp) {m_bpp = bpp;}
-
-void VideoStream::interpolate_pixels(pixel_container pc) {
-	if (m_data.size() == 0) return;
-	Uint8 new_r;
-	Uint8 new_g;
-	Uint8 new_b;
-	for (Uint32 i=0; i<m_data.size(); i++)
-		if (((m_data[i].get_r()==pc.get_r())||(m_data[i].get_r()==0)) && ((m_data[i].get_g()==pc.get_g())||(m_data[i].get_g()==0)) && ((m_data[i].get_b()==pc.get_b())||(m_data[i].get_b()==0))) {
-			if (i%m_width == 0) { 									//pixels on extreme left
-				new_r = m_data[calculate_position(i, 3, pc)].get_r();
-				new_g = m_data[calculate_position(i, 3, pc)].get_g();
-				new_b = m_data[calculate_position(i, 3, pc)].get_b();
-				set_pixel_in_data(i, new_r, new_g, new_b);
-			}
-			else if (i == Uint32(m_width-1)) { 						//pixels on extreme right
-				new_r = m_data[calculate_position(i, 4, pc)].get_r();
-				new_g = m_data[calculate_position(i, 4, pc)].get_g();
-				new_b = m_data[calculate_position(i, 4, pc)].get_b();
-				set_pixel_in_data(i, new_r, new_g, new_b);
-			}
-			else if ((i>0) && (i<Uint32(m_width-1))) { 				//pixels on first row
-				new_r = m_data[calculate_position(i, 2, pc)].get_r();
-				new_g = m_data[calculate_position(i, 2, pc)].get_g();
-				new_b = m_data[calculate_position(i, 2, pc)].get_b();
-				set_pixel_in_data(i, new_r, new_g, new_b);
-			}
-			else if (Uint32(i/m_width)+1 == Uint32(m_height-1)) {	//pixels on last row
-				new_r = m_data[calculate_position(i, 1, pc)].get_r();
-				new_g = m_data[calculate_position(i, 1, pc)].get_g();
-				new_b = m_data[calculate_position(i, 1, pc)].get_b();
-				set_pixel_in_data(i, new_r, new_g, new_b);
-			}
-			else {
-				new_r = (m_data[calculate_position(i, 1, pc)].get_r()+m_data[calculate_position(i, 2, pc)].get_r()+m_data[calculate_position(i, 3, pc)].get_r()+m_data[calculate_position(i, 4, pc)].get_r())/4;
-				new_g = (m_data[calculate_position(i, 1, pc)].get_g()+m_data[calculate_position(i, 2, pc)].get_g()+m_data[calculate_position(i, 3, pc)].get_g()+m_data[calculate_position(i, 4, pc)].get_g())/4;
-				new_b = (m_data[calculate_position(i, 1, pc)].get_b()+m_data[calculate_position(i, 2, pc)].get_b()+m_data[calculate_position(i, 3, pc)].get_b()+m_data[calculate_position(i, 4, pc)].get_b())/4;
-				set_pixel_in_data(i, new_r, new_g, new_b);
-			}
-		}
-}
-
-Uint32 VideoStream::calculate_position (Uint32 current_position, Uint8 direction, pixel_container pc) {
-	Uint32 final_position = current_position;
-	switch (direction) {
-	case 4: // west direction
-		if ((m_data[current_position-1].get_r()!=pc.get_r()) || (m_data[current_position-1].get_g()!=pc.get_g()) || (m_data[current_position-1].get_b()!=pc.get_b()))
-			final_position--;
-		else final_position -= 2;
-		break;
-	case 3: // east direction
-		if ((m_data[current_position+1].get_r()!=pc.get_r()) || (m_data[current_position+1].get_g()!=pc.get_g()) || (m_data[current_position+1].get_b()!=pc.get_b()))
-			final_position++;
-		else final_position += 2;
-		break;
-	case 1: // north direction
-		if ((m_data[current_position-m_width].get_r()!=pc.get_r()) || (m_data[current_position-m_width].get_g()!=pc.get_g()) || (m_data[current_position-m_width].get_b()!=pc.get_b()))
-			final_position -= m_width;
-		else final_position -= m_width-1;
-		break;
-	case 2: // south direction
-		if (current_position+m_width < Uint32(m_width*m_height)) {
-			if ((m_data[current_position+m_width].get_r()!=pc.get_r()) || (m_data[current_position+m_width].get_g()!=pc.get_g()) || (m_data[current_position+m_width].get_b()!=pc.get_b()))
-				final_position += m_width;
-			else final_position += m_width+1;
-		}
-		break;
-	default:
-		break;
-	}
-	return final_position;
-}
-
 bool VideoStream::get_null_pixel_presence() {return m_null_pixel_present;}
 void VideoStream::set_null_pixel_presence(bool presence) {m_null_pixel_present = presence;}
-
-void VideoStream::set_pixel_in_data(Uint32 position, Uint8 r, Uint8 g, Uint8 b) {
-	m_data[position].set_r(r);
-	m_data[position].set_g(g);
-	m_data[position].set_b(b);
-}
-
-Uint8 VideoStream::get_gop_size() {return m_gop_size;}
 
 void VideoStream::get_video_stream(std::string path) {
 	char* char_path = new char[path.max_size()];
@@ -313,7 +158,7 @@ void VideoStream::get_video_stream(std::string path) {
 	while (get_next_frame(p_format_ctx, p_codec_ctx, video_stream, p_frame)) {
 		img_convert((AVPicture*)p_frame_rgb, PIX_FMT_RGB24, (AVPicture*)p_frame, p_codec_ctx->pix_fmt, m_width, m_height);
 		if (++m_last_frame_number <= 25) {//must be secs*25
-			LOG_INFO("Reading frame "<<m_last_frame_number<<" from disk.");
+			//LOG_INFO("Reading frame "<<m_last_frame_number<<" from disk.");
 			//save_frame(p_frame_rgb, m_last_frame_number);
 			for (Uint16 y=0; y<m_height; y++)
 				for (Uint16 x=0; x<m_width; x++)
@@ -329,10 +174,9 @@ void VideoStream::get_video_stream(std::string path) {
 	return;
 }
 
-void VideoStream::save_frame(AVFrame* p_frame, int i_frame) {
+void VideoStream::save_frame(AVFrame* p_frame, Uint32 i_frame) {
 	FILE *p_file;
 	char sz_filename[32];
-	int  y;
 	sprintf(sz_filename, "frame%d.ppm", i_frame);
 	p_file = fopen(sz_filename, "wb");
 	if (p_file == NULL) {
@@ -340,7 +184,7 @@ void VideoStream::save_frame(AVFrame* p_frame, int i_frame) {
 		return;
 	}
 	fprintf(p_file, "P6\n%d %d\n255\n", m_width, m_height);
-	for (y=0; y<m_height; y++)
+	for (Uint16 y=0; y<m_height; y++)
 		fwrite(p_frame->data[0]+y*p_frame->linesize[0], 1, m_width*3, p_file);
 	fclose(p_file);
 }
@@ -378,4 +222,147 @@ bool VideoStream::get_next_frame(AVFormatContext* p_format_ctx, AVCodecContext* 
 	bytes_decoded = avcodec_decode_video(p_codec_ctx, p_frame, &frame_finished, raw_data, bytes_remaining);
 	if (packet.data != NULL) av_free_packet(&packet);
 	return (frame_finished != 0);
+}
+
+void VideoStream::save_video_stream(Uint8* stream, std::string description_number, Uint8 flows_number) {
+	std::string extension = m_path.substr(m_path.find_last_of(".")+1, m_path.size());
+	std::string name = m_path.substr(m_path.find_last_of("/")+1, m_path.find_last_of(".")-m_path.find_last_of("/")-1);
+	std::string filename = name+"_"+description_number+"."+extension;
+	AVOutputFormat* fmt = guess_format(NULL, filename.c_str(), NULL);
+	AVFormatContext* format_context = av_alloc_format_context();
+	format_context->oformat = fmt;
+	AVStream* video_stream = av_new_stream(format_context, 0);
+	AVCodecContext* video_codec_context = avcodec_alloc_context();
+	video_codec_context = video_stream->codec;
+	video_codec_context->codec_id = fmt->video_codec;
+	video_codec_context->codec_type = CODEC_TYPE_VIDEO;
+	video_codec_context->bit_rate = m_bitrate/flows_number;
+	video_codec_context->time_base.den = 25;
+	video_codec_context->time_base.num = 1;
+	video_codec_context->gop_size = m_gop_size;
+	video_codec_context->mb_decision = 2;
+	video_codec_context->me_method = 1;
+	video_codec_context->pix_fmt = PIX_FMT_YUV420P;	
+	video_codec_context->width = m_width;
+	video_codec_context->height = m_height;
+	AVCodec* video_codec = avcodec_find_encoder(video_codec_context->codec_id);
+	if (!video_codec) {
+		LOG_ERROR("Video codec not found.\n");
+		return;
+	}
+	if (fmt->priv_data_size > 0) {
+		format_context->priv_data = av_mallocz(fmt->priv_data_size);
+		if (!format_context->priv_data) {
+			LOG_ERROR("Error allocating private data for format context ... aborting.\n");
+			return;
+		}
+	}
+	format_context->preload = (int)(0.5*AV_TIME_BASE);
+	format_context->max_delay = (int)(0.7*AV_TIME_BASE);
+	if (av_set_parameters(format_context, NULL) < 0) {
+		LOG_ERROR("Invalid encoding parameters... aborting.\n");
+		return;
+	}
+	if (avcodec_open(video_codec_context, video_codec) < 0) {
+		LOG_ERROR("Could not open video codec.\n");
+		return;
+	}
+	//dump_format(format_context, 0, filename.c_str(), 1);
+	Uint32 current_description_size = 400000;
+	Uint8* current_description = new Uint8[current_description_size];
+	AVFrame* frame_rgb = avcodec_alloc_frame();
+	if (frame_rgb == NULL) {
+		LOG_ERROR("Could not allocate RGB frame.\n");
+		return;
+	}
+	url_fopen(&format_context->pb, filename.c_str(), URL_WRONLY);	
+	av_write_header(format_context);
+	Uint32 frame_dimension = avpicture_get_size(PIX_FMT_RGB24, m_width, m_height)*sizeof(Uint8);
+	Uint8* rgb_buffer = new Uint8[frame_dimension];
+	if (!rgb_buffer) {
+		LOG_ERROR("Could not allocate buffer for output RGB frame! ... aborting.\n");
+		return;
+	}
+	for (Uint32 i=0; i<1; i++) {//must be m_last_frame_number-2
+		for (Uint32 j=0; j<frame_dimension; j++)
+			rgb_buffer[j] = stream[j+(i*frame_dimension)];
+		avpicture_fill((AVPicture*)frame_rgb, rgb_buffer, PIX_FMT_RGB24, m_width, m_height);
+		//save_frame(frame_rgb, 1);
+		AVFrame* frame_yuv = avcodec_alloc_frame();
+		if (frame_yuv == NULL) {
+			LOG_ERROR("Could not allocate YUV frame.\n");
+			return;
+		}
+		Uint8* yuv_buffer = new Uint8[avpicture_get_size(PIX_FMT_YUV420P, m_width, m_height)*sizeof(Uint8)];
+		if (!yuv_buffer) {
+			LOG_ERROR("Could not allocate buffer for output YUV frame! ... aborting.\n");
+			return;
+		}
+		AVFrame* tmp_picture = alloc_picture(PIX_FMT_YUV420P);
+		if (!tmp_picture) {
+			LOG_ERROR("Could not allocate temporary frame.\n");
+			return;
+		}
+		fill_yuv_image(tmp_picture, i);
+		avpicture_fill((AVPicture*)frame_yuv, yuv_buffer, PIX_FMT_YUV420P, video_codec_context->width, video_codec_context->height);
+		if (!yuv_buffer) {
+			LOG_ERROR("Could not allocate buffer for encoded frame (yuv_buffer)! ... aborting.\n");
+			return;
+		}
+		img_convert((AVPicture*)frame_yuv, PIX_FMT_RGB24, (AVPicture*)tmp_picture, PIX_FMT_YUV420P, m_width, m_height);
+		Uint32 len = avcodec_encode_video(video_codec_context, current_description, current_description_size, frame_yuv);
+		if (len > 0) {
+			AVPacket packet;
+			av_init_packet(&packet);
+			if (video_codec_context->coded_frame->key_frame)
+				packet.flags |= PKT_FLAG_KEY;
+			packet.stream_index = video_stream->index;
+			packet.data = current_description;
+			packet.size = len;
+			av_write_frame(format_context, &packet);
+		}
+		av_free(frame_yuv);
+	}
+	av_write_trailer(format_context);
+	avcodec_close(video_codec_context);
+	av_free(frame_rgb);
+	av_free(current_description);
+	free(rgb_buffer);
+	av_free(format_context->streams[0]);
+	url_fclose(&format_context->pb);
+	av_free(format_context);
+	delete[] stream;
+}
+
+AVFrame* VideoStream::alloc_picture(Uint8 pix_fmt) {
+	AVFrame* picture = avcodec_alloc_frame();
+	if (!picture) return NULL;
+	Uint8* picture_buf = new Uint8[avpicture_get_size(pix_fmt, m_width, m_height)];
+	if (!picture_buf) {
+		av_free(picture);
+		return NULL;
+	}
+	avpicture_fill((AVPicture*)picture, picture_buf, pix_fmt, m_width, m_height);
+	return picture;
+}
+
+void VideoStream::fill_yuv_image(AVFrame* pict, Uint32 frame_index) {
+	Uint16 size = m_width*m_height;
+	Uint8* picture_buf = new Uint8[(size*3)/2]; /* size for YUV 420 */
+	pict->data[0] = picture_buf;
+	pict->data[1] = pict->data[0]+size;
+	pict->data[2] = pict->data[1]+size/4;
+	pict->linesize[0] = m_width;
+	pict->linesize[1] = m_width/2;
+	pict->linesize[2] = m_width/2;
+	/* Y */
+	for (Uint16 y=0; y<m_height; y++)
+		for(Uint16 x=0; x<m_width; x++)
+			pict->data[0][y * pict->linesize[0] + x] = x + y + frame_index * 3;
+	/* Cb and Cr */
+	for(Uint16 y=0; y<m_height/2; y++)
+		for(Uint16 x=0; x<m_width/2; x++) {
+			pict->data[1][y * pict->linesize[1] + x] = 128 + y + frame_index * 2;
+			pict->data[2][y * pict->linesize[2] + x] = 64 + x + frame_index * 5;
+		}
 }

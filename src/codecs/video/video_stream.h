@@ -29,7 +29,6 @@ class VideoStream : public AbstractStream {
 private:
 	vector<pixel_container> m_data;
 	string m_stream_name, m_hash, m_path;
-	SDL_PixelFormat* m_pixel_format;
 	Uint16 m_width, m_height;
 	Uint8 m_bpp, m_gop_size;
 	bool m_null_pixel_present;
@@ -107,7 +106,28 @@ private:
 	 * @p_frame: pointer to a video frame.
 	 * @i_frame: frame number.
 	 */
-	void save_frame(AVFrame* p_frame, int i_frame);
+	void save_frame(AVFrame* p_frame, Uint32 i_frame);
+
+	/*
+	 * Create a new video stream.
+	 * @oc: pointer to a format context.
+	 * @codec_id: codec ID.
+	 */
+	AVStream* add_video_stream(AVFormatContext* oc, Uint8 codec_id);
+
+	/*
+	 * Allocate a new picture to a frame.
+	 * @pix_fmt: pixel format.
+	 * @returns: frame allocated.
+	 */
+	AVFrame* alloc_picture(Uint8 pix_fmt);
+
+	/*
+	 * Prepare a dummy image.
+	 * @pict: frame container.
+	 * @frame_index: frame number.
+	 */
+	void fill_yuv_image(AVFrame* pict, Uint32 frame_index);
 
 public:
 	VideoStream();
@@ -250,22 +270,22 @@ public:
 	void set_frame_number(Uint32 number);
 
 	/*
-	 * Gets stream path.
-	 * @returns: stream path.
-	 */
-	std::string get_path();
-
-	/*
 	 * Gets original bitrate of a stream.
 	 * @returns: bitrate.
 	 */
 	Uint32 get_bitrate();
-	
+
 	/*
 	 * Gets original GOP size of a stream.
 	 * @returns: GOP size.
 	 */
 	Uint8 get_gop_size();
+
+	/*
+	 * Sets a video stream that must to be encoded.
+	 * @stream: video_stream.
+	 */
+	void save_video_stream(Uint8* stream, std::string description_number, Uint8 flows_number);
 };
 
 #endif /*VIDEO_STREAM_H_*/
